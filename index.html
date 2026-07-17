@@ -42,6 +42,18 @@ body{
 
 a{color:var(--neon-cyan);}
 
+.storage-warning{
+  display:none;
+  align-items:center;
+  gap:10px;
+  background:rgba(255,59,92,.15);
+  border-bottom:1px solid var(--danger);
+  color:#ffd7de;
+  padding:10px 20px;
+  font-size:.85rem;
+  line-height:1.4;
+}
+
 .app{
   display:grid;
   grid-template-columns:230px 1fr;
@@ -658,6 +670,9 @@ main{padding:24px 40px 60px;}
 </style>
 </head>
 <body>
+<div id="storageWarning" class="storage-warning">
+  ⚠️ La sauvegarde ne fonctionne pas dans ce navigateur pour cette page (navigation privée ? cookies/stockage bloqués pour ce site ?). Tes modifications ne seront <strong>pas conservées</strong> après fermeture tant que ce n'est pas réglé. Pense à utiliser <strong>Exporter (JSON)</strong> régulièrement en attendant.
+</div>
 <div class="app">
   <aside class="sidebar">
     <div class="brand">ANIME<span>//</span>DB</div>
@@ -4343,19 +4358,30 @@ let editingId = null;
 let modalSeasons = [];
 
 /* ---------------- storage helpers ---------------- */
+const HAS_CLAUDE_STORAGE = typeof window !== 'undefined' && !!window.storage;
+
 async function storageGet(key, fallback) {
   try {
-    const r = await window.storage.get(key, false);
-    return r ? JSON.parse(r.value) : fallback;
+    if (HAS_CLAUDE_STORAGE) {
+      const r = await window.storage.get(key, false);
+      return r ? JSON.parse(r.value) : fallback;
+    }
+    const raw = window.localStorage.getItem(key);
+    return raw != null ? JSON.parse(raw) : fallback;
   } catch (e) {
     return fallback;
   }
 }
 async function storageSet(key, value) {
   try {
-    await window.storage.set(key, JSON.stringify(value), false);
+    if (HAS_CLAUDE_STORAGE) {
+      await window.storage.set(key, JSON.stringify(value), false);
+    } else {
+      window.localStorage.setItem(key, JSON.stringify(value));
+    }
   } catch (e) {
     console.error('storage set failed', key, e);
+    showStorageWarning();
   }
 }
 
@@ -4417,7 +4443,27 @@ function migrateEntry(e) {
   };
 }
 
+async function storageSelfTest() {
+  const probeKey = 'anime-db-storage-probe';
+  const probeVal = 'ok-' + Date.now();
+  try {
+    await storageSet(probeKey, probeVal);
+    const read = await storageGet(probeKey, null);
+    return read === probeVal;
+  } catch (e) {
+    return false;
+  }
+}
+
+function showStorageWarning() {
+  const banner = document.getElementById('storageWarning');
+  if (banner) banner.style.display = 'flex';
+}
+
 async function init() {
+  const storageOk = await storageSelfTest();
+  if (!storageOk) showStorageWarning();
+
   const seeded = await storageGet(SEEDED_KEY, false);
   DATA = await storageGet(STORAGE_KEY, null);
   if (!seeded || !DATA) {
