@@ -4509,6 +4509,9 @@ function toast(msg) {
 function initials(title) {
   return (title || '?').trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase();
 }
+function displayName(e) {
+  return (e.nickname && e.nickname.trim()) || e.title || '';
+}
 function lastAnimeNote(e) {
   for (let i = e.anime_seasons.length - 1; i >= 0; i--) {
     if (e.anime_seasons[i].note != null) return e.anime_seasons[i].note;
@@ -4565,9 +4568,9 @@ function filteredEntries() {
   }
 
   if (state.category === 'fini') {
-    list = list.slice().sort((a, b) => (finalNote(b) ?? -1) - (finalNote(a) ?? -1));
+    list = list.slice().sort((a, b) => (finalNote(b) ?? -1) - (finalNote(a) ?? -1) || displayName(a).localeCompare(displayName(b)));
   } else {
-    list = list.slice().sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+    list = list.slice().sort((a, b) => displayName(a).localeCompare(displayName(b)));
   }
   return list;
 }
