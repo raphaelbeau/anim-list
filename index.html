@@ -680,7 +680,7 @@ main{padding:24px 40px 60px;}
     <div class="genre-switch" id="genreSwitch"></div>
     <div id="nav"></div>
     <div class="sidebar-footer">
-      <button class="ghost-btn" id="btnRetryImages">🖼 RECHARGER LES IMAGES</button>
+      <button class="ghost-btn" id="btnRetryImages">🖼 RÉESSAYER LES IMAGES MANQUANTES</button>
       <button class="ghost-btn" id="btnExport">↓ EXPORTER (JSON)</button>
       <button class="ghost-btn" id="btnImport">↑ IMPORTER (JSON)</button>
       <input type="file" id="fileImport" accept=".json,application/json" style="display:none">
@@ -4870,6 +4870,7 @@ async function deleteEntry(id) {
 /* ---------------- image fetching (throttled + cached, no permanent failure caching) ---------------- */
 let imgQueue = [];
 let imgQueueRunning = false;
+let queueDelay = 500; // adaptive delay between requests, grows on rate-limit, shrinks on success
 const failedThisSession = new Set();
 
 function queueImageFetch(e) {
@@ -4877,84 +4878,100 @@ function queueImageFetch(e) {
   if (IMAGE_CACHE[key]) return;
   if (failedThisSession.has(key)) return;
   if (imgQueue.find(q => q.id === e.id)) return;
-  imgQueue.push(e);
+  imgQueue.push({ ...e, _attempts: 0 });
   if (!imgQueueRunning) runImageQueue();
 }
 
 async function runImageQueue() {
   imgQueueRunning = true;
   while (imgQueue.length) {
-    const e = imgQueue.shift();
-    const key = e.title.toLowerCase();
+    const item = imgQueue.shift();
+    const key = item.title.toLowerCase();
     if (IMAGE_CACHE[key] || failedThisSession.has(key)) continue;
-    let url = null;
-    try {
-      url = await fetchCoverImage(e.title);
-    } catch (err) { /* ignore */ }
-    if (url) {
-      IMAGE_CACHE[key] = url;
+
+    const result = await fetchCoverImage(item.title);
+
+    if (result.rateLimited) {
+      queueDelay = Math.min(queueDelay * 1.8, 8000);
+      item._attempts += 1;
+      if (item._attempts < 6) {
+        imgQueue.push(item); // retry later, once things calm down
+      } else {
+        failedThisSession.add(key); // give up for this session, "recharger les images" can retry
+      }
+      await new Promise(r => setTimeout(r, queueDelay));
+      continue;
+    }
+
+    if (result.url) {
+      IMAGE_CACHE[key] = result.url;
       storageSet(IMAGE_CACHE_KEY, IMAGE_CACHE);
-      document.querySelectorAll(`.card[data-id="${e.id}"] .card-img-wrap`).forEach(cardImgWrap => {
+      document.querySelectorAll(`.card[data-id="${item.id}"] .card-img-wrap`).forEach(cardImgWrap => {
         const ph = cardImgWrap.querySelector('.ph');
         if (ph) {
           const img = document.createElement('img');
           img.referrerPolicy = 'no-referrer';
           img.onerror = () => { img.remove(); if (!cardImgWrap.querySelector('.ph')) cardImgWrap.prepend(ph); };
-          img.src = url;
+          img.src = result.url;
           cardImgWrap.insertBefore(img, ph);
           ph.remove();
         }
       });
+      queueDelay = Math.max(450, queueDelay * 0.85); // ease back down after a clean success
     } else {
       failedThisSession.add(key);
     }
-    await new Promise(r => setTimeout(r, 300));
+
+    await new Promise(r => setTimeout(r, queueDelay));
   }
   imgQueueRunning = false;
 }
 
+/* Returns { url } on success, { url: null } when genuinely not found,
+   or { rateLimited: true } when a source throttled us (429) so the caller can back off and retry. */
 async function fetchCoverImage(title) {
   const cleanTitle = title.replace(/\([^)]*\)/g, '').trim();
+  let sawRateLimit = false;
 
-  try {
-    const query = `query ($search: String) { Media(search: $search, type: ANIME) { coverImage { large } } }`;
-    const r = await fetch('https://graphql.anilist.co', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({ query, variables: { search: cleanTitle } }),
-    });
-    if (r.ok) {
-      const j = await r.json();
-      const img = j?.data?.Media?.coverImage?.large;
-      if (img) return img;
-    }
-  } catch (e) {}
+  async function tryAniList(type) {
+    try {
+      const query = `query ($search: String) { Media(search: $search, type: ${type}) { coverImage { large } } }`;
+      const r = await fetch('https://graphql.anilist.co', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ query, variables: { search: cleanTitle } }),
+      });
+      if (r.status === 429) { sawRateLimit = true; return null; }
+      if (r.ok) {
+        const j = await r.json();
+        return j?.data?.Media?.coverImage?.large || null;
+      }
+    } catch (e) {}
+    return null;
+  }
 
-  try {
-    const query = `query ($search: String) { Media(search: $search, type: MANGA) { coverImage { large } } }`;
-    const r = await fetch('https://graphql.anilist.co', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({ query, variables: { search: cleanTitle } }),
-    });
-    if (r.ok) {
-      const j = await r.json();
-      const img = j?.data?.Media?.coverImage?.large;
-      if (img) return img;
-    }
-  } catch (e) {}
+  const animeImg = await tryAniList('ANIME');
+  if (animeImg) return { url: animeImg };
 
+  await new Promise(r => setTimeout(r, 250));
+  const mangaImg = await tryAniList('MANGA');
+  if (mangaImg) return { url: mangaImg };
+
+  if (sawRateLimit) return { rateLimited: true };
+
+  await new Promise(r => setTimeout(r, 250));
   const q = encodeURIComponent(cleanTitle);
   try {
     const r = await fetch(`https://api.jikan.moe/v4/anime?q=${q}&limit=1&sfw=true`);
+    if (r.status === 429) return { rateLimited: true };
     if (r.ok) {
       const j = await r.json();
       const img = j?.data?.[0]?.images?.jpg?.image_url;
-      if (img) return img;
+      if (img) return { url: img };
     }
   } catch (e) {}
 
-  return null;
+  return { url: null };
 }
 
 function stripHtml(s) {
@@ -5365,10 +5382,9 @@ async function resetImport() {
 
 async function retryAllImages() {
   failedThisSession.clear();
-  IMAGE_CACHE = {};
-  await storageSet(IMAGE_CACHE_KEY, IMAGE_CACHE);
-  toast('Rechargement des images en cours...');
-  render();
+  queueDelay = 500;
+  toast('Nouvelle tentative pour les images manquantes...');
+  render(); // re-renders cards; any still missing an image will auto re-queue via queueImageFetch
 }
 
 /* ---------------- global listeners ---------------- */
