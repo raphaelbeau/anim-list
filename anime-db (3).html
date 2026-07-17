@@ -1,0 +1,5345 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ANIME//DB</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-void:#0b0014;
+  --bg-panel:#170a2e;
+  --bg-panel-2:#1f0f3d;
+  --bg-panel-3:#26124a;
+  --neon-magenta:#ff2fb0;
+  --neon-cyan:#21e6ff;
+  --neon-violet:#9d3cff;
+  --neon-amber:#ffb020;
+  --text-primary:#f2e9ff;
+  --text-muted:#9a86c9;
+  --text-dim:#6b5895;
+  --grid-line:rgba(157,60,255,0.25);
+  --danger:#ff3b5c;
+  --good:#3cffb0;
+}
+*{box-sizing:border-box;}
+html{font-size:18px;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--bg-void);
+  color:var(--text-primary);
+  font-family:'Rajdhani',sans-serif;
+  font-size:17px;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+::selection{background:var(--neon-magenta);color:#000;}
+::-webkit-scrollbar{width:10px;height:10px;}
+::-webkit-scrollbar-track{background:var(--bg-void);}
+::-webkit-scrollbar-thumb{background:var(--neon-violet);border-radius:6px;}
+::-webkit-scrollbar-thumb:hover{background:var(--neon-magenta);}
+
+a{color:var(--neon-cyan);}
+
+.app{
+  display:grid;
+  grid-template-columns:230px 1fr;
+  min-height:100vh;
+}
+
+/* ---------- SIDEBAR ---------- */
+.sidebar{
+  background:linear-gradient(180deg,var(--bg-panel) 0%, var(--bg-void) 100%);
+  border-right:1px solid var(--grid-line);
+  padding:22px 14px;
+  position:sticky;
+  top:0;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.brand{
+  font-family:'Audiowide',cursive;
+  font-size:1.45rem;
+  letter-spacing:1px;
+  color:var(--text-primary);
+  text-shadow:0 0 8px var(--neon-magenta),0 0 18px rgba(255,47,176,.5);
+  margin:0 0 4px 6px;
+  line-height:1.2;
+}
+.brand span{color:var(--neon-cyan);text-shadow:0 0 8px var(--neon-cyan),0 0 18px rgba(33,230,255,.5);}
+.brand-sub{
+  font-family:'Share Tech Mono',monospace;
+  font-size:.78rem;
+  color:var(--text-dim);
+  margin:0 0 22px 6px;
+  letter-spacing:2px;
+}
+.nav-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:11px 14px;
+  border-radius:8px;
+  background:transparent;
+  border:1px solid transparent;
+  color:var(--text-muted);
+  cursor:pointer;
+  font-weight:600;
+  font-size:1.05rem;
+  letter-spacing:.5px;
+  transition:all .15s ease;
+  user-select:none;
+}
+.nav-item:hover{
+  color:var(--text-primary);
+  background:rgba(157,60,255,.08);
+  border-color:var(--grid-line);
+}
+.nav-item.active{
+  color:var(--bg-void);
+  background:linear-gradient(90deg,var(--neon-magenta),var(--neon-violet));
+  box-shadow:0 0 16px rgba(255,47,176,.45);
+}
+.nav-count{
+  font-family:'Share Tech Mono',monospace;
+  font-size:.82rem;
+  opacity:.85;
+  background:rgba(0,0,0,.25);
+  padding:1px 7px;
+  border-radius:20px;
+  min-width:22px;
+  text-align:center;
+}
+.nav-item.active .nav-count{background:rgba(0,0,0,.35);}
+.sidebar-footer{
+  margin-top:auto;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.ghost-btn{
+  background:transparent;
+  border:1px solid var(--grid-line);
+  color:var(--text-dim);
+  font-family:'Share Tech Mono',monospace;
+  font-size:.8rem;
+  padding:8px 10px;
+  border-radius:6px;
+  cursor:pointer;
+  letter-spacing:1px;
+  text-align:left;
+}
+.ghost-btn:hover{color:var(--neon-cyan);border-color:var(--neon-cyan);}
+
+/* ---------- HEADER / HERO ---------- */
+.hero{
+  position:relative;
+  overflow:hidden;
+  padding:34px 40px 26px;
+  border-bottom:1px solid var(--grid-line);
+  background:
+    radial-gradient(ellipse 70% 100% at 50% 120%, rgba(255,47,176,.18), transparent 60%),
+    linear-gradient(180deg,#12042a 0%, var(--bg-void) 100%);
+}
+.hero::before{
+  content:"";
+  position:absolute;
+  left:0;right:0;bottom:0;
+  height:120px;
+  background-image:
+    repeating-linear-gradient(90deg, rgba(157,60,255,.35) 0 1px, transparent 1px 40px),
+    repeating-linear-gradient(0deg, rgba(157,60,255,.25) 0 1px, transparent 1px 14px);
+  -webkit-mask-image:linear-gradient(180deg, transparent, black 70%);
+  mask-image:linear-gradient(180deg, transparent, black 70%);
+  transform:perspective(120px) rotateX(35deg);
+  transform-origin:bottom;
+  pointer-events:none;
+  opacity:.55;
+}
+.hero::after{
+  content:"";
+  position:absolute;
+  right:60px; top:14px;
+  width:130px;height:130px;
+  border-radius:50%;
+  background:linear-gradient(180deg,var(--neon-amber),var(--neon-magenta) 60%, var(--neon-violet));
+  box-shadow:0 0 60px rgba(255,47,176,.5);
+  opacity:.35;
+  pointer-events:none;
+}
+.hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;position:relative;z-index:1;}
+.hero-title{
+  font-family:'Audiowide',cursive;
+  font-size:1.9rem;
+  margin:0 0 6px;
+  letter-spacing:1px;
+}
+.hero-sub{
+  font-family:'Share Tech Mono',monospace;
+  color:var(--text-muted);
+  font-size:.9rem;
+  margin:0;
+  letter-spacing:.5px;
+}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap;}
+
+.search-box{
+  position:relative;
+  display:flex;
+  align-items:center;
+}
+.search-box input{
+  background:rgba(11,0,20,.6);
+  border:1px solid var(--grid-line);
+  color:var(--text-primary);
+  padding:10px 14px 10px 34px;
+  border-radius:8px;
+  font-family:'Rajdhani',sans-serif;
+  font-size:1.02rem;
+  width:230px;
+  outline:none;
+  transition:border-color .15s;
+}
+.search-box input:focus{border-color:var(--neon-cyan);box-shadow:0 0 12px rgba(33,230,255,.25);}
+.search-box svg{position:absolute;left:10px;width:16px;height:16px;color:var(--text-dim);pointer-events:none;}
+
+.btn{
+  font-family:'Rajdhani',sans-serif;
+  font-weight:700;
+  letter-spacing:.5px;
+  font-size:1rem;
+  padding:10px 18px;
+  border-radius:8px;
+  border:1px solid transparent;
+  cursor:pointer;
+  transition:all .15s ease;
+  white-space:nowrap;
+}
+.btn-primary{
+  background:linear-gradient(90deg,var(--neon-magenta),var(--neon-violet));
+  color:#fff;
+  box-shadow:0 0 14px rgba(255,47,176,.4);
+}
+.btn-primary:hover{box-shadow:0 0 22px rgba(255,47,176,.65);transform:translateY(-1px);}
+.btn-outline{
+  background:transparent;
+  border:1px solid var(--neon-cyan);
+  color:var(--neon-cyan);
+}
+.btn-outline:hover{background:rgba(33,230,255,.1);box-shadow:0 0 14px rgba(33,230,255,.3);}
+.btn-ghost{
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--grid-line);
+  color:var(--text-muted);
+}
+.btn-ghost:hover{color:var(--text-primary);border-color:var(--text-dim);}
+.btn-danger{
+  background:rgba(255,59,92,.1);
+  border:1px solid var(--danger);
+  color:var(--danger);
+}
+.btn-danger:hover{background:rgba(255,59,92,.2);}
+.btn-sm{padding:6px 12px;font-size:.88rem;border-radius:6px;}
+.btn:disabled{opacity:.4;cursor:not-allowed;}
+
+/* ---------- SUBTABS ---------- */
+.subtabs{
+  display:flex;
+  gap:8px;
+  padding:16px 40px 0;
+  flex-wrap:wrap;
+}
+.subtab{
+  font-family:'Share Tech Mono',monospace;
+  font-size:.85rem;
+  letter-spacing:1px;
+  padding:7px 14px;
+  border-radius:20px;
+  border:1px solid var(--grid-line);
+  color:var(--text-muted);
+  cursor:pointer;
+  background:rgba(255,255,255,.02);
+}
+.subtab:hover{color:var(--text-primary);}
+.subtab.active{
+  color:var(--bg-void);
+  background:var(--neon-cyan);
+  border-color:var(--neon-cyan);
+  box-shadow:0 0 12px rgba(33,230,255,.5);
+}
+
+/* ---------- MAIN / GRID ---------- */
+main{padding:24px 40px 60px;}
+.section-label{
+  font-family:'Share Tech Mono',monospace;
+  color:var(--text-dim);
+  font-size:.88rem;
+  letter-spacing:2px;
+  margin:22px 0 12px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.section-label::after{content:"";flex:1;height:1px;background:var(--grid-line);}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+  gap:18px;
+}
+.empty-state{
+  text-align:center;
+  padding:70px 20px;
+  color:var(--text-dim);
+  font-family:'Share Tech Mono',monospace;
+}
+.empty-state .big{font-size:2.4rem;margin-bottom:10px;opacity:.5;}
+
+.card{
+  background:linear-gradient(180deg,var(--bg-panel),var(--bg-panel-2));
+  border:1px solid var(--grid-line);
+  border-radius:12px;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  cursor:pointer;
+  position:relative;
+}
+.card:hover{
+  transform:translateY(-3px);
+  border-color:var(--neon-magenta);
+  box-shadow:0 8px 28px rgba(255,47,176,.25);
+}
+.card-img-wrap{
+  position:relative;
+  width:100%;
+  aspect-ratio:2/3;
+  background:linear-gradient(135deg,var(--bg-panel-3),var(--bg-panel));
+  overflow:hidden;
+}
+.card-img-wrap img{
+  width:100%;height:100%;object-fit:cover;
+  display:block;
+}
+.card-img-wrap .ph{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Audiowide',cursive;
+  font-size:2rem;
+  color:var(--text-dim);
+  text-align:center;
+  padding:10px;
+}
+.note-badge{
+  position:absolute;top:8px;right:8px;
+  background:rgba(11,0,20,.85);
+  border:1px solid var(--neon-amber);
+  color:var(--neon-amber);
+  font-family:'Share Tech Mono',monospace;
+  font-weight:700;
+  font-size:.9rem;
+  padding:3px 8px;
+  border-radius:6px;
+  box-shadow:0 0 10px rgba(255,176,32,.35);
+}
+.dual-note{display:flex;flex-direction:column;gap:2px;align-items:flex-end;position:absolute;top:8px;right:8px;}
+.dual-note span{
+  background:rgba(11,0,20,.85);
+  border:1px solid var(--grid-line);
+  font-family:'Share Tech Mono',monospace;
+  font-size:.76rem;
+  padding:2px 6px;
+  border-radius:5px;
+  color:var(--text-muted);
+}
+.dual-note span.manga{border-color:var(--neon-amber);color:var(--neon-amber);}
+.dual-note span.anime{border-color:var(--neon-cyan);color:var(--neon-cyan);}
+
+.type-badges{
+  position:absolute;bottom:8px;left:8px;
+  display:flex;gap:4px;
+}
+.type-badges span{
+  font-family:'Share Tech Mono',monospace;
+  font-size:.74rem;
+  padding:2px 6px;
+  border-radius:4px;
+  background:rgba(11,0,20,.85);
+  border:1px solid var(--grid-line);
+  color:var(--text-muted);
+  letter-spacing:.5px;
+}
+.card-body{padding:12px 12px 14px;display:flex;flex-direction:column;gap:6px;flex:1;}
+.card-title{
+  font-weight:700;
+  font-size:1.04rem;
+  line-height:1.25;
+  color:var(--text-primary);
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+.card-meta{
+  font-family:'Share Tech Mono',monospace;
+  font-size:.82rem;
+  color:var(--text-dim);
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.card-comment{
+  font-size:.9rem;
+  color:var(--text-muted);
+  line-height:1.35;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+  min-height:1em;
+}
+.card-actions{
+  display:flex;
+  gap:6px;
+  margin-top:auto;
+  padding-top:8px;
+  flex-wrap:wrap;
+}
+.card-actions .btn{flex:1;text-align:center;}
+
+/* ---------- MODAL ---------- */
+.modal-overlay{
+  position:fixed;inset:0;
+  background:rgba(5,0,12,.75);
+  backdrop-filter:blur(3px);
+  display:flex;align-items:flex-start;justify-content:center;
+  padding:40px 16px;
+  z-index:100;
+  overflow-y:auto;
+}
+.modal{
+  background:linear-gradient(180deg,var(--bg-panel),var(--bg-void));
+  border:1px solid var(--neon-violet);
+  box-shadow:0 0 50px rgba(157,60,255,.35);
+  border-radius:14px;
+  max-width:560px;
+  width:100%;
+  padding:26px 28px 28px;
+  position:relative;
+}
+.modal h2{
+  font-family:'Audiowide',cursive;
+  font-size:1.35rem;
+  margin:0 0 18px;
+  color:var(--text-primary);
+  letter-spacing:.5px;
+}
+.modal-close{
+  position:absolute;top:18px;right:20px;
+  background:none;border:none;color:var(--text-dim);
+  font-size:1.5rem;cursor:pointer;line-height:1;
+}
+.modal-close:hover{color:var(--neon-magenta);}
+.field{margin-bottom:14px;}
+.field label{
+  display:block;
+  font-family:'Share Tech Mono',monospace;
+  font-size:.8rem;
+  letter-spacing:1px;
+  color:var(--text-dim);
+  margin-bottom:5px;
+  text-transform:uppercase;
+}
+.field input[type=text],
+.field input[type=number],
+.field input[type=url],
+.field select,
+.field textarea,
+.modal input[type=text],
+.modal input[type=number],
+.modal input[type=url],
+.modal select,
+.modal textarea{
+  width:100%;
+  background:rgba(0,0,0,.35);
+  border:1px solid var(--grid-line);
+  color:var(--text-primary);
+  padding:9px 11px;
+  border-radius:7px;
+  font-family:'Rajdhani',sans-serif;
+  font-size:1.04rem;
+  outline:none;
+}
+.field textarea{resize:vertical;min-height:70px;}
+.modal textarea{resize:none;overflow:hidden;min-height:44px;}
+.field input:focus,.field select:focus,.field textarea:focus,
+.modal input:focus,.modal select:focus,.modal textarea:focus{
+  border-color:var(--neon-cyan);
+  box-shadow:0 0 10px rgba(33,230,255,.2);
+}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.field-row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.chip-select{display:flex;gap:8px;flex-wrap:wrap;}
+.chip{
+  padding:7px 13px;
+  border-radius:20px;
+  border:1px solid var(--grid-line);
+  color:var(--text-muted);
+  font-size:.92rem;
+  cursor:pointer;
+  font-weight:600;
+  user-select:none;
+}
+.chip.on{
+  background:var(--neon-violet);
+  border-color:var(--neon-violet);
+  color:#fff;
+  box-shadow:0 0 10px rgba(157,60,255,.45);
+}
+.modal-footer{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-top:20px;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.modal-footer-right{display:flex;gap:8px;}
+.hint{font-size:.84rem;color:var(--text-dim);font-family:'Share Tech Mono',monospace;}
+
+.genre-switch{
+  display:flex;
+  gap:6px;
+  margin-bottom:18px;
+  padding:4px;
+  background:rgba(0,0,0,.3);
+  border:1px solid var(--grid-line);
+  border-radius:10px;
+}
+.genre-btn{
+  flex:1;
+  text-align:center;
+  padding:9px 6px;
+  border-radius:7px;
+  cursor:pointer;
+  font-weight:700;
+  font-size:.85rem;
+  letter-spacing:.3px;
+  color:var(--text-dim);
+  transition:all .15s ease;
+  user-select:none;
+}
+.genre-btn.shojo.active{
+  background:linear-gradient(135deg,var(--neon-magenta),#ff6fc9);
+  color:#fff;
+  box-shadow:0 0 16px rgba(255,47,176,.5);
+}
+.genre-btn.autre.active{
+  background:linear-gradient(135deg,var(--neon-cyan),#4fd2ff);
+  color:var(--bg-void);
+  box-shadow:0 0 16px rgba(33,230,255,.5);
+}
+.genre-btn:not(.active):hover{color:var(--text-primary);}
+
+.block-section{
+  border:1px solid var(--grid-line);
+  border-radius:10px;
+  padding:14px 14px 8px;
+  margin-bottom:16px;
+  background:rgba(255,255,255,.02);
+}
+.block-section h3{
+  font-family:'Share Tech Mono',monospace;
+  font-size:.78rem;
+  letter-spacing:1px;
+  color:var(--text-muted);
+  margin:0 0 12px;
+  text-transform:uppercase;
+}
+.season-row{
+  border:1px solid var(--grid-line);
+  border-radius:8px;
+  padding:10px 12px;
+  margin-bottom:10px;
+  background:rgba(0,0,0,.2);
+  position:relative;
+}
+.season-row-top{display:flex;gap:10px;margin-bottom:8px;}
+.season-row-top input[type=text]{width:90px;flex:none;}
+.season-row-top input[type=number]{width:90px;flex:none;}
+.season-row textarea{min-height:50px;}
+.season-remove{
+  position:absolute;top:8px;right:8px;
+  background:none;border:none;color:var(--text-dim);
+  cursor:pointer;font-size:.95rem;
+}
+.season-remove:hover{color:var(--danger);}
+.add-season-btn{
+  width:100%;
+  padding:8px;
+  border:1px dashed var(--grid-line);
+  border-radius:7px;
+  background:transparent;
+  color:var(--text-dim);
+  cursor:pointer;
+  font-size:.82rem;
+  font-family:'Share Tech Mono',monospace;
+}
+.add-season-btn:hover{color:var(--neon-cyan);border-color:var(--neon-cyan);}
+
+.card-title-wrap{display:flex;flex-direction:column;gap:1px;}
+.card-nickname{
+  font-weight:700;
+  font-size:.92rem;
+  line-height:1.25;
+  color:var(--text-primary);
+}
+.card-realtitle{
+  font-family:'Share Tech Mono',monospace;
+  font-size:.68rem;
+  color:var(--text-dim);
+  line-height:1.2;
+}
+.card-links{display:flex;gap:6px;flex-wrap:wrap;align-items:center;}
+.link-pill{
+  font-family:'Share Tech Mono',monospace;
+  font-size:.72rem;
+  padding:4px 9px;
+  border-radius:14px;
+  border:1px solid var(--grid-line);
+  color:var(--neon-cyan);
+  text-decoration:none;
+  background:rgba(33,230,255,.06);
+}
+.link-pill:hover{border-color:var(--neon-cyan);background:rgba(33,230,255,.15);}
+.link-pill.scan{color:var(--neon-amber);background:rgba(255,176,32,.06);}
+.link-pill.scan:hover{border-color:var(--neon-amber);background:rgba(255,176,32,.15);}
+.link-edit-btn{
+  background:none;border:none;color:var(--text-dim);
+  cursor:pointer;font-size:.85rem;padding:2px 4px;
+}
+.link-edit-btn:hover{color:var(--neon-magenta);}
+
+.field-hint{font-size:.68rem;color:var(--text-dim);margin-top:3px;font-family:'Share Tech Mono',monospace;}
+.type-toggle-row{display:flex;gap:10px;}
+.toast{
+  position:fixed;bottom:22px;left:50%;transform:translateX(-50%);
+  background:var(--bg-panel-2);
+  border:1px solid var(--neon-cyan);
+  color:var(--text-primary);
+  padding:12px 20px;
+  border-radius:8px;
+  font-size:.95rem;
+  box-shadow:0 0 20px rgba(33,230,255,.3);
+  z-index:200;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .25s, transform .25s;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(-6px);}
+
+@media (max-width: 880px){
+  .app{grid-template-columns:1fr;}
+  .sidebar{
+    position:static;height:auto;
+    flex-direction:row;
+    overflow-x:auto;
+    padding:12px;
+  }
+  .sidebar-footer{display:none;}
+  .brand,.brand-sub{display:none;}
+  .hero,main{padding-left:16px;padding-right:16px;}
+  .subtabs{padding-left:16px;padding-right:16px;}
+  .field-row,.field-row3{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">ANIME<span>//</span>DB</div>
+    <div class="brand-sub">TRACKER v1.0</div>
+    <div class="genre-switch" id="genreSwitch"></div>
+    <div id="nav"></div>
+    <div class="sidebar-footer">
+      <button class="ghost-btn" id="btnRetryImages">🖼 RECHARGER LES IMAGES</button>
+      <button class="ghost-btn" id="btnExport">↓ EXPORTER (JSON)</button>
+      <button class="ghost-btn" id="btnImport">↑ IMPORTER (JSON)</button>
+      <input type="file" id="fileImport" accept=".json,application/json" style="display:none">
+      <button class="ghost-btn" id="btnReset">⟲ RÉINITIALISER IMPORT</button>
+    </div>
+  </aside>
+  <div>
+    <header class="hero">
+      <div class="hero-top">
+        <div>
+          <h1 class="hero-title" id="pageTitle">À voir</h1>
+          <p class="hero-sub" id="pageSub">-- chargement --</p>
+        </div>
+        <div class="hero-actions">
+          <div class="search-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input type="text" id="searchInput" placeholder="Rechercher un titre...">
+          </div>
+          <button class="btn btn-primary" id="btnAdd">+ AJOUTER UNE ŒUVRE</button>
+        </div>
+      </div>
+    </header>
+    <div class="subtabs" id="subtabs"></div>
+    <main id="main"></main>
+  </div>
+</div>
+
+<div id="modalRoot"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const SEED_DATA = [
+ {
+  "id": "imp-0-more-than-married-couple-but-not-lovers",
+  "title": "more than married couple but not lovers",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v6.voiranime.com/anime/fuufu-ijou-koibito-miman/",
+  "scan_url": "https://mangakakalot.com/chapter/iv917671/chapter_80",
+  "anime_status": "en_cours",
+  "manga_status": "en_cours",
+  "anime_seasons": [
+   {
+    "label": "S1",
+    "note": 8.0,
+    "comment": "tres prometteur. Hate de voir laquelle il choisit. Marrant, efficace. ca avance bien"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": "S1"
+ },
+ {
+  "id": "imp-1-ao-no-hako",
+  "title": "ao no hako",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v5.voiranime.com/anime/ao-no-hako/",
+  "scan_url": "https://anime-sama.fr/catalogue/blue-box/scan/vf/",
+  "anime_status": "en_cours",
+  "manga_status": "en_cours",
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 9.0,
+    "comment": "tres bon, tres beau. + sport mis en avant, dessin originaux, bonnes valeurs - triangle amoureux"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "232",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-2-medaka",
+  "title": "Medaka",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v6.voiranime.com/anime/medaka-kuroiwa-is-impervious-to-my-charms/",
+  "scan_url": "https://www.scan-manga.com/lecture-en-ligne/Kuroiwa-Medaka-ni-Watashi-no-Kawaii-ga-Tsuujinai-Chapitre-184-FR_472062.html",
+  "anime_status": "en_cours",
+  "manga_status": "en_cours",
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 8.0,
+    "comment": "pas mal, marrant, original"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "213",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-3-kaoru-hana-wa-rin-to-saku",
+  "title": "kaoru hana wa rin to saku",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": null,
+  "fmt": null,
+  "anime_url": "",
+  "scan_url": "https://www.scan-manga.com/lecture-en-ligne/Kaoru-Hana-wa-Rin-to-Saku-Chapitre-158-FR_473546.html",
+  "anime_status": null,
+  "manga_status": "en_cours",
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "181",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-4-hajimete-no-gal",
+  "title": "hajimete no gal",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.fr/catalogue/hajimete-no-gal/saison1/vostfr/",
+  "scan_url": "https://anime-sama.fr/catalogue/hajimete-no-gal/scan/vf/",
+  "anime_status": null,
+  "manga_status": "en_cours",
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "156",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-5-one-piece",
+  "title": "one piece",
+  "nickname": "",
+  "genre": "autre",
+  "lang": null,
+  "fmt": null,
+  "anime_url": "",
+  "scan_url": "https://anime-sama.fr/catalogue/one-piece/scan_noir-et-blanc/vf/",
+  "anime_status": null,
+  "manga_status": "en_cours",
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "1177",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-6-one-punch-man",
+  "title": "one punch man",
+  "nickname": "",
+  "genre": "autre",
+  "lang": null,
+  "fmt": null,
+  "anime_url": "",
+  "scan_url": "https://anime-sama.org/catalogue/one-punch-man/scan/vf/",
+  "anime_status": null,
+  "manga_status": "en_cours",
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "147",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-7-tonikaku-kawaii",
+  "title": "tonikaku kawaii",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": null,
+  "fmt": null,
+  "anime_url": "",
+  "scan_url": "https://anime-sama.fr/catalogue/tonikaku-kawaii/scan/va/",
+  "anime_status": null,
+  "manga_status": "en_cours",
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "176",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-8-sounds-of-life",
+  "title": "sounds of life",
+  "nickname": "",
+  "genre": "autre",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v5.voiranime.com/anime/kono-oto-tomare/",
+  "scan_url": "",
+  "anime_status": null,
+  "manga_status": "en_cours",
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "18",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-9-dandadan",
+  "title": "Dandadan",
+  "nickname": "",
+  "genre": "autre",
+  "lang": "vf",
+  "fmt": "serie",
+  "anime_url": "https://v5.voiranime.com/anime/dandadan-vf/",
+  "scan_url": "https://anime-sama.fr/catalogue/dandadan/scan/vf/",
+  "anime_status": null,
+  "manga_status": "a_lire",
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 8.0,
+    "comment": "pas mal, parfois un peu chelou histoire d'amour présente donc ca fait plaise, combats style"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-10-himaten",
+  "title": "himaten",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": null,
+  "fmt": null,
+  "anime_url": "",
+  "scan_url": "https://www.scan-manga.com/14498/Himaten.html",
+  "anime_status": null,
+  "manga_status": "a_lire",
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-11-smoking-behind-the-supermarket",
+  "title": "smoking behind the supermarket",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.to/catalogue/smoking-behind-the-supermarket-with-you/",
+  "scan_url": "",
+  "anime_status": null,
+  "manga_status": "a_lire",
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 9.5,
+    "comment": "trop bien, principe très bon, beau dessins, bons personnages. leger, très agréable, chill. dommage mini episode donc très court. manque de concret mais les scans ca doit etre de la folie"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-12-pokemon-m6",
+  "title": "pokemon m6+",
+  "nickname": "",
+  "genre": "autre",
+  "lang": null,
+  "fmt": null,
+  "anime_url": "",
+  "scan_url": "",
+  "anime_status": "en_cours",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": "voir tel pour ep"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-13-anyway-i-m-falling-in-love-with-you-9",
+  "title": "anyway i'm falling in love with you  9",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v6.voiranime.com/anime/anyway-im-falling-in-love-with-you/",
+  "scan_url": "",
+  "anime_status": "en_cours",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-14-isshuukan-friends-4",
+  "title": "isshuukan friends  4",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v6.voiranime.com/anime/isshuukan-friends/",
+  "scan_url": "",
+  "anime_status": "en_cours",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-15-the-angel-next-door-spoils-me-rotten",
+  "title": "the angel next door spoils me rotten",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v5.voiranime.com/anime/otonari-no-tenshi-sama-ni-itsunomanika-dame-ningen-ni-sareteita-ken/",
+  "scan_url": "https://www.scan-manga.com/12557/The-Angel-Next-Door-Spoils-Me-Rotten.html",
+  "anime_status": "att_suite",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "S1",
+    "note": 9.0,
+    "comment": "on espere une suite mais peu probable. Histoire de fou, bons personnages. - dommage concretisation un peu legere & on ne les voit pas apres S2 - 8/10 on voit le après mais ca perd de sa superbe.."
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "23",
+  "progress_episode": "S1"
+ },
+ {
+  "id": "imp-16-you-and-i-are-polar-opposite",
+  "title": "you and I are polar opposite",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.to/catalogue/seihantai-na-kimi-to-boku/saison1/vostfr/",
+  "scan_url": "",
+  "anime_status": "att_suite",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 8.0,
+    "comment": "trop bien, bon rythme, marrant de fou avance bien. manque de profondeur surtout sur la fin c dommage. saison suivante va être au panthéon"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-17-skip-to-loafer",
+  "title": "skip to loafer",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.fr/catalogue/skip-to-loafer/saison1/vostfr/",
+  "scan_url": "",
+  "anime_status": "att_suite",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "S1",
+    "note": 6.0,
+    "comment": "il se passe pas grand chose, voir rien du tout. par contre la S2 a du potentiel. il faudra rattraper ce retard suite 2026"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": "S1"
+ },
+ {
+  "id": "imp-18-kubo-won-t-let-me-be-invisible",
+  "title": "kubo won't let me be invisible",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v6.voiranime.com/anime/kubo-san-wa-mob-wo-yurusanai/",
+  "scan_url": "",
+  "anime_status": "att_suite",
+  "manga_status": "att_suite",
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 8.0,
+    "comment": "+ marrant, mignon. - trop court. a priori suite 2025"
+   }
+  ],
+  "manga": {
+   "note": 8.0,
+   "comment": "marrant, final un peu rapide. c'etait vraiment cool"
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-19-make-heroine-ga-ooisugiru",
+  "title": "make heroine ga ooisugiru",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.fr/catalogue/make-heroine-ga-ooisugiru/",
+  "scan_url": "",
+  "anime_status": "att_suite",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "S1",
+    "note": 7.5,
+    "comment": "pas mal bonne animation, des sides couples. Avance pas assez(c des potes) mais saison 2 annoncée donc ca peut bouger rapidement et devenir très bien."
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": "S1"
+ },
+ {
+  "id": "imp-20-carnets-de-l-aphoticaire",
+  "title": "carnets de l'aphoticaire",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vf",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.si/catalogue/les-carnets-de-lapothicaire/",
+  "scan_url": "",
+  "anime_status": "att_suite",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "S2",
+    "note": 8.0,
+    "comment": "c'est bien, histoire interessante et très originale personnages attachants. la suite arrive bientôt j'ai très hate de voir. j'espère qu'ils vont sortir ensemble"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": "S2"
+ },
+ {
+  "id": "imp-21-alya-sometimes-hides-her-feelings-in-rus",
+  "title": "alya-sometimes-hides-her-feelings-in-russian",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vf",
+  "fmt": "serie",
+  "anime_url": "https://v5.voiranime.com/anime/alya-sometimes-hides-her-feelings-in-russian-vf/",
+  "scan_url": "",
+  "anime_status": "att_suite",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 8.0,
+    "comment": "tres bon debut, marrant efficace. La saison deux a beaucoup de potentiel (suite 2026)"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "suite 2026",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-22-my-dress-up-darling",
+  "title": "my dress up darling",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vf",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.si/catalogue/my-dress-up-darling/saison2/vf/",
+  "scan_url": "",
+  "anime_status": "att_suite",
+  "manga_status": "att_suite",
+  "anime_seasons": [
+   {
+    "label": "S2",
+    "note": 9.0,
+    "comment": "avance bien, marrant des bons perso. j'aime le duo principal qui se complete bien (suite fin 2027)"
+   }
+  ],
+  "manga": {
+   "note": 8.0,
+   "comment": "tres bien, manque d'un peu de profondeur tout de même"
+  },
+  "sequel_date": "suite fin 2027",
+  "progress_chapter": "",
+  "progress_episode": "S2"
+ },
+ {
+  "id": "imp-23-a-star-brighter-than-the-sun",
+  "title": "a star brighter than the sun",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vf",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.si/catalogue/a-star-brighter-than-the-sun/",
+  "scan_url": "",
+  "anime_status": "att_suite",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 9.0,
+    "comment": "tres bon, on voit pas les épisodes passer. animation et dessins originaux. ca manque d'anime comme ca en ce moment. simple, se prend pas la tete mais très efficace. attention un peu repetitif dans la construction des épisodes (sauf pour les derniers) (s2 hiver 2026)"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-24-dr-stone",
+  "title": "dr stone",
+  "nickname": "",
+  "genre": "autre",
+  "lang": "vf",
+  "fmt": "serie",
+  "anime_url": "",
+  "scan_url": "",
+  "anime_status": "att_suite",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 8.0,
+    "comment": "pas mal a voir la suite, j'aime pas trop qu'ils se séparent trop je trouve ca dommage."
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-25-dangers-in-my-heart",
+  "title": "Dangers in my heart",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v6.voiranime.com/anime/boku-no-kokoro-no-yabai-yatsu/",
+  "scan_url": "",
+  "anime_status": "att_suite",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 9.0,
+    "comment": "vaiment tres bien rien a redire. Impatient de voir la suite (suite automne 2025)"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "suite automne 2025",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-26-classroom-of-the-elite",
+  "title": "Classroom of the elite",
+  "nickname": "",
+  "genre": "autre",
+  "lang": null,
+  "fmt": null,
+  "anime_url": "https://v6.voiranime.com/anime/classroom-of-the-elite-3-vf",
+  "scan_url": "",
+  "anime_status": "att_suite",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "S3",
+    "note": 8.0,
+    "comment": "bon perso, style de fou (psychologique) hate de voir la suite."
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": "S3"
+ },
+ {
+  "id": "imp-27-haikyuu",
+  "title": "haikyuu",
+  "nickname": "",
+  "genre": "autre",
+  "lang": "vf",
+  "fmt": "serie",
+  "anime_url": "https://v5.voiranime.com/anime/haikyuu-3-vf/",
+  "scan_url": "",
+  "anime_status": "att_suite",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "FILM1",
+    "note": 10.0,
+    "comment": "franchement très bon. volley bien expliquer, donne des frissons. pas de mauvais épisodes. prochain film en 2027"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": "FILM1"
+ },
+ {
+  "id": "imp-28-city-hunter",
+  "title": "city hunter",
+  "nickname": "",
+  "genre": "autre",
+  "lang": "vf",
+  "fmt": "serie",
+  "anime_url": "https://v5.voiranime.com/anime/city-hunter-vf/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-29-undead-unlucky",
+  "title": "Undead unlucky",
+  "nickname": "",
+  "genre": "autre",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v5.voiranime.com/anime/undead-unluck/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-30-vermeil",
+  "title": "vermeil",
+  "nickname": "",
+  "genre": "autre",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v6.voiranime.com/anime/kinsou-no-vermeil-gakeppuchi-majutsushi-wa-saikyou-no-yakusai-to-mahou-sekai-wo-tsuki-susumu/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-31-cowboy-beebop",
+  "title": "cowboy beebop",
+  "nickname": "",
+  "genre": "autre",
+  "lang": "vf",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.to/catalogue/cowboy-bebop/saison1/fr/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-32-kuroko-basket",
+  "title": "kuroko basket",
+  "nickname": "",
+  "genre": "autre",
+  "lang": "vf",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.to/catalogue/kuroko-no-basket/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-33-frieren",
+  "title": "frieren",
+  "nickname": "",
+  "genre": "autre",
+  "lang": "vf",
+  "fmt": "serie",
+  "anime_url": "https://v6.voiranime.com/anime/sousou-no-frieren-vf/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "S1",
+    "note": 10.0,
+    "comment": "original, apaisant. ambiance sonore de folie. perso attachants. de bons msg. animation de fou. 0 points négatifs"
+   },
+   {
+    "label": "S2",
+    "note": 9.0,
+    "comment": "toujours aussi calme et reposant. ca fait du bien de retrouver les persos. rapprochement entre stark et fern trop succin, mal exploité dommage. saison très courte. je pense que c une saison tempon. la suite risque d'être banger"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": "S1"
+ },
+ {
+  "id": "imp-34-darling-in-the-franxx",
+  "title": "darling in the franxx",
+  "nickname": "",
+  "genre": "autre",
+  "lang": "vf",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.to/catalogue/darling-in-the-franxx/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 9.0,
+    "comment": "très bien. amour au centre de l'histoire donc j'aime beaucoup. de très bonnes valeurs une très bonne histoire. Attention début trop lent, décousu, on sait pas où on va. ca semble partir en steak un peu. ouverture exceptionnelle. (manga semble très différent, à lire à l'avenir pour voir)"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-35-demon-slayer",
+  "title": "demon slayer",
+  "nickname": "",
+  "genre": "autre",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.fr/catalogue/demon-slayer/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "S4",
+    "note": 10.0,
+    "comment": "de la frappe atomique, classique de ouf"
+   }
+  ],
+  "manga": {
+   "note": 8.0,
+   "comment": "lu que le derner arc, fin style, un peu previsible. on perd de la superbe par rapport a l'anime surtout pour les attaques"
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": "S4"
+ },
+ {
+  "id": "imp-36-mha",
+  "title": "MHA",
+  "nickname": "",
+  "genre": "autre",
+  "lang": null,
+  "fmt": null,
+  "anime_url": "",
+  "scan_url": "https://anime-sama.fr/catalogue/my-hero-academia/scan/vf/",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": 8.0,
+   "comment": "c style, combats vraiment pas mal, histoire riche, interressante. dommage histoire avec ochaco pas asser mise en avant (sert d'ouverture). parfois trop long, parle pour rien"
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-37-gachiakuta",
+  "title": "gachiakuta",
+  "nickname": "",
+  "genre": "autre",
+  "lang": "vf",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.si/catalogue/gachiakuta/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 7.0,
+    "comment": "pas mal du tout principe original bonne histoire mais pas transcendent non plus"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-38-oshi-no-ko",
+  "title": "oshi no ko",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vf",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.fr/catalogue/oshi-no-ko/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-39-nana",
+  "title": "nana",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vf",
+  "fmt": "serie",
+  "anime_url": "https://v5.voiranime.com/anime/nana-vf/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-40-a-couple-of-cuckoos",
+  "title": "a couple of cuckoos",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vf",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.fr/catalogue/a-couple-of-cuckoos/saison1/vf/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-41-time-shadows",
+  "title": "time shadows",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vf",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.tv/catalogue/time-shadows/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-42-tunnel-to-summer",
+  "title": "tunnel to summer",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vf",
+  "fmt": "film",
+  "anime_url": "https://v6.voiranime.com/anime/the-tunnel-to-summer-the-exit-of-goodbyes-vf/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-43-je-peux-encore-entendre-l-ocean",
+  "title": "je peux encore entendre l'ocean",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vf",
+  "fmt": "film",
+  "anime_url": "https://anime-sama.fr/catalogue/je-peux-entendre-l-ocean/film/vostfr/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-44-lost-in-starligh",
+  "title": "lost in starligh",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vf",
+  "fmt": "film",
+  "anime_url": "https://anime-sama.tv/catalogue/lost-in-starlight/film/fr/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-45-domestic-girlfriend",
+  "title": "domestic girlfriend",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.fr/catalogue/domestic-girlfriend/saison1/vostfr/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-46-monthly-girl-nozaki-kun",
+  "title": "monthly girl nozaki kun",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v6.voiranime.com/anime/gekkan-shoujo-nozaki-kun/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-47-kaenojo-real-girl",
+  "title": "kaenojo real girl",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v6.voiranime.com/anime/3d-kanojo-real-girl/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-48-saekano",
+  "title": "saekano",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v6.voiranime.com/anime/saenai-heroine-no-sodatekata/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-49-hyouka",
+  "title": "hyouka",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v5.voiranime.com/anime/hyouka/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-50-golden-time",
+  "title": "golden time",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v5.voiranime.com/anime/golden-time/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-51-our-dating-story-the-experienced-you-and",
+  "title": "Our Dating Story: The Experienced You and The Inexperienced Me",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v5.voiranime.com/anime/our-dating-story-the-experienced-you-and-the-inexperienced-me/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-52-wolf-girl-and-the-black-prince",
+  "title": "wolf girl and the black prince",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v5.voiranime.com/anime/ookami-shoujo-to-kuro-ouji/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-53-after-the-rain",
+  "title": "after the rain",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v5.voiranime.com/anime/koi-wa-ameagari-no-you-ni/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-54-higehiro",
+  "title": "higehiro",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v5.voiranime.com/anime/hige-wo-soru-soshite-joshikousei-wo-hirou/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-55-just-because",
+  "title": "Just because",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v5.voiranime.com/anime/just-because/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-56-orange",
+  "title": "orange",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v5.voiranime.com/anime/orange/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-57-biidama-no-tsuki",
+  "title": "biidama no tsuki",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.fr/catalogue/biidama-no-tsuki/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-58-rainbow-days",
+  "title": "Rainbow days",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.fr/catalogue/rainbow-days/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-59-osamake",
+  "title": "osamake",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.fr/catalogue/osamake/saison1/vostfr/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-60-betrothed-to-my-sisters-ex",
+  "title": "betrothed to my sisters ex",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.si/catalogue/betrothed-to-my-sisters-ex/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-61-bloom-into-you",
+  "title": "bloom into you",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.si/catalogue/bloom-into-you/saison1/vostfr/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-62-konobi",
+  "title": "konobi",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.si/catalogue/konobi/saison1/vostfr/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-63-haite-kudasai",
+  "title": "haite kudasai",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v6.voiranime.com/anime/please-put-them-on-takamine-san/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-64-the-shiunji-family-children",
+  "title": "the shiunji family children",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.tv/catalogue/the-shiunji-family-children/saison1/vostfr/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-65-are-there-no-gals-who-are-kind-to-otaku",
+  "title": "are there no gals who are kind to otaku",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.to/catalogue/otaku-ni-yasashii-gal-wa-inai/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-66-mayonaka-heart-tune",
+  "title": "mayonaka heart tune",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.to/catalogue/mayonaka-heart-tune/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-67-akebi-chan-no-sailor-fuku",
+  "title": "akebi chan no sailor fuku",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.to/catalogue/akebi-chan-no-sailor-fuku/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-68-i-want-to-end-this-love-game",
+  "title": "i want to end this love game",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.to/catalogue/aishiteru-game-wo-owarasetai/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-69-weathering-with-you",
+  "title": "weathering with you",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "film",
+  "anime_url": "https://v5.voiranime.com/anime/tenki-no-ko/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-70-a-whisker-away",
+  "title": "a whisker away",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "film",
+  "anime_url": "https://v5.voiranime.com/anime/nakitai-watashi-wa-neko-wo-kaburu/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-71-tunnel-to-summer",
+  "title": "tunnel to summer",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "film",
+  "anime_url": "https://v5.voiranime.com/anime/the-tunnel-to-summer-the-exit-of-goodbyes/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-72-wotaku-ni-koi-wa-muzukashii-ova",
+  "title": "wotaku-ni-koi-wa-muzukashii-ova",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v5.voiranime.com/anime/wotaku-ni-koi-wa-muzukashii-ova/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-73-tamako-love-story",
+  "title": "tamako love story",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "film",
+  "anime_url": "https://v5.voiranime.com/anime/tamako-love-story/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-74-garden-of-words",
+  "title": "garden of words",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "film",
+  "anime_url": "https://v5.voiranime.com/anime/kotonoha-no-niwa/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-75-kimi-wa-kanata",
+  "title": "kimi wa kanata",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "film",
+  "anime_url": "https://anime-sama.fr/catalogue/kimi-wa-kanata/film/vostfr/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-76-to-every-you-i-ve-loved-before",
+  "title": "to every you I've loved before",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "film",
+  "anime_url": "https://anime-sama.fr/catalogue/to-every-you-ive-loved-before/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-77-asagao-to-kase-san",
+  "title": "asagao to kase san",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "film",
+  "anime_url": "https://anime-sama.si/catalogue/asagao-to-kase-san/",
+  "scan_url": "",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-78-love-is-war",
+  "title": "love is war",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vf",
+  "fmt": "serie",
+  "anime_url": "https://v5.voiranime.com/anime/kaguya-sama-wa-kokurasetai-tensai-tachi-no-renai-zunousen-vf/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": "fini",
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 10.0,
+    "comment": "incroyable vrai shojo. fin de fou furieux. fantastique"
+   }
+  ],
+  "manga": {
+   "note": 10.0,
+   "comment": "toujours aussi fou. Bonne evolution de l'œuvre. Attention arc recuperation de kaguya peut etre un peu trop. De bonnes valeurs transmises. De beaux messages. fantastique"
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-79-i-have-a-crush-at-work",
+  "title": "I have a crush at work",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.fr/catalogue/i-have-a-crush-at-work/saison1/vostfr/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 10.0,
+    "comment": "de la folie, + adulte, travail, ca avance tres bien, y'a d'autres couples. - fin un peu rapide"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-80-tsuki-ga-kirei",
+  "title": "tsuki ga kirei",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.fr/catalogue/tsuki-ga-kirei/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 10.0,
+    "comment": "très beau, poétique, sérieux, prend son temps mais bien géré. shojo comme on les aime. pas de points négatifs, franchement très agréablement surpris."
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-81-365-days-to-the-wedding",
+  "title": "365 days to the wedding",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v6.voiranime.com/anime/365-days-to-the-wedding/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 9.0,
+    "comment": "tres bien, bon perso, pitie une suite. efficace drole. Tout ce qu'on aime. + adultes"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-82-our-love-story-has-always-been-10-centim",
+  "title": "our love story has Always been 10 centimeters apart",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v6.voiranime.com/anime/itsudatte-bokura-no-koi-wa-10cm-datta/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 9.0,
+    "comment": "tres tres bien. de belles valeurs bons perso. original, avance tres bien (6 ep). bonne concretisation"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-83-the-quintessenial-quintuplets",
+  "title": "the quintessenial quintuplets",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.fr/catalogue/the-quintessential-quintuplets/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 9.0,
+    "comment": "vraiment très bon, marrant. beaucoup de meuf mais c bien gerer. Bon dev des perso principaux, bonne histoire. Les reveals de fin sont vraiment interessant. Attention on ne voit pas assez ce qu'il pense, ca tombe un peu du ciel"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-84-your-lie-in-april",
+  "title": "your lie in april",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.fr/catalogue/your-lie-in-april/saison1/vostfr/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 9.0,
+    "comment": "très bien, poétique, bonne fin, originale. belle animation, pas fan du dessin. triste mais bien raconter avec bonnes valeurs"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-85-my-stepmom-s-daughter-is-my-ex",
+  "title": "my stepmom's daughter is my ex",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.fr/catalogue/my-stepmoms-daughter-is-my-ex/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 9.0,
+    "comment": "marrant, concept original(un peu chelou quand meme). avance bien, je pense que les scan doivent être une masterclass"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-86-the-girl-downstairs",
+  "title": "the girl downstairs",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v6.voiranime.com/anime/the-girl-downstairs/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 9.0,
+    "comment": "très bien. bonne animation, musique, dessin. bonne histoire bons perso. j'ai kiffer."
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-87-in-the-clear-moonlight-dusk",
+  "title": "in the clear moonlight dusk",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vf",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.to/catalogue/uruwashi-no-yoi-no-tsuki/saison1/vostfr/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 9.0,
+    "comment": "de bon sujet abordés, j'ai kiffer de fou. bonne animation bon dessin, marrant. vraiment très bien"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-88-bukiyou-na-senpai",
+  "title": "bukiyou na senpai",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.fr/catalogue/bukiyou-na-senpai/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 9.0,
+    "comment": "je note longtemps après. de mémoire très bien, j'ai plus les détails"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-89-farming-life-in-another-world",
+  "title": "farming life in another world",
+  "nickname": "",
+  "genre": "autre",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.org/catalogue/farming-life-in-another-world/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "S1",
+    "note": 9.0,
+    "comment": "trop bien, reposant, de bonnes valeurs. dommage pas shojo alors que estanpiller, un peu decu (suite 2026)"
+   },
+   {
+    "label": "S2",
+    "note": 9.0,
+    "comment": "toujours aussi chill, vraiment bien. attention, un peu repetitif tout de même. on explore plus le monde donc c cool"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "suite 2026",
+  "progress_chapter": "",
+  "progress_episode": "S2"
+ },
+ {
+  "id": "imp-90-i-made-friends-with-the-second-prettiest",
+  "title": "i made friends with the second prettiest girl in my class",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.to/catalogue/i-made-friends-with-the-second-prettiest-girl-in-my-class/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 9.0,
+    "comment": "très bon, très bien, attention la première déclaration sort un peu de nulle part, on sait pas pourquoi elle veut lui parler et tout. rythme excellent et avance très bien. + on les voit ensemble après"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-91-lovely-complex",
+  "title": "lovely complex",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": null,
+  "fmt": null,
+  "anime_url": "https://v5.v",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 8.5,
+    "comment": "belle histoire/ vrai shojo marrant"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-92-tsurezure-children",
+  "title": "tsurezure children",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v6.voiranime.com/anime/tsurezure-children/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 8.5,
+    "comment": "plein de petites histoire. Pas prise de tete, chill, touchant; j'ai kiffer"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-93-tomo-chan-is-a-girl",
+  "title": "tomo-chan is a girl",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vf",
+  "fmt": "serie",
+  "anime_url": "https://v5.voiranime.com/anime/tomo-chan-wa-onnanoko-vf/",
+  "scan_url": "",
+  "anime_status": null,
+  "manga_status": "fini",
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": 10.0,
+   "comment": "histoire sympa, un peu long pour rien. dessin bof incroyable/fun/vrai shojo comme on les aime avec une pointe d'humour"
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-94-grandpa-and-grandma-turn-young-again",
+  "title": "grandpa and grandma turn young again",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v5.voiranime.com/anime/grandpa-and-grandma-turn-young-again/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 8.0,
+    "comment": "vraiment pas mal, etonnant. Des bons perso une belle histoire. Fin/ouverture tres belles"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-95-takagi-san",
+  "title": "Takagi-san",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v6.voiranime.com/anime/karakai-jouzu-no-takagi-san/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": "fini",
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 8.0,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": 8.0,
+   "comment": "marrant, sympa. Avance lentement. Bonne fin mais se resout un peu rapidement"
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-96-relife",
+  "title": "relife",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v6.voiranime.com/anime/relife/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 8.0,
+    "comment": "tres tres bon. fin de fou furieux, marrant, tres beau. dommage pas shojo tout du long, long a mettre en place. l'histoire aurait pu etre plus etale sur les épisodes."
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-97-love-fragrance",
+  "title": "love fragrance",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": null,
+  "fmt": null,
+  "anime_url": "",
+  "scan_url": "https://anime-sama.fr/catalogue/love-fragrance/scan/vf/",
+  "anime_status": null,
+  "manga_status": "fini",
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": 8.0,
+   "comment": "Bien, marrant, adultes. vehicule de bonnes choses"
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-98-mikadono-sisters",
+  "title": "mikadono sisters",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.si/catalogue/mikadono-sanshimai-wa-angai-choroi/saison1/vostfr/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 8.0,
+    "comment": "bien, ca avance bien, c marrant, des bonnes valeurs. dommage cote rivalite pas assez mit en avant j'aurai aimer en voir plus."
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-99-nagatoro",
+  "title": "nagatoro",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vf",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.to/catalogue/ijiranaide-nagatoro-san/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "S2",
+    "note": 8.0,
+    "comment": "en vrai c sympa, je m'attendais pas a ça, je pensais être deçu. personnage attachants, principe sympa. petite résolution cool, ca avance."
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": "S2"
+ },
+ {
+  "id": "imp-100-hokkaido-gals-are-super-adorable",
+  "title": "hokkaido gals are super adorable",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.fr/catalogue/hokkaido-gals-are-super-adorable/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 8.0,
+    "comment": "start très bon mais attention ca ralentit vite. manque de concretisation attention. manga très prometteur"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-101-shikimori-san",
+  "title": "shikimori-san",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v6.voiranime.com/anime/kawaii-dake-ja-nai-shikimori-san/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 7.5,
+    "comment": "bien. - avance pas assez. point + ils sont déjà ensemble = original ++. principe pas mal"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-102-class-no-daikirai-na-joshi-to-kekkon-sur",
+  "title": "Class no daikirai na joshi to kekkon suru koto ni natta",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.fr/catalogue/class-no-daikirai-na-joshi-to-kekkon-suru-koto-ni-natta/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 7.5,
+    "comment": "tres haut potentiel, hate de voir la suite, il faut lire les scans impérativement. la on reste sur la faim et en plus fin pas ouf. dommage"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-103-honey-lemon-soda",
+  "title": "honey lemon soda",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vf",
+  "fmt": "serie",
+  "anime_url": "http://anime-sama.fr/catalogue/honey-lemon-soda/saison1/vostfr/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 7.5,
+    "comment": "pas mal du tout, avance bien, une bonne ambiance. Trop basique peut etre ? quelque chose manque je ne saurai pas dire quoi"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-104-my-tiny-senpai",
+  "title": "my tiny senpai",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.fr/catalogue/my-tiny-senpai/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 7.5,
+    "comment": "enorme potentiel. dommage on perd du temps sur des trucs et du coup ca avance pas assez. j'attends la saison deux avec beaucoup d'impatience"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-105-the-moment-you-fall-in-love",
+  "title": "the moment you fall in love",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "film",
+  "anime_url": "https://v5.voiranime.com/anime/zutto-mae-kara-suki-deshita-kokuhaku-jikkou-iinkai/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 7.0,
+    "comment": "trop cours pas assez aprofondie tres dommage"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-106-kowloon",
+  "title": "Kowloon",
+  "nickname": "",
+  "genre": "autre",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.fr/catalogue/kowloon-generic-romance/saison1/vostfr/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 7.0,
+    "comment": "très bien, pas vraiment shojo donc decu. des beaux msg quand meme. un peu trop complexe."
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-107-the-galaxy-next-door",
+  "title": "the galaxy next door",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.fr/catalogue/a-galaxy-next-door/saison1/vostfr/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 7.0,
+    "comment": "pas mal mais un peu chelou des fois. Pas asser approfondie, les scans ont un gros potentiel. histoire et persos sympa"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-108-ao-haru-ride",
+  "title": "ao haru ride",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": null,
+  "fmt": null,
+  "anime_url": "",
+  "scan_url": "",
+  "anime_status": null,
+  "manga_status": "fini",
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "manga": {
+   "note": 7.0,
+   "comment": "pas mal. un peu court. bonne histoire, persos interressants"
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-109-oregairu",
+  "title": "oregairu",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v5.voiranime.com/anime/yahari-ore-no-seishun-love-comedy-wa-machigatteiru/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 7.0,
+    "comment": "personnage attachant, compliqué parfois a suivre. histoire d'amour pas assez approfondie denouement trop rapide"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-110-yamada-kun-to-lv999-no-koi-wo-suru",
+  "title": "Yamada-kun to Lv999 no Koi wo Suru",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v5.voiranime.com/anime/yamada-kun-to-lv999-no-koi-wo-suru/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 7.0,
+    "comment": "tres bien / tres bon potentiel. sentiment de pas finit et resolution trop rapide. espérons une suite"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-111-net-juu-no-susume",
+  "title": "net juu no susume",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v5.voiranime.com/anime/net-juu-no-susume/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 7.0,
+    "comment": "tres bien, bons perso, marrant histoire d'amour pas assez approfondie dommage, il aurait pu aller tres haut."
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-112-insomniacs-after-school",
+  "title": "insomniacs after school",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v6.voiranime.com/anime/kimi-wa-houkago-insomnia/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 7.0,
+    "comment": "bien, marrant fin cool. Pas assez de concretisation dommage. insomnie style mais mit de cote trop vite"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-113-rikekoi",
+  "title": "rikekoi",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.fr/catalogue/rikekoi/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 7.0,
+    "comment": "pas mal, marrant. avance correctement mais rythme particulier en adéquation avec l'histoire. principe très intéressant néanmoins."
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-114-love-after-world-domination",
+  "title": "love after world domination",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vf",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.fr/catalogue/love-after-world-domination/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 7.0,
+    "comment": "pas mal du tout, marrant, orginal, avance bien. decu de cette fin, j'aurais preferer qu'ils soient découvert, qu'ils s'assument(j'imagine que c le cas dans les scan, ils ont du potentiel)"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-115-wotakoi",
+  "title": "wotakoi",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "film",
+  "anime_url": "https://anime-sama.fr/catalogue/wotaku-ni-koi-wa-muzukashii/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 7.0,
+    "comment": "ok, sans plus j'avou je m'attendais a mieux. pas de suite prévue. manque de concrétisation et de profondeur dommage car prometteur ++"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-116-my-wife-has-no-emotion",
+  "title": "my wife has no emotion",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.fr/catalogue/my-wife-has-no-emotion/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 7.0,
+    "comment": "pas mal du tout, original. souleve de bonne questions societal pour le futur, interessant++."
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-117-criminelles-fian-ailles",
+  "title": "criminelles fiançailles",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.org/catalogue/criminelles-fiancailles/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 7.0,
+    "comment": "pas mal marrant et style mais ca avance pas trop c dommage"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-118-imouza",
+  "title": "imouza",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.si/catalogue/imouza/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 7.0,
+    "comment": "en vrai ca va. principe interessant, original. d'un point de vu shojo ca stagne trop. j'ai pas l'impression que la saison ai servit a grand chose de ce point de vue."
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-119-love-of-kill",
+  "title": "love of kill",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": null,
+  "fmt": "serie",
+  "anime_url": "https://v5.voiranime.com/anime/koroshi-ai-vf/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 7.0,
+    "comment": "bien de souvenir je note longtemps après avoir vu. twist original"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-120-ride-your-wave",
+  "title": "ride your wave",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "film",
+  "anime_url": "https://v5.voiranime.com/anime/kimi-to-nami-ni-noretara/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 7.0,
+    "comment": "sympa, un peu triste. parle de sujet qu'on a pas l'habitude donc très interessant et original"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-121-you-can-t-be-in-a-rom-com",
+  "title": "you can't be in a rom-com",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.tv/catalogue/osananajimi-to-wa-lovecom-ni-naranai/saison1/vostfr/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 7.0,
+    "comment": "ca partait si bien.. Trop de meuf, pas de résolution, dommage. principe sympa, dessin et animation plutôt cool"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-122-pseudo-harem",
+  "title": "pseudo harem",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": null,
+  "fmt": null,
+  "anime_url": "https://v6.voiranime.com/anime/giji-harem/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 6.5,
+    "comment": "bon mais trop decousue, -- se mettent ensemble au milieu mais on voit pas. + on les voit ensemble + on les voit vieux"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-123-amagami-sisters",
+  "title": "amagami sisters",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v6.voiranime.com/anime/tying-the-knot-with-an-amagami-sister",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 6.5,
+    "comment": "pas mal, marrant +original. -Avance pas beaucoup, trop de meufs"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-124-can-a-boy-girl-friendship-survive",
+  "title": "can a boy-girl friendship survive ?",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.fr/catalogue/can-a-boy-girl-friendship-survive/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 6.5,
+    "comment": "c'est pas mal, bonne histoire mais manque de profondeur, par rapport aux perso secondaire qui pourraient offrir une excellente fin. - triangle amoureux( en plus mauvais choix)"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-125-bottom-tier-tomozaki",
+  "title": "Bottom tier tomozaki",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v6.voiranime.com/anime/jaku-chara-tomozaki-kun/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 6.5,
+    "comment": "principe ok, parfois difficile a suivre, avance pas trop. declaration de fin pas mal donc ca rattrape. il fait le bon choix"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-126-the-dreaming-boy-is-a-realist",
+  "title": "the dreaming boy is a realist",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v5.voiranime.com/anime/yumemiru-danshi-wa-genjitsushugisha/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 6.0,
+    "comment": "ok tier, pas mal. Manque d'identite propre, decu du denouement peut etre trop court ?"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-127-love-chunibyo-other-d-lusions",
+  "title": "love, chunibyo & other délusions !",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.fr/catalogue/love-chunibyo-and-other-delusions/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 6.0,
+    "comment": "j'ai eu du mal a accroché au delire. des bonnes scènes une bonne histoire des bons themes cependant. Film inutil n'apporte rien dommage"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-128-a-condition-called-love",
+  "title": "a condition called love",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vf",
+  "fmt": "serie",
+  "anime_url": "https://v5.voiranime.com/anime/a-condition-called-love-vf/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "S1",
+    "note": 6.0,
+    "comment": "trop direct avec les sentiments/trop long parfois. mention spe pour l'histoire qui semble interessante++. A voir la suite tout de meme"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": "S1"
+ },
+ {
+  "id": "imp-129-koori-zokusei-danshi-to-cool-na-douryou-",
+  "title": "koori-zokusei-danshi-to-cool-na-douryou-joshi",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v5.voiranime.com/anime/koori-zokusei-danshi-to-cool-na-douryou-joshi/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 6.0,
+    "comment": "pas mal. +adulte, perso cool, principe original, plusieurs couple. - ca avant pas,aucune resolution, autre couple laisser  l'abandon a du potentiel mais gacher tres dommage"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-130-anthem-of-the-heart",
+  "title": "anthem of the  heart",
+  "nickname": "",
+  "genre": "autre",
+  "lang": "vo",
+  "fmt": "film",
+  "anime_url": "https://v5.voiranime.com/anime/kokoro-ga-sakebitagatterun-da/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 6.0,
+    "comment": "pas shojo donc decu"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-131-i-can-t-understand-what-my-husband-is-sa",
+  "title": "i can't understand what my husband is saying",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.fr/catalogue/i-cant-understand-what-my-husband-is-saying/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 6.0,
+    "comment": "des petits épisodes ok"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-132-ride-your-wave",
+  "title": "ride your wave",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vf",
+  "fmt": "film",
+  "anime_url": "https://anime-sama.fr/catalogue/ride-your-wave/film/vf/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 6.0,
+    "comment": "histoire vraiment cool mais on passe trop vite sur le plus interessant. j'ai pas vraiment vu ce que je voulais, un peu deçu. sinon très style et principe très original"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-133-suki-na-ko-ga-megane-wo-wasureta",
+  "title": "suki na ko ga megane wo wasureta",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://v5.voiranime.com/anime/suki-na-ko-ga-megane-wo-wasureta/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 5.0,
+    "comment": "trop repetitif. Concept pas mal/potentiel mal exploité (mention honorable pour l'animation parfois)"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-134-nisekoi",
+  "title": "nisekoi",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vf",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.fr/catalogue/nisekoi/saison1/vf/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 5.0,
+    "comment": "pas ouf, trop de meuf, ca avance pas, pas de resolution et y'aura pas de suites.flemmes de lire les scan. potentiel tres mal exploite"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-135-i-ll-become-a-villainess",
+  "title": "i'll become a villainess",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vf",
+  "fmt": "serie",
+  "anime_url": "https://v6.voiranime.com/anime/ill-become-a-villainess-that-will-go-down-in-history-vf/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 5.0,
+    "comment": "ok histoire sympa mais avance pas assez, histoire d'amour en second plan dommage"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-136-kokoro-connect",
+  "title": "kokoro connect",
+  "nickname": "",
+  "genre": "shojo",
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.tv/catalogue/kokoro-connect/saison1/vostfr/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 5.0,
+    "comment": "pas réussit a finir. trop répétitif. le dieu arrive, ils galèrent on leur dit au final prank machin (nul) épisode d'après un autre dieu. je sens le potention shojo mais c'est trop mal exploité."
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ },
+ {
+  "id": "imp-137-the-silent-voice",
+  "title": "the silent voice",
+  "nickname": "",
+  "genre": "autre",
+  "lang": "vo",
+  "fmt": "film",
+  "anime_url": "https://v5.voiranime.com/anime/koe-no-katachi/",
+  "scan_url": "",
+  "anime_status": "fini",
+  "manga_status": null,
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": 4.0,
+    "comment": "pas shojo + trop triste"
+   }
+  ],
+  "manga": {
+   "note": null,
+   "comment": ""
+  },
+  "sequel_date": "",
+  "progress_chapter": "",
+  "progress_episode": ""
+ }
+];
+</script>
+<script>
+/* ============================================================
+   ANIME//DB — logique application (v3)
+   ============================================================ */
+
+const STORAGE_KEY = 'anime-db-entries';
+const IMAGE_CACHE_KEY = 'anime-db-image-cache';
+const SYNOPSIS_CACHE_KEY = 'anime-db-synopsis-cache';
+const SEEDED_KEY = 'anime-db-seeded-flag-v3';
+
+const CATS = {
+  a_lire:    { label: 'Scan à lire',   sub: 'Mangas que tu veux commencer à lire' },
+  en_cours:  { label: 'En cours',      sub: 'Ce que tu regardes / lis en ce moment' },
+  att_suite: { label: 'Att. suite',    sub: 'Suite annoncée — en attente' },
+  a_voir:    { label: 'À voir',        sub: 'Tout ce que tu veux découvrir' },
+  fini:      { label: 'Fini',          sub: 'Classé par note (celle du scan prime sur celle de l\'anime)' },
+  toutes:    { label: 'Toutes les œuvres', sub: 'Vue complète, tous statuts confondus' },
+};
+
+const STATUS_LABEL = {
+  a_voir: 'À voir', a_lire: 'À lire', en_cours: 'En cours', att_suite: 'Att. suite', fini: 'Fini',
+};
+
+const ANIME_STATUS_OPTIONS = [
+  ['', 'Aucun'], ['a_voir', 'À voir'], ['en_cours', 'En cours'],
+  ['att_suite', 'Att. suite'], ['fini', 'Fini'],
+];
+const MANGA_STATUS_OPTIONS = [
+  ['', 'Aucun'], ['a_lire', 'À lire'], ['en_cours', 'En cours'],
+  ['att_suite', 'Att. suite'], ['fini', 'Fini'],
+];
+
+let DATA = [];
+let IMAGE_CACHE = {};
+let SYNOPSIS_CACHE = {};
+let state = {
+  genre: 'shojo',     // shojo | autre
+  category: 'en_cours',
+  subtab: 'tous',
+  search: '',
+};
+let editingId = null;
+let modalSeasons = [];
+
+/* ---------------- storage helpers ---------------- */
+async function storageGet(key, fallback) {
+  try {
+    const r = await window.storage.get(key, false);
+    return r ? JSON.parse(r.value) : fallback;
+  } catch (e) {
+    return fallback;
+  }
+}
+async function storageSet(key, value) {
+  try {
+    await window.storage.set(key, JSON.stringify(value), false);
+  } catch (e) {
+    console.error('storage set failed', key, e);
+  }
+}
+
+/* ---------------- migration from older schema versions to v3 ---------------- */
+function migrateEntry(e) {
+  if (e.anime_status !== undefined && e.manga_status !== undefined) return e; // already v3
+
+  if (e.anime_seasons && e.manga) {
+    // v2 shape: single category + type
+    const genre = e.genre || 'shojo';
+    const hasAnime = e.anime_seasons.some(s => s.note != null || s.comment);
+    const hasManga = e.manga.note != null || e.manga.comment;
+    let anime_status = null, manga_status = null;
+    if (e.category === 'a_lire') manga_status = 'a_lire';
+    else if (e.category === 'a_voir') anime_status = 'a_voir';
+    else if (['en_cours', 'att_suite', 'fini'].includes(e.category)) {
+      if (hasManga) manga_status = e.category;
+      if (hasAnime || !hasManga) anime_status = e.category;
+    }
+    return {
+      id: e.id, title: e.title, nickname: e.nickname || '', genre,
+      lang: e.lang || null, fmt: e.fmt || null,
+      anime_url: e.anime_url || '', scan_url: e.scan_url || '',
+      anime_status, manga_status,
+      anime_seasons: e.anime_seasons, manga: e.manga,
+      sequel_date: e.sequel_date || '', progress_chapter: e.progress_chapter || '',
+      progress_episode: e.progress_episode || '',
+    };
+  }
+
+  // v1 shape: category/avoir_sub/anime_note/manga_note/comment
+  const genre = e.genre || e.avoir_sub || 'shojo';
+  const anime_seasons = [{
+    label: e.progress_episode || 'Anime',
+    note: (e.anime_note !== undefined ? e.anime_note : null),
+    comment: (e.manga_note != null && e.anime_note == null) ? '' : (e.comment || ''),
+  }];
+  const manga = {
+    note: (e.manga_note !== undefined ? e.manga_note : null),
+    comment: (e.manga_note != null && e.anime_note == null) ? (e.comment || '') : '',
+  };
+  const hasAnime = anime_seasons.some(s => s.note != null || s.comment);
+  const hasManga = manga.note != null || manga.comment;
+  let anime_status = null, manga_status = null;
+  if (e.category === 'a_lire') manga_status = 'a_lire';
+  else if (e.category === 'a_voir') anime_status = 'a_voir';
+  else if (['en_cours', 'att_suite', 'fini'].includes(e.category)) {
+    if (hasManga) manga_status = e.category;
+    if (hasAnime || !hasManga) anime_status = e.category;
+  }
+  return {
+    id: e.id, title: e.title, nickname: '', genre,
+    lang: e.lang || null, fmt: e.fmt || null,
+    anime_url: e.anime_url || '', scan_url: e.scan_url || '',
+    anime_status, manga_status,
+    anime_seasons, manga,
+    sequel_date: e.sequel_date || '', progress_chapter: e.progress_chapter || '',
+    progress_episode: e.progress_episode || '',
+  };
+}
+
+async function init() {
+  const seeded = await storageGet(SEEDED_KEY, false);
+  DATA = await storageGet(STORAGE_KEY, null);
+  if (!seeded || !DATA) {
+    DATA = JSON.parse(JSON.stringify(SEED_DATA));
+    await storageSet(STORAGE_KEY, DATA);
+    await storageSet(SEEDED_KEY, true);
+  } else {
+    DATA = DATA.map(migrateEntry);
+    await persist();
+  }
+  IMAGE_CACHE = await storageGet(IMAGE_CACHE_KEY, {});
+  SYNOPSIS_CACHE = await storageGet(SYNOPSIS_CACHE_KEY, {});
+  renderGenreSwitch();
+  renderNav();
+  render();
+}
+
+async function persist() {
+  await storageSet(STORAGE_KEY, DATA);
+}
+
+/* ---------------- utils ---------------- */
+function uid() {
+  return 'e-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+}
+function escapeHtml(s) {
+  if (!s) return '';
+  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function fmtNote(n) {
+  if (n === null || n === undefined || n === '') return null;
+  const v = parseFloat(n);
+  if (isNaN(v)) return null;
+  return (Number.isInteger(v) ? v.toFixed(0) : v.toFixed(1)) + '/10';
+}
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toast._h);
+  toast._h = setTimeout(() => t.classList.remove('show'), 2200);
+}
+function initials(title) {
+  return (title || '?').trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase();
+}
+function lastAnimeNote(e) {
+  for (let i = e.anime_seasons.length - 1; i >= 0; i--) {
+    if (e.anime_seasons[i].note != null) return e.anime_seasons[i].note;
+  }
+  return null;
+}
+function animeReferenceNote(e) {
+  // the anime's own reference score: manual "note finale" if set, else the last season's note
+  return (e.anime_overall_note != null) ? e.anime_overall_note : lastAnimeNote(e);
+}
+function finalNote(e) {
+  // used for the "Fini" ranking: the scan's note always wins if present
+  const m = e.manga.note;
+  return m != null ? m : animeReferenceNote(e);
+}
+function autoGrow(el) {
+  if (!el) return;
+  el.style.height = 'auto';
+  el.style.height = (el.scrollHeight + 2) + 'px';
+}
+function wireAutoGrow(root) {
+  root.querySelectorAll('textarea').forEach(t => {
+    autoGrow(t);
+    t.addEventListener('input', () => autoGrow(t));
+  });
+}
+
+/* ---------------- view membership (an entry can match a category via either side) ---------------- */
+function matchesView(e, key) {
+  if (key === 'toutes') return true;
+  if (key === 'a_lire') return e.manga_status === 'a_lire';
+  if (key === 'a_voir') return e.anime_status === 'a_voir';
+  if (key === 'en_cours') return e.anime_status === 'en_cours' || e.manga_status === 'en_cours';
+  if (key === 'att_suite') return e.anime_status === 'att_suite' || e.manga_status === 'att_suite';
+  if (key === 'fini') return e.anime_status === 'fini' || e.manga_status === 'fini';
+  return false;
+}
+
+/* ---------------- filtering ---------------- */
+function filteredEntries() {
+  let list = DATA.filter(e => matchesView(e, state.category) && e.genre === state.genre);
+
+  if (state.category === 'a_voir' && state.subtab !== 'tous') {
+    const [lang, fmt] = state.subtab.split('-');
+    list = list.filter(e => e.lang === lang && e.fmt === fmt);
+  }
+
+  if (state.search.trim()) {
+    const q = state.search.trim().toLowerCase();
+    list = list.filter(e =>
+      (e.title || '').toLowerCase().includes(q) ||
+      (e.nickname || '').toLowerCase().includes(q)
+    );
+  }
+
+  if (state.category === 'fini') {
+    list = list.slice().sort((a, b) => (finalNote(b) ?? -1) - (finalNote(a) ?? -1));
+  } else {
+    list = list.slice().sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+  }
+  return list;
+}
+
+/* ---------------- genre switch ---------------- */
+function renderGenreSwitch() {
+  const wrap = document.getElementById('genreSwitch');
+  wrap.innerHTML = `
+    <div class="genre-btn shojo ${state.genre === 'shojo' ? 'active' : ''}" data-g="shojo">🎀 Shojo</div>
+    <div class="genre-btn autre ${state.genre === 'autre' ? 'active' : ''}" data-g="autre">⚔ Autre</div>
+  `;
+  wrap.querySelectorAll('.genre-btn').forEach(b => {
+    b.onclick = () => {
+      state.genre = b.dataset.g;
+      state.subtab = 'tous';
+      renderGenreSwitch();
+      renderNav();
+      render();
+    };
+  });
+}
+
+/* ---------------- nav ---------------- */
+function renderNav() {
+  const nav = document.getElementById('nav');
+  nav.innerHTML = '';
+  Object.entries(CATS).forEach(([key, meta]) => {
+    const count = DATA.filter(e => matchesView(e, key) && e.genre === state.genre).length;
+    const item = document.createElement('div');
+    item.className = 'nav-item' + (state.category === key ? ' active' : '');
+    item.innerHTML = `<span>${meta.label}</span><span class="nav-count">${count}</span>`;
+    item.onclick = () => {
+      state.category = key;
+      state.subtab = 'tous';
+      renderNav();
+      render();
+    };
+    nav.appendChild(item);
+  });
+}
+
+/* ---------------- subtabs (À voir only — format filters) ---------------- */
+function renderSubtabs() {
+  const wrap = document.getElementById('subtabs');
+  wrap.innerHTML = '';
+  if (state.category !== 'a_voir') return;
+  const tabs = [
+    ['tous', 'TOUS'], ['vf-serie', 'VF · SÉRIE'], ['vf-film', 'VF · FILM'],
+    ['vo-serie', 'VO · SÉRIE'], ['vo-film', 'VO · FILM'],
+  ];
+  tabs.forEach(([key, label]) => {
+    const d = document.createElement('div');
+    d.className = 'subtab' + (state.subtab === key ? ' active' : '');
+    d.textContent = label;
+    d.onclick = () => { state.subtab = key; render(); };
+    wrap.appendChild(d);
+  });
+}
+
+/* ---------------- main render ---------------- */
+function render() {
+  const genreLabel = state.genre === 'shojo' ? '🎀 Shojo' : '⚔ Autre';
+  document.getElementById('pageTitle').textContent = `${CATS[state.category].label} — ${genreLabel}`;
+  document.getElementById('pageSub').textContent = CATS[state.category].sub;
+  renderSubtabs();
+
+  const main = document.getElementById('main');
+  const list = filteredEntries();
+
+  if (!list.length) {
+    main.innerHTML = `<div class="empty-state"><div class="big">◇</div>Rien ici pour l'instant.<br>Ajoute une œuvre ou change de catégorie / univers.</div>`;
+    return;
+  }
+
+  main.innerHTML = '';
+
+  if (state.category === 'fini') {
+    const groups = new Map();
+    list.forEach(e => {
+      const n = finalNote(e);
+      const key = n != null ? Math.round(n * 2) / 2 : 'none'; // exact 0.5 steps, 6.5 != 6
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(e);
+    });
+    const keys = Array.from(groups.keys()).sort((a, b) => {
+      if (a === 'none') return 1;
+      if (b === 'none') return -1;
+      return b - a;
+    });
+    keys.forEach(key => {
+      const label = document.createElement('div');
+      label.className = 'section-label';
+      label.textContent = key === 'none' ? 'SANS NOTE' : `★ ${key}/10`;
+      main.appendChild(label);
+      const grid = document.createElement('div');
+      grid.className = 'grid';
+      groups.get(key).forEach(e => grid.appendChild(renderCard(e, null)));
+      main.appendChild(grid);
+    });
+    return;
+  }
+
+  if (state.category === 'en_cours' || state.category === 'att_suite') {
+    const animeList = list.filter(e => e.anime_status === state.category);
+    const mangaList = list.filter(e => e.manga_status === state.category);
+    if (animeList.length) {
+      const label = document.createElement('div');
+      label.className = 'section-label';
+      label.textContent = '📺 ANIME';
+      main.appendChild(label);
+      const grid = document.createElement('div');
+      grid.className = 'grid';
+      animeList.forEach(e => grid.appendChild(renderCard(e, 'anime')));
+      main.appendChild(grid);
+    }
+    if (mangaList.length) {
+      const label = document.createElement('div');
+      label.className = 'section-label';
+      label.textContent = '📖 MANGA / SCAN';
+      main.appendChild(label);
+      const grid = document.createElement('div');
+      grid.className = 'grid';
+      mangaList.forEach(e => grid.appendChild(renderCard(e, 'manga')));
+      main.appendChild(grid);
+    }
+    return;
+  }
+
+  const grid = document.createElement('div');
+  grid.className = 'grid';
+  const side = state.category === 'a_lire' ? 'manga' : (state.category === 'a_voir' ? 'anime' : (state.category === 'toutes' ? 'both' : null));
+  list.forEach(e => grid.appendChild(renderCard(e, side)));
+  main.appendChild(grid);
+}
+
+function buildPastilles(e, side) {
+  const pills = [];
+  const animeNote = animeReferenceNote(e);
+
+  if (state.category === 'fini') {
+    if (e.anime_status === 'fini') {
+      pills.push(`<span class="anime">📺 ${animeNote != null ? fmtNote(animeNote) : 'Fini'}</span>`);
+    }
+    if (e.manga_status === 'fini') {
+      pills.push(`<span class="manga">📖 ${e.manga.note != null ? fmtNote(e.manga.note) : 'Fini'}</span>`);
+    }
+  } else if (side === 'both') {
+    if (e.anime_status) {
+      const txt = e.anime_status === 'fini' && animeNote != null ? fmtNote(animeNote) : STATUS_LABEL[e.anime_status];
+      pills.push(`<span class="anime">📺 ${txt}</span>`);
+    }
+    if (e.manga_status) {
+      const txt = e.manga_status === 'fini' && e.manga.note != null ? fmtNote(e.manga.note) : STATUS_LABEL[e.manga_status];
+      pills.push(`<span class="manga">📖 ${txt}</span>`);
+    }
+  } else if (side === 'anime') {
+    pills.push(`<span class="anime">📺 ${animeNote != null ? fmtNote(animeNote) : STATUS_LABEL[e.anime_status] || ''}</span>`);
+  } else if (side === 'manga') {
+    pills.push(`<span class="manga">📖 ${e.manga.note != null ? fmtNote(e.manga.note) : STATUS_LABEL[e.manga_status] || ''}</span>`);
+  }
+
+  return pills.length ? `<div class="dual-note">${pills.join('')}</div>` : '';
+}
+
+function renderCard(e, side) {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.dataset.id = e.id;
+
+  const cachedImg = IMAGE_CACHE[e.title.toLowerCase()];
+
+  const noteHtml = buildPastilles(e, side);
+
+  const typeBadges = [];
+  if (e.lang) typeBadges.push(e.lang.toUpperCase());
+  if (e.fmt) typeBadges.push(e.fmt === 'serie' ? 'SÉRIE' : 'FILM');
+
+  const metaParts = [];
+  if (side === 'anime' && e.progress_episode) metaParts.push(e.progress_episode);
+  if (side === 'manga' && e.progress_chapter) metaParts.push('ch. ' + e.progress_chapter);
+  if (state.category === 'att_suite' && e.sequel_date) metaParts.push('⏵ ' + e.sequel_date);
+
+  const links = [];
+  if (e.anime_url) links.push(`<a href="${escapeHtml(e.anime_url)}" target="_blank" rel="noopener" class="link-pill" onclick="event.stopPropagation()">📺 anime</a>`);
+  if (e.scan_url) links.push(`<a href="${escapeHtml(e.scan_url)}" target="_blank" rel="noopener" class="link-pill scan" onclick="event.stopPropagation()">📖 scan</a>`);
+
+  card.innerHTML = `
+    <div class="card-img-wrap">
+      ${cachedImg
+        ? `<img src="${cachedImg}" alt="">`
+        : `<div class="ph">${escapeHtml(initials(e.title))}</div>`}
+      ${noteHtml}
+      ${typeBadges.length ? `<div class="type-badges">${typeBadges.map(t => `<span>${t}</span>`).join('')}</div>` : ''}
+    </div>
+    <div class="card-body">
+      <div class="card-title-wrap">
+        <div class="card-nickname">${escapeHtml(e.nickname || e.title)}</div>
+        ${e.nickname ? `<div class="card-realtitle">${escapeHtml(e.title)}</div>` : ''}
+      </div>
+      ${metaParts.length ? `<div class="card-meta">${metaParts.map(escapeHtml).join(' · ')}</div>` : ''}
+      ${links.length ? `<div class="card-links">${links.join('')}</div>` : ''}
+      <div class="card-actions" data-actions></div>
+    </div>
+  `;
+
+  const actions = card.querySelector('[data-actions]');
+  buildCardActions(e, actions, side);
+
+  card.addEventListener('click', () => openModal(e.id));
+
+  if (!cachedImg) queueImageFetch(e);
+
+  return card;
+}
+
+function buildCardActions(e, container, side) {
+  const mk = (label, cls, fn) => {
+    const b = document.createElement('button');
+    b.className = 'btn btn-sm ' + cls;
+    b.textContent = label;
+    b.onclick = (ev) => { ev.stopPropagation(); fn(); };
+    return b;
+  };
+
+  if (state.category === 'a_lire') {
+    container.appendChild(mk('▶ Commencer', 'btn-outline', () => setStatus(e.id, 'manga_status', 'en_cours')));
+    container.appendChild(mk('✓ Terminé', 'btn-ghost', () => openModal(e.id, 'manga')));
+  } else if (state.category === 'a_voir') {
+    container.appendChild(mk('▶ Commencer', 'btn-outline', () => setStatus(e.id, 'anime_status', 'en_cours')));
+    container.appendChild(mk('✓ Terminé', 'btn-ghost', () => openModal(e.id, 'anime')));
+  } else if (state.category === 'en_cours') {
+    if (side === 'anime') {
+      container.appendChild(mk('⏳ Att. suite', 'btn-outline', () => setStatus(e.id, 'anime_status', 'att_suite')));
+      container.appendChild(mk('✓ Terminé', 'btn-ghost', () => openModal(e.id, 'anime')));
+      container.appendChild(mk('↩ À voir', 'btn-ghost', () => setStatus(e.id, 'anime_status', 'a_voir')));
+    } else {
+      container.appendChild(mk('⏳ Att. suite', 'btn-outline', () => setStatus(e.id, 'manga_status', 'att_suite')));
+      container.appendChild(mk('✓ Terminé', 'btn-ghost', () => openModal(e.id, 'manga')));
+      container.appendChild(mk('↩ À lire', 'btn-ghost', () => setStatus(e.id, 'manga_status', 'a_lire')));
+    }
+  } else if (state.category === 'att_suite') {
+    if (side === 'anime') {
+      container.appendChild(mk('▶ Reprendre', 'btn-outline', () => setStatus(e.id, 'anime_status', 'en_cours')));
+      container.appendChild(mk('✓ Terminé', 'btn-ghost', () => openModal(e.id, 'anime')));
+      container.appendChild(mk('↩ À voir', 'btn-ghost', () => setStatus(e.id, 'anime_status', 'a_voir')));
+    } else {
+      container.appendChild(mk('▶ Reprendre', 'btn-outline', () => setStatus(e.id, 'manga_status', 'en_cours')));
+      container.appendChild(mk('✓ Terminé', 'btn-ghost', () => openModal(e.id, 'manga')));
+      container.appendChild(mk('↩ À lire', 'btn-ghost', () => setStatus(e.id, 'manga_status', 'a_lire')));
+    }
+  } else if (state.category === 'fini') {
+    if (e.anime_status === 'fini') {
+      container.appendChild(mk('↺ Anime → En cours', 'btn-ghost', () => setStatus(e.id, 'anime_status', 'en_cours')));
+    }
+    if (e.manga_status === 'fini') {
+      container.appendChild(mk('↺ Scan → En cours', 'btn-ghost', () => setStatus(e.id, 'manga_status', 'en_cours')));
+    }
+  }
+
+  const otherGenre = e.genre === 'shojo' ? 'autre' : 'shojo';
+  const otherLabel = e.genre === 'shojo' ? '⇄ Vers Autre' : '⇄ Vers Shojo';
+  container.appendChild(mk(otherLabel, 'btn-ghost', () => moveGenre(e.id, otherGenre)));
+}
+
+async function setStatus(id, field, value) {
+  const e = DATA.find(x => x.id === id);
+  if (!e) return;
+  e[field] = value;
+  await persist();
+  renderNav();
+  render();
+  toast(`"${e.title}" mis à jour`);
+}
+
+async function moveGenre(id, newGenre) {
+  const e = DATA.find(x => x.id === id);
+  if (!e) return;
+  e.genre = newGenre;
+  await persist();
+  renderNav();
+  render();
+  toast(`"${e.title}" déplacé vers ${newGenre === 'shojo' ? 'Shojo' : 'Autre'}`);
+}
+
+async function deleteEntry(id) {
+  const e = DATA.find(x => x.id === id);
+  if (!e) return;
+  if (!confirm(`Supprimer "${e.title}" ? Cette action est définitive.`)) return;
+  DATA = DATA.filter(x => x.id !== id);
+  await persist();
+  closeModal();
+  renderNav();
+  render();
+  toast('Œuvre supprimée');
+}
+
+/* ---------------- image fetching (throttled + cached, no permanent failure caching) ---------------- */
+let imgQueue = [];
+let imgQueueRunning = false;
+const failedThisSession = new Set();
+
+function queueImageFetch(e) {
+  const key = e.title.toLowerCase();
+  if (IMAGE_CACHE[key]) return;
+  if (failedThisSession.has(key)) return;
+  if (imgQueue.find(q => q.id === e.id)) return;
+  imgQueue.push(e);
+  if (!imgQueueRunning) runImageQueue();
+}
+
+async function runImageQueue() {
+  imgQueueRunning = true;
+  while (imgQueue.length) {
+    const e = imgQueue.shift();
+    const key = e.title.toLowerCase();
+    if (IMAGE_CACHE[key] || failedThisSession.has(key)) continue;
+    let url = null;
+    try {
+      url = await fetchCoverImage(e.title);
+    } catch (err) { /* ignore */ }
+    if (url) {
+      IMAGE_CACHE[key] = url;
+      storageSet(IMAGE_CACHE_KEY, IMAGE_CACHE);
+      document.querySelectorAll(`.card[data-id="${e.id}"] .card-img-wrap`).forEach(cardImgWrap => {
+        const ph = cardImgWrap.querySelector('.ph');
+        if (ph) {
+          const img = document.createElement('img');
+          img.referrerPolicy = 'no-referrer';
+          img.onerror = () => { img.remove(); if (!cardImgWrap.querySelector('.ph')) cardImgWrap.prepend(ph); };
+          img.src = url;
+          cardImgWrap.insertBefore(img, ph);
+          ph.remove();
+        }
+      });
+    } else {
+      failedThisSession.add(key);
+    }
+    await new Promise(r => setTimeout(r, 300));
+  }
+  imgQueueRunning = false;
+}
+
+async function fetchCoverImage(title) {
+  const cleanTitle = title.replace(/\([^)]*\)/g, '').trim();
+
+  try {
+    const query = `query ($search: String) { Media(search: $search, type: ANIME) { coverImage { large } } }`;
+    const r = await fetch('https://graphql.anilist.co', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ query, variables: { search: cleanTitle } }),
+    });
+    if (r.ok) {
+      const j = await r.json();
+      const img = j?.data?.Media?.coverImage?.large;
+      if (img) return img;
+    }
+  } catch (e) {}
+
+  try {
+    const query = `query ($search: String) { Media(search: $search, type: MANGA) { coverImage { large } } }`;
+    const r = await fetch('https://graphql.anilist.co', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ query, variables: { search: cleanTitle } }),
+    });
+    if (r.ok) {
+      const j = await r.json();
+      const img = j?.data?.Media?.coverImage?.large;
+      if (img) return img;
+    }
+  } catch (e) {}
+
+  const q = encodeURIComponent(cleanTitle);
+  try {
+    const r = await fetch(`https://api.jikan.moe/v4/anime?q=${q}&limit=1&sfw=true`);
+    if (r.ok) {
+      const j = await r.json();
+      const img = j?.data?.[0]?.images?.jpg?.image_url;
+      if (img) return img;
+    }
+  } catch (e) {}
+
+  return null;
+}
+
+function stripHtml(s) {
+  return (s || '')
+    .replace(/<br\s*\/?>/gi, ' ')
+    .replace(/<[^>]+>/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+async function fetchSynopsis(title) {
+  const cleanTitle = title.replace(/\([^)]*\)/g, '').trim();
+  for (const type of ['ANIME', 'MANGA']) {
+    try {
+      const query = `query ($search: String) { Media(search: $search, type: ${type}) { description(asHtml: false) } }`;
+      const r = await fetch('https://graphql.anilist.co', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ query, variables: { search: cleanTitle } }),
+      });
+      if (r.ok) {
+        const j = await r.json();
+        const desc = j?.data?.Media?.description;
+        if (desc) return stripHtml(desc);
+      }
+    } catch (e) {}
+  }
+  return null;
+}
+
+async function getSynopsis(title, forceRefresh) {
+  const key = title.toLowerCase();
+  if (!forceRefresh && SYNOPSIS_CACHE[key] !== undefined) return SYNOPSIS_CACHE[key];
+  const text = await fetchSynopsis(title);
+  SYNOPSIS_CACHE[key] = text || null;
+  storageSet(SYNOPSIS_CACHE_KEY, SYNOPSIS_CACHE);
+  return SYNOPSIS_CACHE[key];
+}
+
+/* ---------------- modal (add / edit) ---------------- */
+async function loadSynopsisIntoModal(title) {
+  const box = document.getElementById('synopsisBox');
+  const refreshWrap = document.getElementById('synoRefreshWrap');
+  if (!box) return;
+  if (!title) {
+    box.textContent = 'Renseigne un titre puis enregistre pour aller chercher le résumé.';
+    return;
+  }
+
+  const paint = (text) => {
+    if (!document.getElementById('synopsisBox')) return; // modal closed meanwhile
+    document.getElementById('synopsisBox').textContent = text || "Résumé introuvable pour ce titre. Vérifie l'orthographe du vrai nom ci-dessus.";
+  };
+
+  const cached = SYNOPSIS_CACHE[title.toLowerCase()];
+  if (cached !== undefined) {
+    paint(cached);
+  } else {
+    box.textContent = 'Chargement du résumé...';
+    getSynopsis(title).then(paint);
+  }
+
+  if (refreshWrap) {
+    refreshWrap.innerHTML = `<button type="button" class="link-edit-btn" id="synoRefreshBtn" title="Rafraîchir le résumé">🔄</button>`;
+    document.getElementById('synoRefreshBtn').onclick = () => {
+      box.textContent = 'Chargement du résumé...';
+      getSynopsis(document.getElementById('fTitle').value.trim() || title, true).then(paint);
+    };
+  }
+}
+
+function statusChips(id, options, current) {
+  return `<div class="chip-select" id="${id}">
+    ${options.map(([val, label]) => `<div class="chip ${current === val || (!current && val === '') ? 'on' : ''}" data-val="${val}">${label}</div>`).join('')}
+  </div>`;
+}
+
+function openModal(id, presetFinishSide) {
+  editingId = id || null;
+  const e = editingId ? DATA.find(x => x.id === editingId) : {
+    id: null, title: '', nickname: '', genre: state.genre,
+    lang: '', fmt: '', anime_url: '', scan_url: '',
+    anime_status: state.category === 'a_voir' ? 'a_voir' : null,
+    manga_status: state.category === 'a_lire' ? 'a_lire' : null,
+    anime_seasons: [{ label: 'Anime', note: null, comment: '' }],
+    anime_overall_note: null,
+    manga: { note: null, comment: '' },
+    sequel_date: '', progress_chapter: '', progress_episode: '',
+  };
+
+  let animeStatusPreset = e.anime_status || '';
+  let mangaStatusPreset = e.manga_status || '';
+  if (presetFinishSide === 'anime') animeStatusPreset = 'fini';
+  if (presetFinishSide === 'manga') mangaStatusPreset = 'fini';
+
+  modalSeasons = JSON.parse(JSON.stringify(e.anime_seasons && e.anime_seasons.length ? e.anime_seasons : [{ label: 'Anime', note: null, comment: '' }]));
+
+  const root = document.getElementById('modalRoot');
+  root.innerHTML = `
+  <div class="modal-overlay" id="overlay">
+    <div class="modal">
+      <button class="modal-close" id="mClose">✕</button>
+      <h2>${editingId ? (presetFinishSide ? '✓ Marquer comme terminé' : "Modifier l'œuvre") : '+ Ajouter une œuvre'}</h2>
+      <div class="field-row">
+        <div class="field">
+          <label>Titre (vrai nom, utilisé pour la recherche d'image)</label>
+          <input type="text" id="fTitle" value="${escapeHtml(e.title)}" placeholder="Nom de l'anime / manga">
+        </div>
+        <div class="field">
+          <label>Surnom (optionnel, pour ta recherche)</label>
+          <input type="text" id="fNickname" value="${escapeHtml(e.nickname || '')}" placeholder="Comment tu l'appelles">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Univers</label>
+        <div class="chip-select" id="fGenre">
+          <div class="chip ${e.genre !== 'autre' ? 'on' : ''}" data-val="shojo">🎀 Shojo</div>
+          <div class="chip ${e.genre === 'autre' ? 'on' : ''}" data-val="autre">⚔ Autre</div>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label>Statut anime</label>
+          ${statusChips('fAnimeStatus', ANIME_STATUS_OPTIONS, animeStatusPreset)}
+        </div>
+        <div class="field">
+          <label>Statut manga / scan</label>
+          ${statusChips('fMangaStatus', MANGA_STATUS_OPTIONS, mangaStatusPreset)}
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label>Langue</label>
+          <div class="chip-select" id="fLang">
+            <div class="chip ${e.lang === 'vf' ? 'on' : ''}" data-val="vf">VF</div>
+            <div class="chip ${e.lang === 'vo' ? 'on' : ''}" data-val="vo">VO</div>
+          </div>
+        </div>
+        <div class="field">
+          <label>Format</label>
+          <div class="chip-select" id="fFmt">
+            <div class="chip ${e.fmt === 'serie' ? 'on' : ''}" data-val="serie">Série</div>
+            <div class="chip ${e.fmt === 'film' ? 'on' : ''}" data-val="film">Film</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label>Lien anime</label>
+          ${e.anime_url ? `<a href="${escapeHtml(e.anime_url)}" target="_blank" rel="noopener" class="link-pill" style="display:inline-block;margin-bottom:6px;">🔗 ouvrir le lien</a>` : ''}
+          <input type="url" id="fAnimeUrl" value="${escapeHtml(e.anime_url || '')}" placeholder="https://...">
+        </div>
+        <div class="field">
+          <label>Lien scan</label>
+          ${e.scan_url ? `<a href="${escapeHtml(e.scan_url)}" target="_blank" rel="noopener" class="link-pill scan" style="display:inline-block;margin-bottom:6px;">🔗 ouvrir le lien</a>` : ''}
+          <input type="url" id="fScanUrl" value="${escapeHtml(e.scan_url || '')}" placeholder="https://...">
+        </div>
+      </div>
+
+      <div class="block-section">
+        <h3>📝 Résumé <span id="synoRefreshWrap"></span></h3>
+        <div id="synopsisBox" class="field-hint" style="font-size:.9rem;color:var(--text-muted);line-height:1.4;">Chargement du résumé...</div>
+      </div>
+
+      <div class="field-row3">
+        <div class="field">
+          <label>Épisode / saison actuelle</label>
+          <input type="text" id="fProgEp" value="${escapeHtml(e.progress_episode || '')}" placeholder="S1, ep 12...">
+        </div>
+        <div class="field">
+          <label>Chapitre (scan)</label>
+          <input type="text" id="fProgCh" value="${escapeHtml(e.progress_chapter || '')}" placeholder="184">
+        </div>
+        <div class="field">
+          <label>Suite prévue</label>
+          <input type="text" id="fSuite" value="${escapeHtml(e.sequel_date || '')}" placeholder="suite 2026">
+        </div>
+      </div>
+
+      <div class="block-section">
+        <h3>📺 Anime — note &amp; avis par saison / film</h3>
+        <p class="field-hint">Ajoute une ligne par saison, et aussi par film (même sorti entre deux saisons).</p>
+        <div id="seasonRows"></div>
+        <button type="button" class="add-season-btn" id="addSeasonBtn">➕ Ajouter une saison / un film</button>
+        <div class="field" style="max-width:220px;margin-top:12px;">
+          <label>Note finale anime (optionnelle)</label>
+          <input type="number" id="fAnimeOverallNote" min="0" max="10" step="0.5" value="${e.anime_overall_note ?? ''}" placeholder="ex: 8.5">
+        </div>
+        <p class="field-hint">Sert de référence si l'anime a plusieurs saisons. Si vide, c'est la note de la dernière saison qui compte. La note du scan reste toujours prioritaire pour le classement dans "Fini".</p>
+      </div>
+
+      <div class="block-section">
+        <h3>📖 Manga / Scan</h3>
+        <div class="field-row">
+          <div class="field" style="max-width:140px;">
+            <label>Note scan (/10)</label>
+            <input type="number" id="fMangaNote" min="0" max="10" step="0.5" value="${e.manga.note ?? ''}">
+          </div>
+        </div>
+        <div class="field">
+          <label>Commentaire scan</label>
+          <textarea id="fMangaComment" placeholder="Ton avis sur le manga...">${escapeHtml(e.manga.comment || '')}</textarea>
+        </div>
+      </div>
+
+      <p class="hint">La note affichée dans "Fini" = note du scan si elle existe, sinon la dernière note d'anime renseignée.</p>
+
+      <div class="modal-footer">
+        <div>${editingId ? `<button class="btn btn-danger btn-sm" id="mDelete">🗑 Supprimer</button>` : '<span></span>'}</div>
+        <div class="modal-footer-right">
+          <button class="btn btn-ghost" id="mCancel">Annuler</button>
+          <button class="btn btn-primary" id="mSave">${presetFinishSide ? '✓ Valider' : 'Enregistrer'}</button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+
+  const overlay = document.getElementById('overlay');
+  document.getElementById('mClose').onclick = closeModal;
+  document.getElementById('mCancel').onclick = closeModal;
+  overlay.onclick = (ev) => { if (ev.target === overlay) closeModal(); };
+  if (editingId) document.getElementById('mDelete').onclick = () => deleteEntry(editingId);
+
+  wireChipGroup('fGenre');
+  wireChipGroup('fAnimeStatus');
+  wireChipGroup('fMangaStatus');
+  wireChipGroup('fLang');
+  wireChipGroup('fFmt');
+
+  loadSynopsisIntoModal(e.title);
+
+  overlay.addEventListener('keydown', (ev) => {
+    if (ev.key === 'Enter' && ev.target.tagName !== 'TEXTAREA') {
+      ev.preventDefault();
+      saveModal();
+    }
+  });
+
+  renderSeasonRows();
+  document.getElementById('addSeasonBtn').onclick = () => {
+    modalSeasons.push({ label: `S${modalSeasons.length + 1}`, note: null, comment: '' });
+    renderSeasonRows();
+  };
+
+  wireAutoGrow(root);
+
+  document.getElementById('mSave').onclick = () => saveModal();
+
+  setTimeout(() => document.getElementById('fTitle')?.focus(), 50);
+}
+
+function renderSeasonRows() {
+  const wrap = document.getElementById('seasonRows');
+  wrap.innerHTML = modalSeasons.map((s, idx) => `
+    <div class="season-row" data-idx="${idx}">
+      ${modalSeasons.length > 1 ? `<button type="button" class="season-remove" data-remove="${idx}">✕</button>` : ''}
+      <div class="season-row-top">
+        <input type="text" class="s-label" value="${escapeHtml(s.label || '')}" placeholder="S1 / Film 1">
+        <input type="number" class="s-note" min="0" max="10" step="0.5" value="${s.note ?? ''}" placeholder="Note /10">
+      </div>
+      <textarea class="s-comment" placeholder="Avis sur cette saison / ce film...">${escapeHtml(s.comment || '')}</textarea>
+    </div>
+  `).join('');
+  wrap.querySelectorAll('[data-remove]').forEach(btn => {
+    btn.onclick = () => {
+      syncSeasonsFromDom();
+      modalSeasons.splice(parseInt(btn.dataset.remove, 10), 1);
+      renderSeasonRows();
+      wireAutoGrow(wrap);
+    };
+  });
+  wireAutoGrow(wrap);
+}
+
+function syncSeasonsFromDom() {
+  const rows = document.querySelectorAll('#seasonRows .season-row');
+  rows.forEach((row, idx) => {
+    if (!modalSeasons[idx]) return;
+    modalSeasons[idx].label = row.querySelector('.s-label').value.trim() || `S${idx + 1}`;
+    const noteVal = row.querySelector('.s-note').value;
+    modalSeasons[idx].note = noteVal !== '' ? parseFloat(noteVal) : null;
+    modalSeasons[idx].comment = row.querySelector('.s-comment').value.trim();
+  });
+}
+
+function wireChipGroup(id, onChange) {
+  const wrap = document.getElementById(id);
+  if (!wrap) return;
+  wrap.querySelectorAll('.chip').forEach(c => {
+    c.onclick = () => {
+      wrap.querySelectorAll('.chip').forEach(x => x.classList.remove('on'));
+      c.classList.add('on');
+      if (onChange) onChange(c.dataset.val);
+    };
+  });
+}
+function chipVal(id) {
+  const wrap = document.getElementById(id);
+  const on = wrap?.querySelector('.chip.on');
+  return on ? on.dataset.val : null;
+}
+
+function closeModal() {
+  document.getElementById('modalRoot').innerHTML = '';
+  editingId = null;
+  modalSeasons = [];
+}
+
+async function saveModal() {
+  const title = document.getElementById('fTitle').value.trim();
+  if (!title) { toast('Le titre est obligatoire'); return; }
+
+  syncSeasonsFromDom();
+
+  const nickname = document.getElementById('fNickname').value.trim();
+  const genre = chipVal('fGenre') || 'shojo';
+  const anime_status = chipVal('fAnimeStatus') || null;
+  const manga_status = chipVal('fMangaStatus') || null;
+  const lang = chipVal('fLang');
+  const fmt = chipVal('fFmt');
+  const anime_url = document.getElementById('fAnimeUrl').value.trim();
+  const scan_url = document.getElementById('fScanUrl').value.trim();
+  const progress_episode = document.getElementById('fProgEp').value.trim();
+  const progress_chapter = document.getElementById('fProgCh').value.trim();
+  const sequel_date = document.getElementById('fSuite').value.trim();
+  const mangaNoteRaw = document.getElementById('fMangaNote').value;
+  const manga = {
+    note: mangaNoteRaw !== '' ? parseFloat(mangaNoteRaw) : null,
+    comment: document.getElementById('fMangaComment').value.trim(),
+  };
+  const anime_seasons = modalSeasons.map(s => ({
+    label: s.label || 'Anime',
+    note: s.note,
+    comment: s.comment || '',
+  }));
+  const overallRaw = document.getElementById('fAnimeOverallNote').value;
+  const anime_overall_note = overallRaw !== '' ? parseFloat(overallRaw) : null;
+
+  const payload = {
+    title, nickname, genre, anime_status, manga_status, lang, fmt, anime_url, scan_url,
+    progress_episode, progress_chapter, sequel_date,
+    anime_seasons, anime_overall_note, manga,
+  };
+
+  if (editingId) {
+    const idx = DATA.findIndex(x => x.id === editingId);
+    if (idx > -1) DATA[idx] = { ...DATA[idx], ...payload };
+    toast('Modifications enregistrées');
+  } else {
+    DATA.push({ id: uid(), ...payload });
+    toast('Œuvre ajoutée');
+  }
+
+  await persist();
+  closeModal();
+  renderNav();
+  render();
+}
+
+/* ---------------- export / import / reset ---------------- */
+function exportJSON() {
+  const blob = new Blob([JSON.stringify(DATA, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'anime-db-export.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('Export téléchargé');
+}
+
+function importJSON(file) {
+  const reader = new FileReader();
+  reader.onload = async () => {
+    let parsed;
+    try {
+      parsed = JSON.parse(reader.result);
+    } catch (err) {
+      toast('Fichier invalide : JSON illisible');
+      return;
+    }
+    if (!Array.isArray(parsed)) {
+      toast('Fichier invalide : ce n\'est pas une liste d\'œuvres');
+      return;
+    }
+    if (!confirm(`Importer ${parsed.length} œuvre(s) ? Cela remplacera toutes tes données actuelles.`)) return;
+    DATA = parsed.map(migrateEntry);
+    await persist();
+    renderNav();
+    render();
+    toast(`${DATA.length} œuvre(s) importée(s)`);
+  };
+  reader.readAsText(file);
+}
+
+async function resetImport() {
+  if (!confirm("Ceci va remplacer toutes tes données actuelles par la liste importée depuis ton fichier d'origine. Continuer ?")) return;
+  DATA = JSON.parse(JSON.stringify(SEED_DATA));
+  await persist();
+  renderNav();
+  render();
+  toast("Données réinitialisées depuis l'import");
+}
+
+async function retryAllImages() {
+  failedThisSession.clear();
+  IMAGE_CACHE = {};
+  await storageSet(IMAGE_CACHE_KEY, IMAGE_CACHE);
+  toast('Rechargement des images en cours...');
+  render();
+}
+
+/* ---------------- global listeners ---------------- */
+document.getElementById('btnAdd').onclick = () => openModal(null);
+document.getElementById('btnExport').onclick = exportJSON;
+document.getElementById('btnImport').onclick = () => document.getElementById('fileImport').click();
+document.getElementById('fileImport').addEventListener('change', (ev) => {
+  const file = ev.target.files[0];
+  if (file) importJSON(file);
+  ev.target.value = '';
+});
+document.getElementById('btnReset').onclick = resetImport;
+document.getElementById('btnRetryImages').onclick = retryAllImages;
+document.getElementById('searchInput').addEventListener('input', (e) => {
+  state.search = e.target.value;
+  render();
+});
+
+init();
+
+</script>
+</body>
+</html>
