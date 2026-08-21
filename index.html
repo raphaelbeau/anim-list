@@ -5077,12 +5077,12 @@ function openModal(id, presetFinishSide) {
       <h2>${editingId ? (presetFinishSide ? '✓ Marquer comme terminé' : "Modifier l'œuvre") : '+ Ajouter une œuvre'}</h2>
       <div class="field-row">
         <div class="field">
-          <label>Titre (vrai nom, utilisé pour la recherche d'image)</label>
-          <input type="text" id="fTitle" value="${escapeHtml(e.title)}" placeholder="Nom de l'anime / manga">
+          <label>Titre</label>
+          <input type="text" id="fTitle" value="${escapeHtml(e.title)}" placeholder="">
         </div>
         <div class="field">
-          <label>Surnom (optionnel, pour ta recherche)</label>
-          <input type="text" id="fNickname" value="${escapeHtml(e.nickname || '')}" placeholder="Comment tu l'appelles">
+          <label>Surnom</label>
+          <input type="text" id="fNickname" value="${escapeHtml(e.nickname || '')}" placeholder="">
         </div>
       </div>
 
@@ -5100,7 +5100,7 @@ function openModal(id, presetFinishSide) {
           ${statusChips('fAnimeStatus', ANIME_STATUS_OPTIONS, animeStatusPreset)}
         </div>
         <div class="field">
-          <label>Statut manga / scan</label>
+          <label>Statut scan</label>
           ${statusChips('fMangaStatus', MANGA_STATUS_OPTIONS, mangaStatusPreset)}
         </div>
       </div>
@@ -5126,62 +5126,69 @@ function openModal(id, presetFinishSide) {
         <div class="field">
           <label>Lien anime</label>
           ${e.anime_url ? `<a href="${escapeHtml(e.anime_url)}" target="_blank" rel="noopener" class="link-pill" style="display:inline-block;margin-bottom:6px;">🔗 ouvrir le lien</a>` : ''}
-          <input type="url" id="fAnimeUrl" value="${escapeHtml(e.anime_url || '')}" placeholder="https://...">
+          <input type="url" id="fAnimeUrl" value="${escapeHtml(e.anime_url || '')}" placeholder="">
         </div>
         <div class="field">
           <label>Lien scan</label>
           ${e.scan_url ? `<a href="${escapeHtml(e.scan_url)}" target="_blank" rel="noopener" class="link-pill scan" style="display:inline-block;margin-bottom:6px;">🔗 ouvrir le lien</a>` : ''}
-          <input type="url" id="fScanUrl" value="${escapeHtml(e.scan_url || '')}" placeholder="https://...">
+          <input type="url" id="fScanUrl" value="${escapeHtml(e.scan_url || '')}" placeholder="">
         </div>
       </div>
 
       <div class="block-section">
-        <h3>📝 Résumé <span id="synoRefreshWrap"></span></h3>
+        <h3>Résumé <span id="synoRefreshWrap"></span></h3>
         <div id="synopsisBox" class="field-hint" style="font-size:.9rem;color:var(--text-muted);line-height:1.4;">Chargement du résumé...</div>
       </div>
 
       <div class="field-row3">
         <div class="field">
-          <label>Épisode / saison actuelle</label>
-          <input type="text" id="fProgEp" value="${escapeHtml(e.progress_episode || '')}" placeholder="S1, ep 12...">
+          <label>Prochain épisode</label>
+          <input type="text" id="fProgEp" value="${escapeHtml(e.progress_episode || '')}" placeholder="">
         </div>
         <div class="field">
-          <label>Chapitre (scan)</label>
-          <input type="text" id="fProgCh" value="${escapeHtml(e.progress_chapter || '')}" placeholder="184">
+          <label>Prochain n° scan</label>
+          <input type="text" id="fProgCh" value="${escapeHtml(e.progress_chapter || '')}" placeholder="">
         </div>
         <div class="field">
           <label>Suite prévue</label>
-          <input type="text" id="fSuite" value="${escapeHtml(e.sequel_date || '')}" placeholder="suite 2026">
+          <input type="text" id="fSuite" value="${escapeHtml(e.sequel_date || '')}" placeholder="">
         </div>
       </div>
 
       <div class="block-section">
-        <h3>📺 Anime — note &amp; avis par saison / film</h3>
-        <p class="field-hint">Ajoute une ligne par saison, et aussi par film (même sorti entre deux saisons).</p>
+        <h3>NOTE anime</h3>
+        <p class="field-hint"></p>
         <div id="seasonRows"></div>
         <button type="button" class="add-season-btn" id="addSeasonBtn">➕ Ajouter une saison / un film</button>
         <div class="field" style="max-width:220px;margin-top:12px;">
-          <label>Note finale anime (optionnelle)</label>
-          <input type="number" id="fAnimeOverallNote" min="0" max="10" step="0.5" value="${e.anime_overall_note ?? ''}" placeholder="ex: 8.5">
+          <label>Note finale anime</label>
+          <input type="number" id="fAnimeOverallNote" min="0" max="10" step="0.5" value="${e.anime_overall_note ?? ''}" placeholder="">
+           <details class="field-help">
+  <p class="field-hint">
+    Pas obligatoire, sert de référence si l'anime a plusieurs saisons. Si vide, c'est la note de la dernière saison qui compte. 
+    La note du scan reste toujours prioritaire pour le classement dans "Fini".
+  </p>
+</details>
         </div>
-        <p class="field-hint">Sert de référence si l'anime a plusieurs saisons. Si vide, c'est la note de la dernière saison qui compte. La note du scan reste toujours prioritaire pour le classement dans "Fini".</p>
       </div>
 
       <div class="block-section">
-        <h3>📖 Manga / Scan</h3>
+        <h3>NOTE Manga / Scan</h3>
         <div class="field-row">
           <div class="field" style="max-width:140px;">
-            <label>Note scan (/10)</label>
-            <input type="number" id="fMangaNote" min="0" max="10" step="0.5" value="${e.manga.note ?? ''}">
+            <label></label>
+            <input type="number" id="fMangaNote" min="0" max="10" step="0.5" value="${e.manga.note ?? ''}" placeholder="Note">
           </div>
         </div>
         <div class="field">
           <label>Commentaire scan</label>
-          <textarea id="fMangaComment" placeholder="Ton avis sur le manga...">${escapeHtml(e.manga.comment || '')}</textarea>
+          <textarea id="fMangaComment" placeholder="Avis">${escapeHtml(e.manga.comment || '')}</textarea>
         </div>
       </div>
-
-      <p class="hint">La note affichée dans "Fini" = note du scan si elle existe, sinon la dernière note d'anime renseignée.</p>
+                  <details class="field-help">
+ <p class="hint">La note affichée dans "Fini" = note du scan si elle existe, sinon la dernière note d'anime renseignée.</p>
+</details>
+      
 
       <div class="modal-footer">
         <div>${editingId ? `<button class="btn btn-danger btn-sm" id="mDelete">🗑 Supprimer</button>` : '<span></span>'}</div>
@@ -5233,10 +5240,10 @@ function renderSeasonRows() {
     <div class="season-row" data-idx="${idx}">
       ${modalSeasons.length > 1 ? `<button type="button" class="season-remove" data-remove="${idx}">✕</button>` : ''}
       <div class="season-row-top">
-        <input type="text" class="s-label" value="${escapeHtml(s.label || '')}" placeholder="S1 / Film 1">
-        <input type="number" class="s-note" min="0" max="10" step="0.5" value="${s.note ?? ''}" placeholder="Note /10">
+        <input type="text" class="s-label" value="${escapeHtml(s.label || '')}" placeholder="Saison">
+        <input type="number" class="s-note" min="0" max="10" step="0.5" value="${s.note ?? ''}" placeholder="Note">
       </div>
-      <textarea class="s-comment" placeholder="Avis sur cette saison / ce film...">${escapeHtml(s.comment || '')}</textarea>
+      <textarea class="s-comment" placeholder="Avis">${escapeHtml(s.comment || '')}</textarea>
     </div>
   `).join('');
   wrap.querySelectorAll('[data-remove]').forEach(btn => {
