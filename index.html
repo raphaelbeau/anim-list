@@ -146,6 +146,27 @@ a{color:var(--neon-cyan);}
   text-align:left;
 }
 .ghost-btn:hover{color:var(--neon-cyan);border-color:var(--neon-cyan);}
+.sync-btn{border-color:var(--neon-violet);color:var(--neon-violet);}
+.sync-btn:hover{color:var(--neon-magenta);border-color:var(--neon-magenta);}
+.sync-status{
+  font-family:'Share Tech Mono',monospace;
+  font-size:.68rem;
+  color:var(--text-dim);
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:0 2px;
+  min-height:1.2em;
+}
+.sync-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--text-dim);
+  flex:none;
+}
+.sync-dot.ok{background:var(--good);box-shadow:0 0 6px var(--good);}
+.sync-dot.error{background:var(--danger);box-shadow:0 0 6px var(--danger);}
+.sync-dot.syncing{background:var(--neon-cyan);box-shadow:0 0 6px var(--neon-cyan);animation:pulse-dot 1s infinite;}
+@keyframes pulse-dot{0%,100%{opacity:1;}50%{opacity:.3;}}
 
 /* ---------- HEADER / HERO ---------- */
 .hero{
@@ -680,6 +701,8 @@ main{padding:24px 40px 60px;}
     <div class="genre-switch" id="genreSwitch"></div>
     <div id="nav"></div>
     <div class="sidebar-footer">
+      <button class="ghost-btn sync-btn" id="btnSync">🔗 SYNCHRO GITHUB</button>
+      <div id="syncStatus" class="sync-status"></div>
       <button class="ghost-btn" id="btnRetryImages">🖼 RÉESSAYER LES IMAGES MANQUANTES</button>
       <button class="ghost-btn" id="btnExport">↓ EXPORTER (JSON)</button>
       <button class="ghost-btn" id="btnImport">↑ IMPORTER (JSON)</button>
@@ -786,6 +809,157 @@ async function storageSet(key, value) {
   }
 }
 
+/* ---------------- GitHub sync (optional, cross-device) ----------------
+   Config + PAT always live in plain localStorage on the device (deliberately
+   NOT in window.storage), since this is a per-device credential the user
+   manages themselves. When configured, the GitHub JSON file becomes the
+   source of truth: we pull it on load and push after every local change,
+   so several devices can share the same data without relying on each
+   device's own local storage. */
+const SYNC_CONFIG_KEY = 'anime-db-github-sync-config';
+
+function getSyncConfig() {
+  try {
+    const raw = window.localStorage.getItem(SYNC_CONFIG_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch (e) { return null; }
+}
+function setSyncConfig(cfg) {
+  try { window.localStorage.setItem(SYNC_CONFIG_KEY, JSON.stringify(cfg)); } catch (e) {}
+}
+function clearSyncConfig() {
+  try { window.localStorage.removeItem(SYNC_CONFIG_KEY); } catch (e) {}
+}
+function isSyncConfigured() {
+  const c = getSyncConfig();
+  return !!(c && c.owner && c.repo && c.path && c.token);
+}
+
+let syncState = { syncing: false, lastSync: null, lastError: null, sha: null };
+
+function b64EncodeUnicode(str) {
+  return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (m, p1) => String.fromCharCode(parseInt(p1, 16))));
+}
+function b64DecodeUnicode(str) {
+  const clean = str.replace(/\n/g, '');
+  return decodeURIComponent(atob(clean).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+}
+
+function githubContentsUrl(cfg) {
+  return `https://api.github.com/repos/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}/contents/${cfg.path.split('/').map(encodeURIComponent).join('/')}`;
+}
+function githubHeaders(cfg) {
+  return {
+    'Authorization': `Bearer ${cfg.token}`,
+    'Accept': 'application/vnd.github+json',
+    'X-GitHub-Api-Version': '2022-11-28',
+  };
+}
+
+async function githubGetFile(cfg) {
+  const branch = cfg.branch || 'main';
+  try {
+    const r = await fetch(`${githubContentsUrl(cfg)}?ref=${encodeURIComponent(branch)}`, { headers: githubHeaders(cfg) });
+    if (r.status === 404) return { notFound: true };
+    if (r.status === 401 || r.status === 403) return { error: 'Token invalide ou permissions insuffisantes.' };
+    if (!r.ok) return { error: `Erreur GitHub (${r.status})` };
+    const j = await r.json();
+    const text = b64DecodeUnicode(j.content || '');
+    const parsed = JSON.parse(text);
+    return { data: parsed, sha: j.sha };
+  } catch (e) {
+    return { error: 'Impossible de contacter GitHub (réseau ?)' };
+  }
+}
+
+async function githubPutFile(cfg, dataObj, sha, retried) {
+  const branch = cfg.branch || 'main';
+  const body = {
+    message: `anime-db: mise à jour (${new Date().toISOString()})`,
+    content: b64EncodeUnicode(JSON.stringify(dataObj, null, 1)),
+    branch,
+  };
+  if (sha) body.sha = sha;
+  try {
+    const r = await fetch(githubContentsUrl(cfg), {
+      method: 'PUT', headers: { ...githubHeaders(cfg), 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    if (r.status === 409 && !retried) {
+      // someone/something else updated the file since our last read — refetch sha and retry once
+      const fresh = await githubGetFile(cfg);
+      if (fresh.sha) return githubPutFile(cfg, dataObj, fresh.sha, true);
+      return { error: 'Conflit de version, réessaie la synchronisation.' };
+    }
+    if (r.status === 401 || r.status === 403) return { error: 'Token invalide ou permissions insuffisantes.' };
+    if (!r.ok) return { error: `Erreur GitHub (${r.status})` };
+    const j = await r.json();
+    return { sha: j.content?.sha };
+  } catch (e) {
+    return { error: 'Impossible de contacter GitHub (réseau ?)' };
+  }
+}
+
+async function githubTestConnection(cfg) {
+  const result = await githubGetFile(cfg);
+  if (result.error) return { ok: false, message: result.error };
+  if (result.notFound) return { ok: true, message: 'Connexion OK — le fichier sera créé à la première synchro.' };
+  const count = Array.isArray(result.data) ? result.data.length : '?';
+  return { ok: true, message: `Connexion OK — ${count} œuvre(s) trouvée(s) dans le fichier distant.` };
+}
+
+async function pullFromGitHub(silent) {
+  const cfg = getSyncConfig();
+  if (!cfg) return false;
+  syncState.syncing = true;
+  const result = await githubGetFile(cfg);
+  syncState.syncing = false;
+  if (result.error) {
+    syncState.lastError = result.error;
+    if (!silent) toast('⚠️ Sync GitHub : ' + result.error);
+    return false;
+  }
+  if (result.notFound) {
+    syncState.sha = null;
+    syncState.lastError = null;
+    return false; // nothing remote yet, keep local data, first push will create it
+  }
+  DATA = (Array.isArray(result.data) ? result.data : []).map(migrateEntry);
+  syncState.sha = result.sha;
+  syncState.lastSync = Date.now();
+  syncState.lastError = null;
+  await storageSet(STORAGE_KEY, DATA); // keep a local offline cache in sync too
+  return true;
+}
+
+let pushDebounceTimer = null;
+function schedulePushToGitHub() {
+  if (!isSyncConfigured()) return;
+  clearTimeout(pushDebounceTimer);
+  pushDebounceTimer = setTimeout(() => pushToGitHub(), 1500);
+}
+
+async function pushToGitHub(manual) {
+  const cfg = getSyncConfig();
+  if (!cfg) return false;
+  syncState.syncing = true;
+  if (manual) renderSyncStatus();
+  const result = await githubPutFile(cfg, DATA, syncState.sha);
+  syncState.syncing = false;
+  if (result.error) {
+    syncState.lastError = result.error;
+    toast('⚠️ Sync GitHub : ' + result.error);
+    renderSyncStatus();
+    return false;
+  }
+  syncState.sha = result.sha;
+  syncState.lastSync = Date.now();
+  syncState.lastError = null;
+  renderSyncStatus();
+  if (manual) toast('Synchronisé avec GitHub ✓');
+  return true;
+}
+
 /* ---------------- migration from older schema versions to v3 ---------------- */
 function migrateEntry(e) {
   if (e.anime_status !== undefined && e.manga_status !== undefined) return e; // already v3
@@ -865,25 +1039,35 @@ async function init() {
   const storageOk = await storageSelfTest();
   if (!storageOk) showStorageWarning();
 
-  const seeded = await storageGet(SEEDED_KEY, false);
-  DATA = await storageGet(STORAGE_KEY, null);
-  if (!seeded || !DATA) {
-    DATA = JSON.parse(JSON.stringify(SEED_DATA));
-    await storageSet(STORAGE_KEY, DATA);
-    await storageSet(SEEDED_KEY, true);
-  } else {
-    DATA = DATA.map(migrateEntry);
-    await persist();
+  let pulledFromGitHub = false;
+  if (isSyncConfigured()) {
+    pulledFromGitHub = await pullFromGitHub(true);
   }
+
+  if (!pulledFromGitHub) {
+    const seeded = await storageGet(SEEDED_KEY, false);
+    DATA = await storageGet(STORAGE_KEY, null);
+    if (!seeded || !DATA) {
+      DATA = JSON.parse(JSON.stringify(SEED_DATA));
+      await storageSet(STORAGE_KEY, DATA);
+      await storageSet(SEEDED_KEY, true);
+    } else {
+      DATA = DATA.map(migrateEntry);
+      await persist(true); // local-only, avoid pushing before we've even confirmed sync state
+    }
+  }
+
   IMAGE_CACHE = await storageGet(IMAGE_CACHE_KEY, {});
   SYNOPSIS_CACHE = await storageGet(SYNOPSIS_CACHE_KEY, {});
   renderGenreSwitch();
   renderNav();
+  renderSyncStatus();
   render();
 }
 
-async function persist() {
+async function persist(skipSync) {
   await storageSet(STORAGE_KEY, DATA);
+  if (!skipSync) schedulePushToGitHub();
 }
 
 /* ---------------- utils ---------------- */
@@ -974,6 +1158,28 @@ function filteredEntries() {
     list = list.slice().sort((a, b) => displayName(a).localeCompare(displayName(b)));
   }
   return list;
+}
+
+/* ---------------- sync status indicator ---------------- */
+function renderSyncStatus() {
+  const el = document.getElementById('syncStatus');
+  if (!el) return;
+  if (!isSyncConfigured()) {
+    el.innerHTML = '';
+    return;
+  }
+  if (syncState.syncing) {
+    el.innerHTML = `<span class="sync-dot syncing"></span> Synchro en cours...`;
+  } else if (syncState.lastError) {
+    el.innerHTML = `<span class="sync-dot error"></span> Erreur de sync`;
+  } else if (syncState.lastSync) {
+    const t = new Date(syncState.lastSync);
+    const hh = String(t.getHours()).padStart(2, '0');
+    const mm = String(t.getMinutes()).padStart(2, '0');
+    el.innerHTML = `<span class="sync-dot ok"></span> Sync ${hh}:${mm}`;
+  } else {
+    el.innerHTML = `<span class="sync-dot"></span> GitHub configuré`;
+  }
 }
 
 /* ---------------- genre switch ---------------- */
@@ -1819,8 +2025,143 @@ async function retryAllImages() {
   render(); // re-renders cards; any still missing an image will auto re-queue via queueImageFetch
 }
 
+/* ---------------- GitHub sync modal ---------------- */
+function openSyncModal() {
+  const cfg = getSyncConfig() || { owner: '', repo: '', path: 'data.json', branch: 'main', token: '' };
+  const root = document.getElementById('modalRoot');
+  root.innerHTML = `
+  <div class="modal-overlay" id="syncOverlay">
+    <div class="modal">
+      <button class="modal-close" id="syncClose">✕</button>
+      <h2>🔗 Synchronisation GitHub</h2>
+      <p class="field-hint" style="margin-bottom:14px;">
+        Relie l'app à un fichier JSON dans un dépôt GitHub pour partager tes données entre plusieurs appareils.
+        Une fois configuré, ce fichier devient la référence : l'app le récupère à l'ouverture et le met à jour après chaque modification.
+      </p>
+
+      <div class="field-row">
+        <div class="field">
+          <label>Propriétaire (user ou org)</label>
+          <input type="text" id="syncOwner" value="${escapeHtml(cfg.owner)}" placeholder="ton-pseudo-github">
+        </div>
+        <div class="field">
+          <label>Dépôt</label>
+          <input type="text" id="syncRepo" value="${escapeHtml(cfg.repo)}" placeholder="anime-db">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Chemin du fichier</label>
+          <input type="text" id="syncPath" value="${escapeHtml(cfg.path || 'data.json')}" placeholder="data.json">
+        </div>
+        <div class="field">
+          <label>Branche</label>
+          <input type="text" id="syncBranch" value="${escapeHtml(cfg.branch || 'main')}" placeholder="main">
+        </div>
+      </div>
+      <div class="field">
+        <label>Personal Access Token</label>
+        <input type="password" id="syncToken" value="${escapeHtml(cfg.token)}" placeholder="github_pat_...">
+        <p class="field-hint">
+          Utilise de préférence un <strong>fine-grained token</strong> limité à ce seul dépôt, avec la permission
+          "Contents: Read and write" — rien d'autre n'est nécessaire.
+          <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Créer un token →</a><br>
+          Il est enregistré uniquement dans le navigateur de cet appareil (jamais envoyé ailleurs qu'à GitHub).
+        </p>
+      </div>
+
+      <div id="syncTestResult" class="field-hint" style="min-height:1.2em;"></div>
+
+      <div class="modal-footer">
+        <div><button class="btn btn-danger btn-sm" id="syncClear">🗑 Réinitialiser / déconnecter</button></div>
+        <div class="modal-footer-right">
+          <button class="btn btn-ghost" id="syncTest">🔌 Tester la connexion</button>
+          <button class="btn btn-outline" id="syncNow">🔄 Synchroniser maintenant</button>
+          <button class="btn btn-primary" id="syncSave">💾 Enregistrer</button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+
+  const overlay = document.getElementById('syncOverlay');
+  document.getElementById('syncClose').onclick = closeSyncModal;
+  overlay.onclick = (ev) => { if (ev.target === overlay) closeSyncModal(); };
+
+  function readForm() {
+    return {
+      owner: document.getElementById('syncOwner').value.trim(),
+      repo: document.getElementById('syncRepo').value.trim(),
+      path: document.getElementById('syncPath').value.trim() || 'data.json',
+      branch: document.getElementById('syncBranch').value.trim() || 'main',
+      token: document.getElementById('syncToken').value.trim(),
+    };
+  }
+
+  document.getElementById('syncSave').onclick = () => {
+    const newCfg = readForm();
+    if (!newCfg.owner || !newCfg.repo || !newCfg.token) {
+      toast('Propriétaire, dépôt et token sont obligatoires');
+      return;
+    }
+    setSyncConfig(newCfg);
+    syncState = { syncing: false, lastSync: null, lastError: null, sha: null };
+    toast('Configuration enregistrée');
+    renderSyncStatus();
+    closeSyncModal();
+  };
+
+  document.getElementById('syncTest').onclick = async () => {
+    const newCfg = readForm();
+    if (!newCfg.owner || !newCfg.repo || !newCfg.token) {
+      toast('Propriétaire, dépôt et token sont obligatoires');
+      return;
+    }
+    const resultEl = document.getElementById('syncTestResult');
+    resultEl.textContent = 'Test en cours...';
+    const result = await githubTestConnection(newCfg);
+    resultEl.textContent = (result.ok ? '✅ ' : '❌ ') + result.message;
+  };
+
+  document.getElementById('syncNow').onclick = async () => {
+    const newCfg = readForm();
+    if (!newCfg.owner || !newCfg.repo || !newCfg.token) {
+      toast('Enregistre la configuration avant de synchroniser');
+      return;
+    }
+    setSyncConfig(newCfg);
+    const resultEl = document.getElementById('syncTestResult');
+    resultEl.textContent = 'Synchronisation en cours...';
+    const pulled = await pullFromGitHub();
+    if (pulled) {
+      renderNav();
+      render();
+      resultEl.textContent = '✅ Données récupérées depuis GitHub.';
+    } else if (!syncState.lastError) {
+      const pushed = await pushToGitHub(true);
+      resultEl.textContent = pushed ? '✅ Données envoyées vers GitHub (fichier créé).' : '❌ ' + (syncState.lastError || 'Échec de la synchro.');
+    } else {
+      resultEl.textContent = '❌ ' + syncState.lastError;
+    }
+    renderSyncStatus();
+  };
+
+  document.getElementById('syncClear').onclick = () => {
+    if (!confirm("Déconnecter la synchro GitHub ? Le token sera supprimé de cet appareil. Tes données restent en local.")) return;
+    clearSyncConfig();
+    syncState = { syncing: false, lastSync: null, lastError: null, sha: null };
+    toast('Synchro GitHub désactivée sur cet appareil');
+    renderSyncStatus();
+    closeSyncModal();
+  };
+}
+
+function closeSyncModal() {
+  document.getElementById('modalRoot').innerHTML = '';
+}
+
 /* ---------------- global listeners ---------------- */
 document.getElementById('btnAdd').onclick = () => openModal(null);
+document.getElementById('btnSync').onclick = openSyncModal;
 document.getElementById('btnExport').onclick = exportJSON;
 document.getElementById('btnImport').onclick = () => document.getElementById('fileImport').click();
 document.getElementById('fileImport').addEventListener('change', (ev) => {
