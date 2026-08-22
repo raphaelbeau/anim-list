@@ -204,7 +204,28 @@ a{color:var(--neon-cyan);}
   opacity:.35;
   pointer-events:none;
 }
+.hero-title-row{display:flex;align-items:flex-start;gap:12px;}
 .hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;position:relative;z-index:1;}
+.hamburger-btn{
+  display:none;
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--grid-line);
+  color:var(--text-primary);
+  font-size:1.3rem;
+  line-height:1;
+  padding:8px 11px;
+  border-radius:8px;
+  cursor:pointer;
+  flex:none;
+}
+.hamburger-btn:hover{border-color:var(--neon-cyan);color:var(--neon-cyan);}
+.sidebar-backdrop{
+  display:none;
+  position:fixed;inset:0;
+  background:rgba(5,0,12,.7);
+  z-index:150;
+}
+.sidebar-backdrop.show{display:block;}
 .hero-title{
   font-family:'Audiowide',cursive;
   font-size:1.9rem;
@@ -452,7 +473,7 @@ main{padding:24px 40px 60px;}
   backdrop-filter:blur(3px);
   display:flex;align-items:flex-start;justify-content:center;
   padding:40px 16px;
-  z-index:100;
+  z-index:300;
   overflow-y:auto;
 }
 .modal{
@@ -676,26 +697,55 @@ main{padding:24px 40px 60px;}
 
 @media (max-width: 880px){
   .app{grid-template-columns:1fr;}
+  .hamburger-btn{display:inline-flex;align-items:center;justify-content:center;}
   .sidebar{
-    position:static;height:auto;
-    flex-direction:row;
-    overflow-x:auto;
-    padding:12px;
+    position:fixed;
+    top:0; left:0;
+    height:100vh;
+    width:250px;
+    max-width:82vw;
+    transform:translateX(-105%);
+    transition:transform .25s ease;
+    z-index:200;
+    flex-direction:column;
+    overflow-y:auto;
+    box-shadow:8px 0 30px rgba(0,0,0,.5);
   }
-  .sidebar-footer{display:none;}
-  .brand,.brand-sub{display:none;}
+  .sidebar.open{transform:translateX(0);}
+  .sidebar-footer{display:flex;}
+  .brand,.brand-sub{display:block;}
   .hero,main{padding-left:16px;padding-right:16px;}
   .subtabs{padding-left:16px;padding-right:16px;}
   .field-row,.field-row3{grid-template-columns:1fr;}
+  .hero-title{font-size:1.3rem;}
+
+  /* smaller cards so more fit per row on a phone screen */
+  .grid{grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:10px;}
+  .card-body{padding:8px 8px 10px;gap:4px;}
+  .card-nickname{font-size:.8rem;}
+  .card-realtitle{font-size:.58rem;}
+  .card-meta{font-size:.6rem;}
+  .card-actions{gap:4px;}
+  .card-actions .btn{font-size:.66rem;padding:5px 6px;}
+  .link-pill{font-size:.6rem;padding:3px 6px;}
+}
+
+@media (max-width: 420px){
+  .grid{grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px;}
+  .hero-actions{width:100%;}
+  .search-box{flex:1;}
+  .search-box input{width:100%;}
 }
 </style>
 </head>
 <body>
+
 <div id="storageWarning" class="storage-warning">
   ⚠️ La sauvegarde ne fonctionne pas dans ce navigateur pour cette page (navigation privée ? cookies/stockage bloqués pour ce site ?). Tes modifications ne seront <strong>pas conservées</strong> après fermeture tant que ce n'est pas réglé. Pense à utiliser <strong>Exporter (JSON)</strong> régulièrement en attendant.
 </div>
 <div class="app">
-  <aside class="sidebar">
+  <div id="sidebarBackdrop" class="sidebar-backdrop"></div>
+  <aside class="sidebar" id="sidebar">
     <div class="brand">ANIME<span>//</span>DB</div>
     <div class="brand-sub"></div>
     <div class="genre-switch" id="genreSwitch"></div>
@@ -713,9 +763,12 @@ main{padding:24px 40px 60px;}
   <div>
     <header class="hero">
       <div class="hero-top">
-        <div>
-          <h1 class="hero-title" id="pageTitle">À voir</h1>
-          <p class="hero-sub" id="pageSub">-- chargement --</p>
+        <div class="hero-title-row">
+          <button class="hamburger-btn" id="hamburgerBtn" aria-label="Menu">☰</button>
+          <div>
+            <h1 class="hero-title" id="pageTitle">À voir</h1>
+            <p class="hero-sub" id="pageSub">-- chargement --</p>
+          </div>
         </div>
         <div class="hero-actions">
           <div class="search-box">
@@ -1196,6 +1249,7 @@ function renderGenreSwitch() {
       renderGenreSwitch();
       renderNav();
       render();
+      closeSidebar();
     };
   });
 }
@@ -1214,9 +1268,25 @@ function renderNav() {
       state.subtab = 'tous';
       renderNav();
       render();
+      closeSidebar();
     };
     nav.appendChild(item);
   });
+}
+
+/* ---------------- mobile sidebar drawer ---------------- */
+function openSidebar() {
+  document.getElementById('sidebar')?.classList.add('open');
+  document.getElementById('sidebarBackdrop')?.classList.add('show');
+}
+function closeSidebar() {
+  document.getElementById('sidebar')?.classList.remove('open');
+  document.getElementById('sidebarBackdrop')?.classList.remove('show');
+}
+function toggleSidebar() {
+  const sb = document.getElementById('sidebar');
+  if (sb && sb.classList.contains('open')) closeSidebar();
+  else openSidebar();
 }
 
 /* ---------------- subtabs (À voir only — format filters) ---------------- */
@@ -2034,10 +2104,7 @@ function openSyncModal() {
     <div class="modal">
       <button class="modal-close" id="syncClose">✕</button>
       <h2>🔗 Synchronisation GitHub</h2>
-      <p class="field-hint" style="margin-bottom:14px;">
-        Relie l'app à un fichier JSON dans un dépôt GitHub pour partager tes données entre plusieurs appareils.
-        Une fois configuré, ce fichier devient la référence : l'app le récupère à l'ouverture et le met à jour après chaque modification.
-      </p>
+      <p class="field-hint" style="margin-bottom:14px;"></p>
 
       <div class="field-row">
         <div class="field">
@@ -2061,24 +2128,24 @@ function openSyncModal() {
       </div>
       <div class="field">
         <label>Personal Access Token</label>
-        <input type="password" id="syncToken" value="${escapeHtml(cfg.token)}" placeholder="github_pat_...">
-        <p class="field-hint">
-          Utilise de préférence un <strong>fine-grained token</strong> limité à ce seul dépôt, avec la permission
-          "Contents: Read and write" — rien d'autre n'est nécessaire.
-          <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Créer un token →</a><br>
-          Il est enregistré uniquement dans le navigateur de cet appareil (jamais envoyé ailleurs qu'à GitHub).
-        </p>
+        <input type="password" id="syncToken" value="${escapeHtml(cfg.token)}" placeholder="">
+        <p class="field-hint"></p>
       </div>
 
       <div id="syncTestResult" class="field-hint" style="min-height:1.2em;"></div>
 
       <div class="modal-footer">
-        <div><button class="btn btn-danger btn-sm" id="syncClear">🗑 Réinitialiser / déconnecter</button></div>
-        <div class="modal-footer-right">
+        <div>
           <button class="btn btn-ghost" id="syncTest">🔌 Tester la connexion</button>
+          <button class="btn btn-danger btn-sm" id="syncClear">🗑 Réinitialiser / déconnecter</button>
+          
+          </div>
+        <div class="modal-footer-right">
+          
           <button class="btn btn-outline" id="syncNow">🔄 Synchroniser maintenant</button>
           <button class="btn btn-primary" id="syncSave">💾 Enregistrer</button>
         </div>
+        
       </div>
     </div>
   </div>`;
@@ -2161,6 +2228,11 @@ function closeSyncModal() {
 
 /* ---------------- global listeners ---------------- */
 document.getElementById('btnAdd').onclick = () => openModal(null);
+document.getElementById('hamburgerBtn').onclick = toggleSidebar;
+document.getElementById('sidebarBackdrop').onclick = closeSidebar;
+document.querySelector('.sidebar-footer').addEventListener('click', (ev) => {
+  if (ev.target.closest('button')) closeSidebar();
+});
 document.getElementById('btnSync').onclick = openSyncModal;
 document.getElementById('btnExport').onclick = exportJSON;
 document.getElementById('btnImport').onclick = () => document.getElementById('fileImport').click();
