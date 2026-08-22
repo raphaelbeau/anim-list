@@ -1357,7 +1357,7 @@ function render() {
     if (animeList.length) {
       const label = document.createElement('div');
       label.className = 'section-label';
-      label.textContent = '📺 ANIME';
+      label.textContent = ' ANIME';
       main.appendChild(label);
       const grid = document.createElement('div');
       grid.className = 'grid';
@@ -1367,7 +1367,7 @@ function render() {
     if (mangaList.length) {
       const label = document.createElement('div');
       label.className = 'section-label';
-      label.textContent = '📖 MANGA / SCAN';
+      label.textContent = ' MANGA / SCAN';
       main.appendChild(label);
       const grid = document.createElement('div');
       grid.className = 'grid';
@@ -1390,10 +1390,10 @@ function buildPastilles(e, side) {
 
   if (state.category === 'fini') {
     if (e.anime_status === 'fini') {
-      pills.push(`<span class="anime">📺 ${animeNote != null ? fmtNote(animeNote) : 'Fini'}</span>`);
+      pills.push(`<span class="anime"> ${animeNote != null ? fmtNote(animeNote) : 'Fini'}</span>`);
     }
     if (e.manga_status === 'fini') {
-      pills.push(`<span class="manga">📖 ${e.manga.note != null ? fmtNote(e.manga.note) : 'Fini'}</span>`);
+      pills.push(`<span class="manga"> ${e.manga.note != null ? fmtNote(e.manga.note) : 'Fini'}</span>`);
     }
   } else if (side === 'both') {
     if (e.anime_status) {
@@ -1402,12 +1402,12 @@ function buildPastilles(e, side) {
     }
     if (e.manga_status) {
       const txt = e.manga_status === 'fini' && e.manga.note != null ? fmtNote(e.manga.note) : STATUS_LABEL[e.manga_status];
-      pills.push(`<span class="manga">📖 ${txt}</span>`);
+      pills.push(`<span class="manga"> ${txt}</span>`);
     }
   } else if (side === 'anime') {
-    pills.push(`<span class="anime">📺 ${animeNote != null ? fmtNote(animeNote) : STATUS_LABEL[e.anime_status] || ''}</span>`);
+    pills.push(`<span class="anime"> ${animeNote != null ? fmtNote(animeNote) : STATUS_LABEL[e.anime_status] || ''}</span>`);
   } else if (side === 'manga') {
-    pills.push(`<span class="manga">📖 ${e.manga.note != null ? fmtNote(e.manga.note) : STATUS_LABEL[e.manga_status] || ''}</span>`);
+    pills.push(`<span class="manga"> ${e.manga.note != null ? fmtNote(e.manga.note) : STATUS_LABEL[e.manga_status] || ''}</span>`);
   }
 
   return pills.length ? `<div class="dual-note">${pills.join('')}</div>` : '';
