@@ -1426,8 +1426,8 @@
  },
  {
   "id": "imp-53-after-the-rain",
-  "title": "after the rain",
-  "nickname": "",
+  "title": "Koi wa Ameagari no Yō ni",
+  "nickname": "after the rain",
   "genre": "shojo",
   "lang": "vo",
   "fmt": "serie",
@@ -1448,7 +1448,8 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "anime_overall_note": null
  },
  {
   "id": "imp-54-higehiro",
