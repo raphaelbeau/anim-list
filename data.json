@@ -2707,7 +2707,7 @@
   "anime_url": "https://anime-sama.fr/catalogue/class-no-daikirai-na-joshi-to-kekkon-suru-koto-ni-natta/",
   "scan_url": "",
   "anime_status": "fini",
-  "manga_status": null,
+  "manga_status": "a_lire",
   "anime_seasons": [
    {
     "label": "Anime",
@@ -2721,7 +2721,8 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "anime_overall_note": null
  },
  {
   "id": "imp-103-honey-lemon-soda",
