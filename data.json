@@ -4139,5 +4139,32 @@
    "note": null,
    "comment": ""
   }
+ },
+ {
+  "id": "e-mt5ym624ifm9d",
+  "title": "Yu-gi-oh",
+  "nickname": "",
+  "genre": "autre",
+  "anime_status": null,
+  "manga_status": "a_lire",
+  "lang": null,
+  "fmt": null,
+  "anime_url": "",
+  "scan_url": "",
+  "progress_episode": "",
+  "progress_chapter": "",
+  "sequel_date": "",
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "anime_overall_note": null,
+  "manga": {
+   "note": null,
+   "comment": ""
+  }
  }
 ]
