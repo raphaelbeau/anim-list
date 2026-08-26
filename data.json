@@ -4853,7 +4853,7 @@
   "scan_url": "",
   "progress_episode": "att fin",
   "progress_chapter": "",
-  "sequel_date": "",
+  "sequel_date": "Att fin",
   "anime_seasons": [
    {
     "label": "Anime",
@@ -5129,6 +5129,12 @@
   "manga": {
    "note": null,
    "comment": ""
+  },
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  }
 ]
