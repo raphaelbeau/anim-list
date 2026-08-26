@@ -24,7 +24,13 @@
   "sequel_date": "",
   "progress_chapter": "80",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-1-ao-no-hako",
@@ -51,7 +57,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-2-medaka",
@@ -78,7 +90,13 @@
   "sequel_date": "",
   "progress_chapter": "229",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-3-kaoru-hana-wa-rin-to-saku",
@@ -105,7 +123,13 @@
   "sequel_date": "",
   "progress_chapter": "199",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": true,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-4-hajimete-no-gal",
@@ -131,7 +155,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "156",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-5-one-piece",
@@ -158,7 +188,13 @@
   "sequel_date": "",
   "progress_chapter": "1192",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-6-one-punch-man",
@@ -184,7 +220,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "147",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-7-tonikaku-kawaii",
@@ -210,7 +252,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "176",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-8-sounds-of-life",
@@ -237,7 +285,13 @@
   "sequel_date": "",
   "progress_chapter": "vol 18",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-9-dandadan",
@@ -264,7 +318,13 @@
   "sequel_date": "suite annoncée",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-10-himaten",
@@ -290,7 +350,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-11-smoking-behind-the-supermarket",
@@ -317,7 +383,13 @@
   "sequel_date": "",
   "progress_chapter": "64",
   "progress_episode": "att fin (saison 1)",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-12-pokemon-m6",
@@ -344,7 +416,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "m6+",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-13-anyway-i-m-falling-in-love-with-you-9",
@@ -371,7 +449,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "9 - S1",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-14-isshuukan-friends-4",
@@ -398,7 +482,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "4 - S1",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-15-the-angel-next-door-spoils-me-rotten",
@@ -430,7 +520,13 @@
   "sequel_date": "suite 2028",
   "progress_chapter": "23",
   "progress_episode": "S3",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-16-you-and-i-are-polar-opposite",
@@ -457,7 +553,13 @@
   "sequel_date": "att fin",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-17-skip-to-loafer",
@@ -484,7 +586,13 @@
   "sequel_date": "suite 2027",
   "progress_chapter": "",
   "progress_episode": "S2",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-18-kubo-won-t-let-me-be-invisible",
@@ -511,7 +619,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-19-make-heroine-ga-ooisugiru",
@@ -538,7 +652,13 @@
   "sequel_date": "suite annoncée",
   "progress_chapter": "",
   "progress_episode": "S2",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-20-carnets-de-l-aphoticaire",
@@ -565,7 +685,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "S2",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-21-alya-sometimes-hides-her-feelings-in-rus",
@@ -592,7 +718,13 @@
   "sequel_date": "suite 2027",
   "progress_chapter": "",
   "progress_episode": "S2",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-22-my-dress-up-darling",
@@ -619,7 +751,13 @@
   "sequel_date": "suite fin 2027",
   "progress_chapter": "",
   "progress_episode": "S3",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-23-a-star-brighter-than-the-sun",
@@ -646,7 +784,13 @@
   "sequel_date": "suite annoncée",
   "progress_chapter": "",
   "progress_episode": "S2",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-24-dr-stone",
@@ -673,7 +817,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "saison 4",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-25-dangers-in-my-heart",
@@ -700,7 +850,13 @@
   "sequel_date": "suite automne 2025",
   "progress_chapter": "",
   "progress_episode": "film",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-26-classroom-of-the-elite",
@@ -727,7 +883,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "S4",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-27-haikyuu",
@@ -753,7 +915,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": "FILM1"
+  "progress_episode": "FILM1",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-28-city-hunter",
@@ -779,7 +947,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-29-undead-unlucky",
@@ -805,7 +979,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-30-vermeil",
@@ -832,7 +1012,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-31-cowboy-beebop",
@@ -859,7 +1045,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-32-kuroko-basket",
@@ -885,7 +1077,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-33-frieren",
@@ -917,7 +1115,13 @@
   "sequel_date": "octobre 2027",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-34-darling-in-the-franxx",
@@ -944,7 +1148,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-35-demon-slayer",
@@ -971,7 +1181,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "film1",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-36-mha",
@@ -998,7 +1214,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-37-gachiakuta",
@@ -1025,7 +1247,13 @@
   "sequel_date": "suite annoncée",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-38-oshi-no-ko",
@@ -1051,7 +1279,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-39-nana",
@@ -1077,7 +1311,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-40-a-couple-of-cuckoos",
@@ -1103,7 +1343,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-41-time-shadows",
@@ -1129,7 +1375,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-42-tunnel-to-summer",
@@ -1156,7 +1408,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-43-je-peux-encore-entendre-l-ocean",
@@ -1183,7 +1441,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-44-lost-in-starligh",
@@ -1209,7 +1473,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-45-domestic-girlfriend",
@@ -1235,7 +1505,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-46-monthly-girl-nozaki-kun",
@@ -1262,7 +1538,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-47-kaenojo-real-girl",
@@ -1289,7 +1571,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-48-saekano",
@@ -1315,7 +1603,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-49-hyouka",
@@ -1342,7 +1636,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-50-golden-time",
@@ -1369,7 +1669,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-51-our-dating-story-the-experienced-you-and",
@@ -1396,7 +1702,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-52-wolf-girl-and-the-black-prince",
@@ -1423,7 +1735,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-53-after-the-rain",
@@ -1450,7 +1768,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-54-higehiro",
@@ -1477,7 +1801,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-55-just-because",
@@ -1504,7 +1834,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-56-orange",
@@ -1530,7 +1866,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-57-biidama-no-tsuki",
@@ -1556,7 +1898,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-58-rainbow-days",
@@ -1582,7 +1930,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-59-osamake",
@@ -1608,7 +1962,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-60-betrothed-to-my-sisters-ex",
@@ -1635,7 +1995,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-61-bloom-into-you",
@@ -1661,7 +2027,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-62-konobi",
@@ -1688,7 +2060,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-63-haite-kudasai",
@@ -1715,7 +2093,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-64-the-shiunji-family-children",
@@ -1741,7 +2125,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-65-are-there-no-gals-who-are-kind-to-otaku",
@@ -1767,7 +2157,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-66-mayonaka-heart-tune",
@@ -1793,7 +2189,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-67-akebi-chan-no-sailor-fuku",
@@ -1819,7 +2221,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-68-i-want-to-end-this-love-game",
@@ -1846,7 +2254,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "10",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-69-weathering-with-you",
@@ -1873,7 +2287,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-70-a-whisker-away",
@@ -1899,7 +2319,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-72-wotaku-ni-koi-wa-muzukashii-ova",
@@ -1926,7 +2352,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-73-tamako-love-story",
@@ -1952,7 +2384,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-74-garden-of-words",
@@ -1978,7 +2416,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-75-kimi-wa-kanata",
@@ -2004,7 +2448,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-76-to-every-you-i-ve-loved-before",
@@ -2031,7 +2481,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-77-asagao-to-kase-san",
@@ -2057,7 +2513,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-78-love-is-war",
@@ -2084,7 +2546,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "film",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-79-i-have-a-crush-at-work",
@@ -2110,7 +2578,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-80-tsuki-ga-kirei",
@@ -2136,7 +2610,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-81-365-days-to-the-wedding",
@@ -2162,7 +2642,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-82-our-love-story-has-always-been-10-centim",
@@ -2189,7 +2675,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-83-the-quintessenial-quintuplets",
@@ -2216,7 +2708,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-84-your-lie-in-april",
@@ -2242,7 +2740,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-85-my-stepmom-s-daughter-is-my-ex",
@@ -2268,7 +2772,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-86-the-girl-downstairs",
@@ -2294,7 +2804,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-87-in-the-clear-moonlight-dusk",
@@ -2321,7 +2837,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-88-bukiyou-na-senpai",
@@ -2347,7 +2869,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-89-farming-life-in-another-world",
@@ -2379,7 +2907,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "S2",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-90-i-made-friends-with-the-second-prettiest",
@@ -2406,7 +2940,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-91-lovely-complex",
@@ -2432,7 +2972,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-92-tsurezure-children",
@@ -2458,7 +3004,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-93-tomo-chan-is-a-girl",
@@ -2485,7 +3037,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-94-grandpa-and-grandma-turn-young-again",
@@ -2512,7 +3070,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-95-takagi-san",
@@ -2538,7 +3102,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-96-relife",
@@ -2565,7 +3135,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-97-love-fragrance",
@@ -2592,7 +3168,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-98-mikadono-sisters",
@@ -2618,7 +3200,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-99-nagatoro",
@@ -2644,7 +3232,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": "S2"
+  "progress_episode": "S2",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-100-hokkaido-gals-are-super-adorable",
@@ -2670,7 +3264,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-101-shikimori-san",
@@ -2696,7 +3296,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-102-class-no-daikirai-na-joshi-to-kekkon-sur",
@@ -2723,7 +3329,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-103-honey-lemon-soda",
@@ -2750,7 +3362,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-104-my-tiny-senpai",
@@ -2776,7 +3394,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-105-the-moment-you-fall-in-love",
@@ -2802,7 +3426,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-106-kowloon",
@@ -2829,7 +3459,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-107-the-galaxy-next-door",
@@ -2855,7 +3491,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-108-ao-haru-ride",
@@ -2881,7 +3523,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-109-oregairu",
@@ -2907,7 +3555,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-110-yamada-kun-to-lv999-no-koi-wo-suru",
@@ -2934,7 +3588,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-111-net-juu-no-susume",
@@ -2960,7 +3620,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-112-insomniacs-after-school",
@@ -2987,7 +3653,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-113-rikekoi",
@@ -3013,7 +3685,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-114-love-after-world-domination",
@@ -3039,7 +3717,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-116-my-wife-has-no-emotion",
@@ -3065,7 +3749,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-117-criminelles-fian-ailles",
@@ -3091,7 +3781,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-118-imouza",
@@ -3118,7 +3814,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-119-love-of-kill",
@@ -3144,7 +3846,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-121-you-can-t-be-in-a-rom-com",
@@ -3171,7 +3879,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-122-pseudo-harem",
@@ -3198,7 +3912,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-123-amagami-sisters",
@@ -3225,7 +3945,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-124-can-a-boy-girl-friendship-survive",
@@ -3251,7 +3977,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-125-bottom-tier-tomozaki",
@@ -3277,7 +4009,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-126-the-dreaming-boy-is-a-realist",
@@ -3304,7 +4042,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-127-love-chunibyo-other-d-lusions",
@@ -3331,7 +4075,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-128-a-condition-called-love",
@@ -3357,7 +4107,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": "S1"
+  "progress_episode": "S1",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-129-koori-zokusei-danshi-to-cool-na-douryou-",
@@ -3384,7 +4140,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-130-anthem-of-the-heart",
@@ -3411,7 +4173,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-131-i-can-t-understand-what-my-husband-is-sa",
@@ -3438,7 +4206,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-132-ride-your-wave",
@@ -3464,7 +4238,13 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": ""
+  "progress_episode": "",
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-133-suki-na-ko-ga-megane-wo-wasureta",
@@ -3491,7 +4271,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-134-nisekoi",
@@ -3518,7 +4304,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-135-i-ll-become-a-villainess",
@@ -3545,7 +4337,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-136-kokoro-connect",
@@ -3572,7 +4370,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "imp-137-the-silent-voice",
@@ -3599,7 +4403,13 @@
   "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
-  "anime_overall_note": null
+  "anime_overall_note": null,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
  },
  {
   "id": "e-mrp7sfhhwuhis",
@@ -3626,6 +4436,12 @@
   "manga": {
    "note": null,
    "comment": ""
+  },
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -3653,6 +4469,12 @@
   "manga": {
    "note": null,
    "comment": ""
+  },
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -3680,6 +4502,12 @@
   "manga": {
    "note": null,
    "comment": ""
+  },
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -3707,6 +4535,12 @@
   "manga": {
    "note": null,
    "comment": ""
+  },
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -3734,6 +4568,12 @@
   "manga": {
    "note": null,
    "comment": ""
+  },
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -3761,6 +4601,12 @@
   "manga": {
    "note": null,
    "comment": ""
+  },
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -3788,6 +4634,12 @@
   "manga": {
    "note": null,
    "comment": ""
+  },
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -3815,6 +4667,12 @@
   "manga": {
    "note": null,
    "comment": ""
+  },
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -3842,6 +4700,12 @@
   "manga": {
    "note": null,
    "comment": ""
+  },
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -3869,6 +4733,12 @@
   "manga": {
    "note": null,
    "comment": ""
+  },
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -3896,6 +4766,12 @@
   "manga": {
    "note": null,
    "comment": ""
+  },
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -3923,6 +4799,12 @@
   "manga": {
    "note": null,
    "comment": ""
+  },
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -3950,6 +4832,12 @@
   "manga": {
    "note": null,
    "comment": ""
+  },
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -3977,6 +4865,12 @@
   "manga": {
    "note": null,
    "comment": ""
+  },
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -4004,6 +4898,12 @@
   "manga": {
    "note": null,
    "comment": ""
+  },
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -4031,6 +4931,12 @@
   "manga": {
    "note": null,
    "comment": ""
+  },
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -4058,6 +4964,12 @@
   "manga": {
    "note": null,
    "comment": ""
+  },
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -4085,6 +4997,12 @@
   "manga": {
    "note": null,
    "comment": ""
+  },
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -4112,6 +5030,12 @@
   "manga": {
    "note": null,
    "comment": ""
+  },
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -4139,6 +5063,12 @@
   "manga": {
    "note": null,
    "comment": ""
+  },
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -4166,6 +5096,12 @@
   "manga": {
    "note": null,
    "comment": ""
+  },
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  }
 ]
