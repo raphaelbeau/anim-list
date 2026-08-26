@@ -1,0 +1,45 @@
+name: Vérification des parutions (ANIME//DB)
+
+on:
+  schedule:
+    # Toutes les 30 minutes. GitHub peut retarder légèrement l'exécution en
+    # cas de forte charge sur ses serveurs, mais ça reste largement assez
+    # réactif pour un suivi de sorties de chapitres. Ajuste la fréquence en
+    # changeant cette ligne (le minimum documenté par GitHub est 5 minutes,
+    # ex: '*/5 * * * *' pour toutes les 5 minutes).
+    - cron: '*/30 * * * *'
+  workflow_dispatch: {} # bouton "Run workflow" manuel dans l'onglet Actions du repo
+
+permissions:
+  contents: write # nécessaire pour que le job puisse commiter data.json
+
+concurrency:
+  group: check-releases
+  cancel-in-progress: false # on laisse toujours un run en cours se terminer proprement
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupérer les données du dépôt
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # fetch natif, aucune dépendance npm à installer
+
+      - name: Vérifier les parutions et notifier
+        run: node scripts/check-releases.js data.json notif-config.json --write
+
+      - name: Commiter les mises à jour de suivi
+        run: |
+          git config user.name "anime-db-bot"
+          git config user.email "actions@users.noreply.github.com"
+          if ! git diff --quiet -- data.json; then
+            git add data.json
+            git commit -m "chore: mise à jour automatique des parutions"
+            git push
+          else
+            echo "Rien de nouveau à commiter."
+          fi
