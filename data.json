@@ -5103,5 +5103,32 @@
    "derniere_verification": null,
    "ntfy_topic": null
   }
+ },
+ {
+  "id": "e-mtamrm942wnm7",
+  "title": "Yuyu hakusho",
+  "nickname": "",
+  "genre": "autre",
+  "anime_status": null,
+  "manga_status": "a_lire",
+  "lang": null,
+  "fmt": null,
+  "anime_url": "",
+  "scan_url": "",
+  "progress_episode": "",
+  "progress_chapter": "",
+  "sequel_date": "",
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "anime_overall_note": null,
+  "manga": {
+   "note": null,
+   "comment": ""
+  }
  }
 ]
