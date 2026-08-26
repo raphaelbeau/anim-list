@@ -125,7 +125,7 @@
   "progress_episode": "",
   "anime_overall_note": null,
   "suivi": {
-   "suivi_actif": false,
+   "suivi_actif": true,
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
@@ -2820,7 +2820,7 @@
   "lang": "vf",
   "fmt": "serie",
   "anime_url": "https://anime-sama.to/catalogue/uruwashi-no-yoi-no-tsuki/saison1/vostfr/",
-  "scan_url": "https://anime-sama.to/catalogue/uruwashi-no-yoi-no-tsuki/scan/vf/",
+  "scan_url": "",
   "anime_status": "fini",
   "manga_status": "a_lire",
   "anime_seasons": [
@@ -4618,8 +4618,8 @@
   "manga_status": "a_lire",
   "lang": null,
   "fmt": null,
-  "anime_url": "",
-  "scan_url": "https://anime-sama.to/catalogue/firefly-wedding/",
+  "anime_url": "https://anime-sama.to/catalogue/firefly-wedding/",
+  "scan_url": "",
   "progress_episode": "",
   "progress_chapter": "",
   "sequel_date": "",
@@ -4783,7 +4783,7 @@
   "manga_status": null,
   "lang": null,
   "fmt": null,
-  "anime_url": "https://anime-sama.to/catalogue/rick-et-morty/",
+  "anime_url": "",
   "scan_url": "",
   "progress_episode": "s4ep10",
   "progress_chapter": "",
@@ -5074,39 +5074,6 @@
  {
   "id": "e-mt5ym624ifm9d",
   "title": "Yu-Gi-Oh!",
-  "nickname": "",
-  "genre": "autre",
-  "anime_status": null,
-  "manga_status": "a_lire",
-  "lang": null,
-  "fmt": null,
-  "anime_url": "",
-  "scan_url": "",
-  "progress_episode": "",
-  "progress_chapter": "",
-  "sequel_date": "",
-  "anime_seasons": [
-   {
-    "label": "Anime",
-    "note": null,
-    "comment": ""
-   }
-  ],
-  "anime_overall_note": null,
-  "manga": {
-   "note": null,
-   "comment": ""
-  },
-  "suivi": {
-   "suivi_actif": false,
-   "dernier_chapitre_paru": null,
-   "derniere_verification": null,
-   "ntfy_topic": null
-  }
- },
- {
-  "id": "e-mtaf4nsvvzmkb",
-  "title": "Yuyu hakusho",
   "nickname": "",
   "genre": "autre",
   "anime_status": null,
