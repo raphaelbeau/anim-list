@@ -126,8 +126,8 @@
   "anime_overall_note": null,
   "suivi": {
    "suivi_actif": true,
-   "dernier_chapitre_paru": null,
-   "derniere_verification": null,
+   "dernier_chapitre_paru": 199,
+   "derniere_verification": "2026-08-26T21:38:36.722Z",
    "ntfy_topic": null
   }
  },
@@ -191,8 +191,8 @@
   "anime_overall_note": null,
   "suivi": {
    "suivi_actif": true,
-   "dernier_chapitre_paru": null,
-   "derniere_verification": null,
+   "dernier_chapitre_paru": 1191,
+   "derniere_verification": "2026-08-26T21:38:37.508Z",
    "ntfy_topic": null
   }
  },
