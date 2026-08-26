@@ -161,7 +161,7 @@ async function checkReleases(entries) {
     if (!found) {
       results.push({
         id: entry.id, title: entry.title, nickname: entry.nickname || '',
-        scan_url: entry.scan_url || null,
+        scan_url: entry.scan_url || null, ntfy_topic: entry.suivi.ntfy_topic || null,
         previousChapter: previous, latestChapter: null,
         source: null, isNew: false, checkedAt,
       });
@@ -173,7 +173,7 @@ async function checkReleases(entries) {
 
     const row = {
       id: entry.id, title: entry.title, nickname: entry.nickname || '',
-      scan_url: entry.scan_url || null,
+      scan_url: entry.scan_url || null, ntfy_topic: entry.suivi.ntfy_topic || null,
       previousChapter: isBaseline ? null : previous,
       latestChapter: found.chapter,
       source: found.source, isNew, checkedAt,
@@ -185,17 +185,84 @@ async function checkReleases(entries) {
   return { results, newReleases };
 }
 
-module.exports = { checkMangaDex, checkGenericRss, findLatestChapter, checkReleases };
+/* ============================================================
+   NOTIFICATION — ntfy
+   ============================================================ */
+
+/**
+ * Envoie une notification ntfy pour une œuvre donnée.
+ * Payload :
+ *   - Titre : 🔔 Nouveau chapitre — [Nom de l'œuvre]   (nickname si présent, sinon titre)
+ *   - Corps : Chapitre [X] disponible
+ *   - Click : le scan_url de l'œuvre (tap sur la notif -> ouverture directe du lien de lecture)
+ *
+ * @param {{server?: string, topic: string}} ntfyConfig
+ * @param {{title: string, nickname?: string, latestChapter: number, scan_url?: string, ntfy_topic?: string}} release
+ * @returns {Promise<{ok: boolean, error?: string}>}
+ */
+async function sendNtfyNotification(ntfyConfig, release) {
+  const topic = (release && release.ntfy_topic) || (ntfyConfig && ntfyConfig.topic);
+  if (!topic) {
+    return { ok: false, error: 'Aucun topic ntfy configuré (ni sur cette œuvre, ni en global).' };
+  }
+  const server = ((ntfyConfig && ntfyConfig.server) || 'https://ntfy.sh').replace(/\/+$/, '');
+  const label = release.nickname || release.title;
+
+  const headers = {
+    'Title': `🔔 Nouveau chapitre — ${label}`,
+    'Tags': 'bookmark_tabs',
+  };
+  if (release.scan_url) headers['Click'] = release.scan_url;
+
+  try {
+    const res = await fetch(`${server}/${encodeURIComponent(topic)}`, {
+      method: 'POST',
+      headers,
+      body: `Chapitre ${release.latestChapter} disponible`,
+    });
+    if (!res.ok) return { ok: false, error: `ntfy a répondu ${res.status}` };
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: 'Impossible de contacter le serveur ntfy (réseau ?)' };
+  }
+}
+
+/**
+ * Envoie une notification pour chaque œuvre de `newReleases`. Continue même si
+ * l'une des notifications échoue (ex: topic mal configuré) — chaque tentative
+ * est reportée individuellement dans le tableau retourné, plutôt que de
+ * bloquer les autres œuvres.
+ *
+ * @param {Array} newReleases - sortie de checkReleases().newReleases
+ * @param {{server?: string, topic: string}} ntfyConfig
+ * @returns {Promise<Array<{id: string, title: string, ok: boolean, error?: string}>>}
+ */
+async function notifyNewReleases(newReleases, ntfyConfig) {
+  const outcomes = [];
+  for (const release of newReleases || []) {
+    const result = await sendNtfyNotification(ntfyConfig, release);
+    outcomes.push({ id: release.id, title: release.title, ok: result.ok, error: result.error });
+  }
+  return outcomes;
+}
+
+module.exports = {
+  checkMangaDex, checkGenericRss, findLatestChapter, checkReleases,
+  sendNtfyNotification, notifyNewReleases,
+};
 
 /* ============================================================
    CLI — usage manuel / test :
      node check-releases.js data.json
+     node check-releases.js data.json notif-config.json
      cat data.json | node check-releases.js
    ============================================================ */
 if (require.main === module) {
   (async () => {
     const fs = require('fs');
     const filePath = process.argv[2];
+    const ntfyConfigPath = process.argv[3];
+
     const raw = filePath ? fs.readFileSync(filePath, 'utf-8') : fs.readFileSync(0, 'utf-8');
     const entries = JSON.parse(raw);
 
@@ -203,7 +270,18 @@ if (require.main === module) {
 
     console.error(`Œuvres suivies vérifiées : ${results.length}`);
     console.error(`Nouveaux chapitres détectés : ${newReleases.length}`);
-    console.log(JSON.stringify({ results, newReleases }, null, 1));
+
+    let notifyOutcomes = [];
+    if (newReleases.length && ntfyConfigPath) {
+      const ntfyConfig = JSON.parse(fs.readFileSync(ntfyConfigPath, 'utf-8'));
+      notifyOutcomes = await notifyNewReleases(newReleases, ntfyConfig);
+      const sent = notifyOutcomes.filter(o => o.ok).length;
+      console.error(`Notifications envoyées : ${sent}/${notifyOutcomes.length}`);
+    } else if (newReleases.length && !ntfyConfigPath) {
+      console.error('(Aucun fichier de config ntfy fourni en 2e argument — notifications non envoyées.)');
+    }
+
+    console.log(JSON.stringify({ results, newReleases, notifyOutcomes }, null, 1));
   })().catch(err => {
     console.error(err);
     process.exit(1);
