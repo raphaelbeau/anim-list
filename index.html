@@ -2455,6 +2455,7 @@ async function sendNtfyTest(cfg) {
     const server = (cfg.server || 'https://ntfy.sh').replace(/\/+$/, '');
     const r = await fetch(`${server}/${encodeURIComponent(cfg.topic)}`, {
       method: 'POST',
+      mode: 'no-cors', 
       headers: { 'Title': '✅ ANIME//DB', 'Tags': 'tada' },
       body: 'Test réussi — la configuration ntfy fonctionne.',
     });
