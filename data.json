@@ -5129,6 +5129,39 @@
   "manga": {
    "note": null,
    "comment": ""
+  },
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  }
+ },
+ {
+  "id": "e-mtaky87f7nsb1",
+  "title": "Orange",
+  "nickname": "",
+  "genre": "autre",
+  "anime_status": null,
+  "manga_status": null,
+  "lang": null,
+  "fmt": null,
+  "anime_url": "",
+  "scan_url": "",
+  "progress_episode": "",
+  "progress_chapter": "",
+  "sequel_date": "",
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "anime_overall_note": null,
+  "manga": {
+   "note": null,
+   "comment": ""
   }
  }
 ]
