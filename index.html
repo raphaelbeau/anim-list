@@ -151,6 +151,8 @@ a{color:var(--neon-cyan);}
 .ghost-btn:hover{color:var(--neon-cyan);border-color:var(--neon-cyan);}
 .sync-btn{border-color:var(--neon-violet);color:var(--neon-violet);}
 .sync-btn:hover{color:var(--neon-magenta);border-color:var(--neon-magenta);}
+.notif-btn{border-color:var(--neon-amber);color:var(--neon-amber);}
+.notif-btn:hover{color:#fff;border-color:#fff;}
 .sync-status{
   font-family:'Share Tech Mono',monospace;
   font-size:.68rem;
@@ -601,6 +603,103 @@ main{padding:24px 40px 60px;}
 }
 .genre-btn:not(.active):hover{color:var(--text-primary);}
 
+.tracking-header{
+  font-family:'Share Tech Mono',monospace;
+  font-size:.75rem;
+  letter-spacing:3px;
+  color:var(--neon-cyan);
+  text-shadow:0 0 8px rgba(33,230,255,.5);
+  margin-bottom:4px;
+}
+.tracking-title{
+  font-family:'Audiowide',cursive;
+  font-size:1.05rem;
+  color:var(--text-primary);
+  margin-bottom:16px;
+}
+.tracking-box{
+  border:1px solid var(--neon-violet);
+  border-radius:10px;
+  padding:16px 18px;
+  background:linear-gradient(180deg,rgba(157,60,255,.08),rgba(0,0,0,.15));
+  box-shadow:0 0 18px rgba(157,60,255,.15);
+  margin-bottom:16px;
+}
+.tracking-row-label{
+  font-family:'Share Tech Mono',monospace;
+  font-size:.72rem;
+  letter-spacing:1px;
+  color:var(--text-muted);
+  margin-bottom:8px;
+}
+.tracking-toggle{
+  display:block;
+  width:100%;
+  font-family:'Share Tech Mono',monospace;
+  font-weight:700;
+  font-size:.85rem;
+  letter-spacing:2px;
+  padding:10px;
+  border-radius:8px;
+  cursor:pointer;
+  margin-bottom:14px;
+  border:1px solid var(--grid-line);
+  background:rgba(0,0,0,.3);
+  color:var(--text-dim);
+}
+.tracking-toggle.on{
+  border-color:var(--good);
+  color:var(--good);
+  background:rgba(60,255,176,.08);
+  box-shadow:0 0 14px rgba(60,255,176,.25);
+}
+.tracking-toggle.off:hover{border-color:var(--neon-magenta);color:var(--neon-magenta);}
+.tracking-stat{
+  font-family:'Share Tech Mono',monospace;
+  font-size:.8rem;
+  color:var(--text-muted);
+  margin-bottom:4px;
+}
+.tracking-stat span{color:var(--neon-cyan);font-weight:700;}
+.tracking-hot{
+  margin-top:10px;
+  font-family:'Rajdhani',sans-serif;
+  font-weight:700;
+  font-size:.9rem;
+  color:var(--neon-amber);
+  text-shadow:0 0 8px rgba(255,176,32,.4);
+}
+.tracking-warn{
+  border:1px solid var(--danger);
+  background:rgba(255,59,92,.08);
+  border-radius:8px;
+  padding:10px 12px;
+  font-size:.78rem;
+  color:#ffd7de;
+  margin-bottom:14px;
+}
+.tracking-warn ul{margin:6px 0 0;padding-left:18px;}
+.tracking-warn li{margin-bottom:3px;}
+
+.badge-tracking{
+  display:inline-flex;align-items:center;gap:4px;
+  font-family:'Share Tech Mono',monospace;
+  font-size:.62rem;
+  letter-spacing:.5px;
+  padding:2px 7px;
+  border-radius:5px;
+  border:1px solid var(--good);
+  color:var(--good);
+  background:rgba(60,255,176,.08);
+}
+.badge-new-chapters{
+  display:inline-flex;align-items:center;gap:3px;
+  font-family:'Rajdhani',sans-serif;
+  font-weight:700;
+  font-size:.7rem;
+  color:var(--neon-amber);
+}
+
 .block-section{
   border:1px solid var(--grid-line);
   border-radius:10px;
@@ -756,6 +855,7 @@ main{padding:24px 40px 60px;}
     <div class="sidebar-footer">
       <button class="ghost-btn sync-btn" id="btnSync">🔗 SYNCHRO GITHUB</button>
       <div id="syncStatus" class="sync-status"></div>
+      <button class="ghost-btn notif-btn" id="btnNotif">🔔 PARUTIONS</button>
       <button class="ghost-btn" id="btnRetryImages">RÉESSAYER LES IMAGES MANQUANTES</button>
       <button class="ghost-btn" id="btnExport">↓ EXPORTER (JSON)</button>
       <button class="ghost-btn" id="btnImport">↑ IMPORTER (JSON)</button>
@@ -1018,6 +1118,19 @@ async function pushToGitHub(manual) {
 
 /* ---------------- migration from older schema versions to v3 ---------------- */
 function migrateEntry(e) {
+  const m = migrateEntryCore(e);
+  if (!m.suivi) {
+    m.suivi = {
+      suivi_actif: false,
+      dernier_chapitre_paru: null,
+      derniere_verification: null,
+      ntfy_topic: null, // override optionnel, null = topic global (configuré plus tard)
+    };
+  }
+  return m;
+}
+
+function migrateEntryCore(e) {
   if (e.anime_status !== undefined && e.manga_status !== undefined) return e; // already v3
 
   if (e.anime_seasons && e.manga) {
@@ -1430,8 +1543,24 @@ function renderCard(e, side) {
 
   const metaParts = [];
   if (side === 'anime' && e.progress_episode) metaParts.push(e.progress_episode);
-  if (side === 'manga' && e.progress_chapter) metaParts.push('ch. ' + e.progress_chapter);
+  if (side === 'manga') {
+    const s = e.suivi || {};
+    if (s.dernier_chapitre_paru != null && e.progress_chapter) {
+      metaParts.push(`CH. ${e.progress_chapter} → ${s.dernier_chapitre_paru}`);
+    } else if (e.progress_chapter) {
+      metaParts.push('ch. ' + e.progress_chapter);
+    }
+  }
   if (state.category === 'att_suite' && e.sequel_date) metaParts.push('⏵ ' + e.sequel_date);
+
+  const suivi = e.suivi || {};
+  const suiviBadges = [];
+  if (suivi.suivi_actif) suiviBadges.push('<span class="badge-tracking">🔔 suivi actif</span>');
+  const chapDiff = (suivi.dernier_chapitre_paru != null && e.progress_chapter)
+    ? suivi.dernier_chapitre_paru - parseInt(e.progress_chapter, 10) : null;
+  if (chapDiff != null && chapDiff > 0) {
+    suiviBadges.push(`<span class="badge-new-chapters">🔔 ${chapDiff} nouveau${chapDiff > 1 ? 'x' : ''}</span>`);
+  }
 
   const links = [];
   if (e.anime_url) links.push(`<a href="${escapeHtml(e.anime_url)}" target="_blank" rel="noopener" class="link-pill" onclick="event.stopPropagation()">📺 anime</a>`);
@@ -1451,6 +1580,7 @@ function renderCard(e, side) {
         ${e.nickname ? `<div class="card-realtitle">${escapeHtml(e.title)}</div>` : ''}
       </div>
       ${metaParts.length ? `<div class="card-meta">${metaParts.map(escapeHtml).join(' · ')}</div>` : ''}
+      ${suiviBadges.length ? `<div class="card-meta">${suiviBadges.join(' ')}</div>` : ''}
       ${links.length ? `<div class="card-links">${links.join('')}</div>` : ''}
       <div class="card-actions" data-actions></div>
     </div>
@@ -1764,6 +1894,7 @@ function openModal(id, presetFinishSide) {
     anime_overall_note: null,
     manga: { note: null, comment: '' },
     sequel_date: '', progress_chapter: '', progress_episode: '',
+    suivi: { suivi_actif: false, dernier_chapitre_paru: null, derniere_verification: null, ntfy_topic: null },
   };
 
   let animeStatusPreset = e.anime_status || '';
@@ -1888,6 +2019,7 @@ function openModal(id, presetFinishSide) {
           <label>Commentaire scan</label>
           <textarea id="fMangaComment" placeholder="Avis">${escapeHtml(e.manga.comment || '')}</textarea>
         </div>
+        ${editingId ? `<button type="button" class="btn btn-outline btn-sm" id="btnOpenSuivi" style="margin-top:10px;">🔔 Suivre les sorties →</button>` : `<p class="field-hint" style="margin-top:8px;">Le suivi des sorties sera disponible une fois l'œuvre enregistrée.</p>`}
       </div>
                   <details class="field-help">
  <p class="hint">La note affichée dans "Fini" = note du scan si elle existe, sinon la dernière note d'anime renseignée.</p>
@@ -1909,6 +2041,7 @@ function openModal(id, presetFinishSide) {
   document.getElementById('mCancel').onclick = closeModal;
   overlay.onclick = (ev) => { if (ev.target === overlay) closeModal(); };
   if (editingId) document.getElementById('mDelete').onclick = () => deleteEntry(editingId);
+  if (editingId) document.getElementById('btnOpenSuivi').onclick = () => openSuiviPanel(editingId);
 
   wireChipGroup('fGenre');
   wireChipGroup('fAnimeStatus');
@@ -1993,6 +2126,75 @@ function closeModal() {
   document.getElementById('modalRoot').innerHTML = '';
   editingId = null;
   modalSeasons = [];
+}
+
+function fmtCheckTime(iso) {
+  if (!iso) return 'jamais';
+  const d = new Date(iso);
+  const dd = String(d.getDate()).padStart(2, '0');
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const hh = String(d.getHours()).padStart(2, '0');
+  const mi = String(d.getMinutes()).padStart(2, '0');
+  return `${dd}/${mm} ${hh}:${mi}`;
+}
+
+function openSuiviPanel(id) {
+  const e = DATA.find(x => x.id === id);
+  if (!e) return;
+  if (!e.suivi) e.suivi = { suivi_actif: false, dernier_chapitre_paru: null, derniere_verification: null, ntfy_topic: null };
+  const s = e.suivi;
+
+  const diff = (s.dernier_chapitre_paru != null && e.progress_chapter)
+    ? s.dernier_chapitre_paru - parseInt(e.progress_chapter, 10) : null;
+
+  const warnings = [];
+  if (!e.scan_url) warnings.push("aucun lien scan enregistré sur cette fiche — le clic sur une future notification n'aura rien à ouvrir");
+
+  const root = document.getElementById('modalRoot');
+  root.innerHTML = `
+  <div class="modal-overlay" id="suiviOverlay">
+    <div class="modal tracking-panel">
+      <button class="modal-close" id="suiviClose">✕</button>
+      <div class="tracking-header">PARUTION</div>
+      <div class="tracking-title">${escapeHtml(displayName(e))}</div>
+
+      <div class="tracking-box">
+        <div class="tracking-row-label">🔔 NOTIFICATIONS</div>
+        <button class="tracking-toggle ${s.suivi_actif ? 'on' : 'off'}" id="suiviToggle">
+          [ ${s.suivi_actif ? 'ACTIVÉES' : 'DÉSACTIVÉES'} ]
+        </button>
+        <div class="tracking-stat">Dernier chapitre détecté : <span>${s.dernier_chapitre_paru != null ? s.dernier_chapitre_paru : '—'}</span></div>
+        <div class="tracking-stat">Dernière vérification : <span>${fmtCheckTime(s.derniere_verification)}</span></div>
+        ${diff != null && diff > 0 ? `<div class="tracking-hot">🔥 ${diff} chapitre${diff > 1 ? 's' : ''} en attente</div>` : ''}
+      </div>
+
+      ${warnings.length ? `
+      <div class="tracking-warn">
+        ⚠️ <ul>${warnings.map(w => `<li>${escapeHtml(w)}</li>`).join('')}</ul>
+      </div>` : ''}
+
+      <p class="field-hint">La vérification automatique des sorties (et l'envoi de la notification) arrivera dans une prochaine étape — pour l'instant, active simplement le suivi sur les œuvres que tu veux surveiller.</p>
+
+      <div class="modal-footer">
+        <button class="btn btn-ghost" id="suiviBack">← Retour à la fiche</button>
+        <button class="btn btn-primary" id="suiviDone">Fermer</button>
+      </div>
+    </div>
+  </div>`;
+
+  const overlay = document.getElementById('suiviOverlay');
+  document.getElementById('suiviClose').onclick = closeModal;
+  document.getElementById('suiviDone').onclick = closeModal;
+  overlay.onclick = (ev) => { if (ev.target === overlay) closeModal(); };
+  document.getElementById('suiviBack').onclick = () => openModal(id);
+
+  document.getElementById('suiviToggle').onclick = async () => {
+    e.suivi.suivi_actif = !e.suivi.suivi_actif;
+    await persist();
+    renderNav();
+    render();
+    openSuiviPanel(id); // rafraîchit le panneau en place
+  };
 }
 
 async function saveModal() {
@@ -2229,6 +2431,110 @@ function closeSyncModal() {
   document.getElementById('modalRoot').innerHTML = '';
 }
 
+/* ---------------- ntfy notification config (paramètres globaux) ----------------
+   Stocké en local pour l'instant (une prochaine étape le fera aussi voyager
+   via la synchro GitHub, pour que le script de vérification GitHub Actions
+   sache où envoyer les notifications). */
+const NTFY_CONFIG_KEY = 'anime-db-ntfy-config';
+
+function getNtfyConfig() {
+  try {
+    const raw = window.localStorage.getItem(NTFY_CONFIG_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch (e) { return null; }
+}
+function setNtfyConfig(cfg) {
+  try { window.localStorage.setItem(NTFY_CONFIG_KEY, JSON.stringify(cfg)); } catch (e) {}
+}
+function generateNtfyTopic() {
+  const rand = Array.from(crypto.getRandomValues(new Uint8Array(8))).map(b => b.toString(16).padStart(2, '0')).join('');
+  return `animedb-${rand}`;
+}
+async function sendNtfyTest(cfg) {
+  try {
+    const server = (cfg.server || 'https://ntfy.sh').replace(/\/+$/, '');
+    const r = await fetch(`${server}/${encodeURIComponent(cfg.topic)}`, {
+      method: 'POST',
+      headers: { 'Title': '✅ ANIME//DB', 'Tags': 'tada' },
+      body: 'Test réussi — la configuration ntfy fonctionne.',
+    });
+    return { ok: r.ok };
+  } catch (e) {
+    return { ok: false, error: 'Impossible de contacter le serveur ntfy.' };
+  }
+}
+
+function openNotifModal() {
+  const cfg = getNtfyConfig() || { server: 'https://ntfy.sh', topic: '' };
+  const root = document.getElementById('modalRoot');
+  root.innerHTML = `
+  <div class="modal-overlay" id="notifOverlay">
+    <div class="modal">
+      <button class="modal-close" id="notifClose">✕</button>
+      <h2>🔔 Notifications de parution</h2>
+      <p class="field-hint" style="margin-bottom:14px;">
+        Configure ton topic <strong>ntfy</strong> (appli Android gratuite) pour recevoir une notif
+        quand un nouveau chapitre sort sur une œuvre suivie.
+      </p>
+
+      <div class="field">
+        <label>Serveur ntfy</label>
+        <input type="text" id="notifServer" value="${escapeHtml(cfg.server || 'https://ntfy.sh')}" placeholder="https://ntfy.sh">
+      </div>
+      <div class="field">
+        <label>Topic (identifiant secret de ton flux de notifs)</label>
+        <div class="field-row" style="align-items:flex-end;">
+          <input type="text" id="notifTopic" value="${escapeHtml(cfg.topic || '')}" placeholder="animedb-xxxxxxxx">
+          <button type="button" class="btn btn-ghost btn-sm" id="notifRegen" style="flex:none;">🎲 Générer</button>
+        </div>
+        <p class="field-hint">Garde-le secret comme un mot de passe — n'importe qui le connaissant peut recevoir tes notifs.</p>
+      </div>
+
+      <div id="notifTestResult" class="field-hint" style="min-height:1.2em;"></div>
+
+      <div class="modal-footer">
+        <div><button class="btn btn-ghost btn-sm" id="notifTest">📲 Envoyer un test</button></div>
+        <div class="modal-footer-right">
+          <button class="btn btn-ghost" id="notifCancel">Annuler</button>
+          <button class="btn btn-primary" id="notifSave">💾 Enregistrer</button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+
+  const overlay = document.getElementById('notifOverlay');
+  document.getElementById('notifClose').onclick = closeNotifModal;
+  document.getElementById('notifCancel').onclick = closeNotifModal;
+  overlay.onclick = (ev) => { if (ev.target === overlay) closeNotifModal(); };
+
+  document.getElementById('notifRegen').onclick = () => {
+    document.getElementById('notifTopic').value = generateNtfyTopic();
+  };
+
+  document.getElementById('notifTest').onclick = async () => {
+    const server = document.getElementById('notifServer').value.trim() || 'https://ntfy.sh';
+    const topic = document.getElementById('notifTopic').value.trim();
+    const resultEl = document.getElementById('notifTestResult');
+    if (!topic) { resultEl.textContent = "Renseigne d'abord un topic."; return; }
+    resultEl.textContent = 'Envoi...';
+    const r = await sendNtfyTest({ server, topic });
+    resultEl.textContent = r.ok ? '✅ Envoyé ! Vérifie ton téléphone.' : '❌ ' + (r.error || "Échec de l'envoi.");
+  };
+
+  document.getElementById('notifSave').onclick = () => {
+    const server = document.getElementById('notifServer').value.trim() || 'https://ntfy.sh';
+    const topic = document.getElementById('notifTopic').value.trim();
+    if (!topic) { toast('Le topic est obligatoire'); return; }
+    setNtfyConfig({ server, topic });
+    toast('Configuration ntfy enregistrée');
+    closeNotifModal();
+  };
+}
+
+function closeNotifModal() {
+  document.getElementById('modalRoot').innerHTML = '';
+}
+
 /* ---------------- global listeners ---------------- */
 document.getElementById('btnAdd').onclick = () => openModal(null);
 document.getElementById('hamburgerBtn').onclick = toggleSidebar;
@@ -2237,6 +2543,7 @@ document.querySelector('.sidebar-footer').addEventListener('click', (ev) => {
   if (ev.target.closest('button')) closeSidebar();
 });
 document.getElementById('btnSync').onclick = openSyncModal;
+document.getElementById('btnNotif').onclick = openNotifModal;
 document.getElementById('btnExport').onclick = exportJSON;
 document.getElementById('btnImport').onclick = () => document.getElementById('fileImport').click();
 document.getElementById('fileImport').addEventListener('change', (ev) => {
