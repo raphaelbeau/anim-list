@@ -201,9 +201,11 @@ async function checkReleases(entries) {
  * @returns {Promise<{ok: boolean, error?: string}>}
  */
 async function sendNtfyNotification(ntfyConfig, release) {
-  const topic = (release && release.ntfy_topic) || (ntfyConfig && ntfyConfig.topic);
+  const topic = (release && release.ntfy_topic)
+    || (ntfyConfig && ntfyConfig.default_topic)
+    || (ntfyConfig && ntfyConfig.topic); // compat avec d'anciennes config sauvegardées sous 'topic'
   if (!topic) {
-    return { ok: false, error: 'Aucun topic ntfy configuré (ni sur cette œuvre, ni en global).' };
+    return { ok: false, error: 'Aucun topic ntfy configuré (ni sur cette œuvre, ni en global via default_topic).' };
   }
   const server = ((ntfyConfig && ntfyConfig.server) || 'https://ntfy.sh').replace(/\/+$/, '');
   const label = release.nickname || release.title;
