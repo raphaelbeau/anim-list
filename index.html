@@ -1001,8 +1001,9 @@ function b64DecodeUnicode(str) {
   return decodeURIComponent(atob(clean).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
 }
 
-function githubContentsUrl(cfg) {
-  return `https://api.github.com/repos/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}/contents/${cfg.path.split('/').map(encodeURIComponent).join('/')}`;
+function githubContentsUrl(cfg, path) {
+  const p = path || cfg.path;
+  return `https://api.github.com/repos/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}/contents/${p.split('/').map(encodeURIComponent).join('/')}`;
 }
 function githubHeaders(cfg) {
   return {
@@ -1012,10 +1013,10 @@ function githubHeaders(cfg) {
   };
 }
 
-async function githubGetFile(cfg) {
+async function githubGetFile(cfg, path) {
   const branch = cfg.branch || 'main';
   try {
-    const r = await fetch(`${githubContentsUrl(cfg)}?ref=${encodeURIComponent(branch)}`, { headers: githubHeaders(cfg) });
+    const r = await fetch(`${githubContentsUrl(cfg, path)}?ref=${encodeURIComponent(branch)}`, { headers: githubHeaders(cfg) });
     if (r.status === 404) return { notFound: true };
     if (r.status === 401 || r.status === 403) return { error: 'Token invalide ou permissions insuffisantes.' };
     if (!r.ok) return { error: `Erreur GitHub (${r.status})` };
@@ -1028,7 +1029,7 @@ async function githubGetFile(cfg) {
   }
 }
 
-async function githubPutFile(cfg, dataObj, sha, retried) {
+async function githubPutFile(cfg, dataObj, sha, retried, path) {
   const branch = cfg.branch || 'main';
   const body = {
     message: `anime-db: mise à jour (${new Date().toISOString()})`,
@@ -1037,14 +1038,14 @@ async function githubPutFile(cfg, dataObj, sha, retried) {
   };
   if (sha) body.sha = sha;
   try {
-    const r = await fetch(githubContentsUrl(cfg), {
+    const r = await fetch(githubContentsUrl(cfg, path), {
       method: 'PUT', headers: { ...githubHeaders(cfg), 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
     if (r.status === 409 && !retried) {
       // someone/something else updated the file since our last read — refetch sha and retry once
-      const fresh = await githubGetFile(cfg);
-      if (fresh.sha) return githubPutFile(cfg, dataObj, fresh.sha, true);
+      const fresh = await githubGetFile(cfg, path);
+      if (fresh.sha) return githubPutFile(cfg, dataObj, fresh.sha, true, path);
       return { error: 'Conflit de version, réessaie la synchronisation.' };
     }
     if (r.status === 401 || r.status === 403) return { error: 'Token invalide ou permissions insuffisantes.' };
@@ -2432,10 +2433,14 @@ function closeSyncModal() {
 }
 
 /* ---------------- ntfy notification config (paramètres globaux) ----------------
-   Stocké en local pour l'instant (une prochaine étape le fera aussi voyager
-   via la synchro GitHub, pour que le script de vérification GitHub Actions
-   sache où envoyer les notifications). */
+   Le serveur + le topic par défaut sont mis en cache en local, mais aussi
+   poussés vers un fichier notif-config.json dans le même dépôt GitHub que
+   data.json — c'est ce fichier distant que scripts/check-releases.js (exécuté
+   par GitHub Actions) lit pour savoir où envoyer les notifications. Sans ce
+   push, le topic ne reste que dans le navigateur et l'Action ne le voit jamais. */
 const NTFY_CONFIG_KEY = 'anime-db-ntfy-config';
+const NTFY_CONFIG_PATH = 'notif-config.json';
+let ntfyConfigSha = null;
 
 function getNtfyConfig() {
   try {
@@ -2443,7 +2448,7 @@ function getNtfyConfig() {
     return raw ? JSON.parse(raw) : null;
   } catch (e) { return null; }
 }
-function setNtfyConfig(cfg) {
+function setNtfyConfigLocal(cfg) {
   try { window.localStorage.setItem(NTFY_CONFIG_KEY, JSON.stringify(cfg)); } catch (e) {}
 }
 function generateNtfyTopic() {
@@ -2453,7 +2458,7 @@ function generateNtfyTopic() {
 async function sendNtfyTest(cfg) {
   try {
     const server = (cfg.server || 'https://ntfy.sh').replace(/\/+$/, '');
-    await fetch(`${server}/${encodeURIComponent(cfg.topic)}`, {
+    await fetch(`${server}/${encodeURIComponent(cfg.default_topic)}`, {
       method: 'POST',
       mode: 'no-cors',
       body: 'Test réussi — la configuration ntfy fonctionne.',
@@ -2464,71 +2469,125 @@ async function sendNtfyTest(cfg) {
   }
 }
 
+/** Lit notif-config.json depuis le dépôt GitHub configuré (source de vérité). */
+async function pullNtfyConfigFromGithub() {
+  const syncCfg = getSyncConfig();
+  if (!syncCfg) return null;
+  const result = await githubGetFile(syncCfg, NTFY_CONFIG_PATH);
+  if (result.notFound) { ntfyConfigSha = null; return null; }
+  if (result.error) return null;
+  ntfyConfigSha = result.sha;
+  setNtfyConfigLocal(result.data);
+  return result.data;
+}
+
+/** Écrit notif-config.json sur le dépôt GitHub, pour que l'Action y ait accès. */
+async function pushNtfyConfigToGithub(cfg) {
+  const syncCfg = getSyncConfig();
+  if (!syncCfg) return { error: "La synchro GitHub n'est pas configurée (bouton 🔗 SYNCHRO GITHUB)." };
+  const result = await githubPutFile(syncCfg, cfg, ntfyConfigSha, false, NTFY_CONFIG_PATH);
+  if (result.sha) ntfyConfigSha = result.sha;
+  return result;
+}
+
 function openNotifModal() {
-  const cfg = getNtfyConfig() || { server: 'https://ntfy.sh', topic: '' };
+  let cfg = getNtfyConfig() || { server: 'https://ntfy.sh', default_topic: '' };
   const root = document.getElementById('modalRoot');
-  root.innerHTML = `
-  <div class="modal-overlay" id="notifOverlay">
-    <div class="modal">
-      <button class="modal-close" id="notifClose">✕</button>
-      <h2>🔔 Notifications de parution</h2>
-      <p class="field-hint" style="margin-bottom:14px;">
-        Configure ton topic <strong>ntfy</strong> (appli Android gratuite) pour recevoir une notif
-        quand un nouveau chapitre sort sur une œuvre suivie.
-      </p>
 
-      <div class="field">
-        <label>Serveur ntfy</label>
-        <input type="text" id="notifServer" value="${escapeHtml(cfg.server || 'https://ntfy.sh')}" placeholder="https://ntfy.sh">
-      </div>
-      <div class="field">
-        <label>Topic (identifiant secret de ton flux de notifs)</label>
-        <div class="field-row" style="align-items:flex-end;">
-          <input type="text" id="notifTopic" value="${escapeHtml(cfg.topic || '')}" placeholder="animedb-xxxxxxxx">
-          <button type="button" class="btn btn-ghost btn-sm" id="notifRegen" style="flex:none;">🎲 Générer</button>
+  function renderForm(current, syncNote) {
+    root.innerHTML = `
+    <div class="modal-overlay" id="notifOverlay">
+      <div class="modal">
+        <button class="modal-close" id="notifClose">✕</button>
+        <h2>🔔 Notifications de parution</h2>
+        <p class="field-hint" style="margin-bottom:14px;">
+          Configure ton topic <strong>ntfy</strong> (appli Android gratuite) pour recevoir une notif
+          quand un nouveau chapitre sort sur une œuvre suivie. Ce topic est envoyé à GitHub pour que
+          la vérification automatique (GitHub Actions) sache où notifier.
+        </p>
+        ${syncNote ? `<p class="field-hint" style="margin-bottom:14px;">${syncNote}</p>` : ''}
+
+        <div class="field">
+          <label>Serveur ntfy</label>
+          <input type="text" id="notifServer" value="${escapeHtml(current.server || 'https://ntfy.sh')}" placeholder="https://ntfy.sh">
         </div>
-        <p class="field-hint">Garde-le secret comme un mot de passe — n'importe qui le connaissant peut recevoir tes notifs.</p>
-      </div>
+        <div class="field">
+          <label>Topic par défaut (identifiant secret de ton flux de notifs)</label>
+          <div class="field-row" style="align-items:flex-end;">
+            <input type="text" id="notifTopic" value="${escapeHtml(current.default_topic || '')}" placeholder="animedb-xxxxxxxx">
+            <button type="button" class="btn btn-ghost btn-sm" id="notifRegen" style="flex:none;">🎲 Générer</button>
+          </div>
+          <p class="field-hint">Garde-le secret comme un mot de passe — n'importe qui le connaissant peut recevoir tes notifs. Utilisé pour toutes les œuvres suivies, sauf si l'une d'elles a son propre topic.</p>
+        </div>
 
-      <div id="notifTestResult" class="field-hint" style="min-height:1.2em;"></div>
+        <div id="notifTestResult" class="field-hint" style="min-height:1.2em;"></div>
 
-      <div class="modal-footer">
-        <div><button class="btn btn-ghost btn-sm" id="notifTest">📲 Envoyer un test</button></div>
-        <div class="modal-footer-right">
-          <button class="btn btn-ghost" id="notifCancel">Annuler</button>
-          <button class="btn btn-primary" id="notifSave">💾 Enregistrer</button>
+        <div class="modal-footer">
+          <div><button class="btn btn-ghost btn-sm" id="notifTest">📲 Envoyer un test</button></div>
+          <div class="modal-footer-right">
+            <button class="btn btn-ghost" id="notifCancel">Annuler</button>
+            <button class="btn btn-primary" id="notifSave">💾 Enregistrer</button>
+          </div>
         </div>
       </div>
-    </div>
-  </div>`;
+    </div>`;
 
-  const overlay = document.getElementById('notifOverlay');
-  document.getElementById('notifClose').onclick = closeNotifModal;
-  document.getElementById('notifCancel').onclick = closeNotifModal;
-  overlay.onclick = (ev) => { if (ev.target === overlay) closeNotifModal(); };
+    const overlay = document.getElementById('notifOverlay');
+    document.getElementById('notifClose').onclick = closeNotifModal;
+    document.getElementById('notifCancel').onclick = closeNotifModal;
+    overlay.onclick = (ev) => { if (ev.target === overlay) closeNotifModal(); };
 
-  document.getElementById('notifRegen').onclick = () => {
-    document.getElementById('notifTopic').value = generateNtfyTopic();
-  };
+    document.getElementById('notifRegen').onclick = () => {
+      document.getElementById('notifTopic').value = generateNtfyTopic();
+    };
 
-  document.getElementById('notifTest').onclick = async () => {
-    const server = document.getElementById('notifServer').value.trim() || 'https://ntfy.sh';
-    const topic = document.getElementById('notifTopic').value.trim();
-    const resultEl = document.getElementById('notifTestResult');
-    if (!topic) { resultEl.textContent = "Renseigne d'abord un topic."; return; }
-    resultEl.textContent = 'Envoi...';
-    const r = await sendNtfyTest({ server, topic });
-    resultEl.textContent = r.ok ? '✅ Envoyé ! Vérifie ton téléphone.' : '❌ ' + (r.error || "Échec de l'envoi.");
-  };
+    document.getElementById('notifTest').onclick = async () => {
+      const server = document.getElementById('notifServer').value.trim() || 'https://ntfy.sh';
+      const default_topic = document.getElementById('notifTopic').value.trim();
+      const resultEl = document.getElementById('notifTestResult');
+      if (!default_topic) { resultEl.textContent = "Renseigne d'abord un topic."; return; }
+      resultEl.textContent = 'Envoi...';
+      const r = await sendNtfyTest({ server, default_topic });
+      resultEl.textContent = r.ok ? '✅ Envoyé ! Vérifie ton téléphone.' : '❌ ' + (r.error || "Échec de l'envoi.");
+    };
 
-  document.getElementById('notifSave').onclick = () => {
-    const server = document.getElementById('notifServer').value.trim() || 'https://ntfy.sh';
-    const topic = document.getElementById('notifTopic').value.trim();
-    if (!topic) { toast('Le topic est obligatoire'); return; }
-    setNtfyConfig({ server, topic });
-    toast('Configuration ntfy enregistrée');
-    closeNotifModal();
-  };
+    document.getElementById('notifSave').onclick = async () => {
+      const server = document.getElementById('notifServer').value.trim() || 'https://ntfy.sh';
+      const default_topic = document.getElementById('notifTopic').value.trim();
+      if (!default_topic) { toast('Le topic est obligatoire'); return; }
+      const newCfg = { server, default_topic };
+      setNtfyConfigLocal(newCfg);
+
+      if (!isSyncConfigured()) {
+        toast('⚠️ Enregistré en local seulement — active la synchro GitHub pour que la vérification automatique fonctionne');
+        closeNotifModal();
+        return;
+      }
+
+      const saveBtn = document.getElementById('notifSave');
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'Envoi vers GitHub...';
+      const result = await pushNtfyConfigToGithub(newCfg);
+      if (result.error) {
+        toast('⚠️ Enregistré en local, mais pas envoyé sur GitHub : ' + result.error);
+      } else {
+        toast('Configuration enregistrée et synchronisée avec GitHub ✓');
+      }
+      closeNotifModal();
+    };
+  }
+
+  renderForm(cfg, isSyncConfigured() ? 'Récupération de la config distante...' : null);
+
+  if (isSyncConfigured()) {
+    pullNtfyConfigFromGithub().then(remoteCfg => {
+      if (remoteCfg && document.getElementById('notifOverlay')) {
+        renderForm(remoteCfg, '✅ Config chargée depuis GitHub (celle utilisée par la vérification automatique).');
+      } else if (document.getElementById('notifOverlay')) {
+        renderForm(cfg, "Aucune config trouvée sur GitHub pour l'instant — elle sera créée à l'enregistrement.");
+      }
+    });
+  }
 }
 
 function closeNotifModal() {
