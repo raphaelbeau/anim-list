@@ -639,6 +639,77 @@ main{padding:24px 40px 60px;}
   color:var(--text-primary);
   margin-bottom:16px;
 }
+.tracking-section-title{
+  font-family:'Share Tech Mono',monospace;
+  font-size:.78rem;
+  letter-spacing:1.5px;
+  color:var(--neon-amber);
+  text-shadow:0 0 6px rgba(255,176,32,.35);
+  margin:18px 0 8px;
+  padding-bottom:6px;
+  border-bottom:1px solid var(--grid-line);
+}
+.tracking-section-title:first-of-type{margin-top:0;}
+.status-on{color:var(--good);font-weight:700;}
+.status-off{color:var(--text-dim);font-weight:700;}
+.anime-radio-group{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.anime-radio-option{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  padding:9px 10px;
+  border:1px solid var(--grid-line);
+  border-radius:8px;
+  cursor:pointer;
+  background:rgba(0,0,0,.2);
+  transition:border-color .15s,background .15s;
+}
+.anime-radio-option:hover{border-color:var(--neon-amber);}
+.anime-radio-option input[type=radio]{
+  position:absolute;
+  opacity:0;
+  width:0;height:0;
+}
+.anime-radio-mark{
+  flex:none;
+  width:16px;height:16px;
+  margin-top:2px;
+  border-radius:50%;
+  border:2px solid var(--text-dim);
+  position:relative;
+}
+.anime-radio-option input[type=radio]:checked ~ .anime-radio-mark{
+  border-color:var(--neon-amber);
+  box-shadow:0 0 8px rgba(255,176,32,.4);
+}
+.anime-radio-option input[type=radio]:checked ~ .anime-radio-mark::after{
+  content:"";
+  position:absolute;
+  inset:2px;
+  border-radius:50%;
+  background:var(--neon-amber);
+}
+.anime-radio-option:has(input[type=radio]:checked){
+  border-color:var(--neon-amber);
+  background:rgba(255,176,32,.06);
+}
+.anime-radio-text{display:flex;flex-direction:column;gap:2px;}
+.anime-radio-text strong{
+  font-family:'Rajdhani',sans-serif;
+  font-size:.9rem;
+  color:var(--text-primary);
+  font-weight:700;
+}
+.anime-radio-text small{
+  font-family:'Share Tech Mono',monospace;
+  font-size:.68rem;
+  color:var(--text-dim);
+}
+.tracking-box-detected{border-color:var(--neon-cyan);box-shadow:0 0 18px rgba(33,230,255,.12);}
 .tracking-box{
   border:1px solid var(--neon-violet);
   border-radius:10px;
@@ -1166,6 +1237,18 @@ function migrateEntry(e) {
       dernier_chapitre_paru: null,
       derniere_verification: null,
       ntfy_topic: null, // override optionnel, null = topic global (configuré plus tard)
+    };
+  }
+  if (!m.suivi_anime) {
+    m.suivi_anime = {
+      mode: 'desactive', // 'desactive' | 'saison_complete' | 'chaque_episode'
+      nom_detecte: null,
+      saison_actuelle: null,
+      episodes_sortis: null,
+      episodes_total: null,
+      prochain_episode: null,
+      derniere_verification: null,
+      ntfy_topic: null,
     };
   }
   return m;
@@ -1936,6 +2019,11 @@ function openModal(id, presetFinishSide) {
     manga: { note: null, comment: '' },
     sequel_date: '', progress_chapter: '', progress_episode: '',
     suivi: { suivi_actif: false, dernier_chapitre_paru: null, derniere_verification: null, ntfy_topic: null },
+    suivi_anime: {
+      mode: 'desactive', nom_detecte: null, saison_actuelle: null,
+      episodes_sortis: null, episodes_total: null, prochain_episode: null,
+      derniere_verification: null, ntfy_topic: null,
+    },
   };
 
   let animeStatusPreset = e.anime_status || '';
@@ -2068,12 +2156,12 @@ function openModal(id, presetFinishSide) {
           <label>Commentaire scan</label>
           <textarea id="fMangaComment" placeholder="Avis">${escapeHtml(e.manga.comment || '')}</textarea>
         </div>
-        ${editingId ? `<button type="button" class="btn btn-outline btn-sm" id="btnOpenSuivi" style="margin-top:10px;">🔔 Suivre les sorties →</button>` : `<p class="field-hint" style="margin-top:8px;">Le suivi des sorties sera disponible une fois l'œuvre enregistrée.</p>`}
       </div>
                   <details class="field-help">
  <p class="hint">La note affichée dans "Fini" = note du scan si elle existe, sinon la dernière note d'anime renseignée.</p>
 </details>
-      
+
+      ${editingId ? `<button type="button" class="btn btn-outline btn-sm" id="btnOpenSuivi" style="margin-bottom:16px;width:100%;">🔔 Suivre les parutions (manga &amp; anime) →</button>` : `<p class="field-hint" style="margin-bottom:16px;">Le suivi des parutions sera disponible une fois l'œuvre enregistrée.</p>`}
 
       <div class="modal-footer">
         <div>${editingId ? `<button class="btn btn-danger btn-sm" id="mDelete">🗑 Supprimer</button>` : '<span></span>'}</div>
@@ -2187,17 +2275,41 @@ function fmtCheckTime(iso) {
   return `${dd}/${mm} ${hh}:${mi}`;
 }
 
+function parseEpisodeProgress(progress_episode) {
+  if (!progress_episode) return null;
+  const m = String(progress_episode).match(/(\d+)/);
+  return m ? parseInt(m[1], 10) : null;
+}
+
 function openSuiviPanel(id) {
   const e = DATA.find(x => x.id === id);
   if (!e) return;
   if (!e.suivi) e.suivi = { suivi_actif: false, dernier_chapitre_paru: null, derniere_verification: null, ntfy_topic: null };
+  if (!e.suivi_anime) {
+    e.suivi_anime = {
+      mode: 'desactive', nom_detecte: null, saison_actuelle: null,
+      episodes_sortis: null, episodes_total: null, prochain_episode: null,
+      derniere_verification: null, ntfy_topic: null,
+    };
+  }
   const s = e.suivi;
+  const sa = e.suivi_anime;
 
   const diff = (s.dernier_chapitre_paru != null && e.progress_chapter)
     ? s.dernier_chapitre_paru - parseInt(e.progress_chapter, 10) : null;
 
   const warnings = [];
   if (!e.scan_url) warnings.push("aucun lien scan enregistré sur cette fiche — le clic sur une future notification n'aura rien à ouvrir");
+
+  const progressEpNum = parseEpisodeProgress(e.progress_episode);
+  const episodesDiff = (sa.episodes_sortis != null && progressEpNum != null)
+    ? sa.episodes_sortis - progressEpNum : null;
+
+  const animeModeLabels = {
+    desactive: 'DÉSACTIVÉ',
+    saison_complete: 'ACTIVÉES — saison complète',
+    chaque_episode: 'ACTIVÉES — chaque épisode',
+  };
 
   const root = document.getElementById('modalRoot');
   root.innerHTML = `
@@ -2207,6 +2319,7 @@ function openSuiviPanel(id) {
       <div class="tracking-header">PARUTION</div>
       <div class="tracking-title">${escapeHtml(displayName(e))}</div>
 
+      <div class="tracking-section-title">📖 SUIVI DES SORTIES MANGA</div>
       <div class="tracking-box">
         <div class="tracking-row-label">🔔 NOTIFICATIONS</div>
         <button class="tracking-toggle ${s.suivi_actif ? 'on' : 'off'}" id="suiviToggle">
@@ -2222,7 +2335,53 @@ function openSuiviPanel(id) {
         ⚠️ <ul>${warnings.map(w => `<li>${escapeHtml(w)}</li>`).join('')}</ul>
       </div>` : ''}
 
-      <p class="field-hint">La vérification automatique des sorties (et l'envoi de la notification) arrivera dans une prochaine étape — pour l'instant, active simplement le suivi sur les œuvres que tu veux surveiller.</p>
+      <div class="tracking-section-title">🔔 SUIVI DES SORTIES ANIME</div>
+      <div class="tracking-box">
+        <div class="tracking-row-label">STATUT DE SUIVI</div>
+        <div class="anime-radio-group" id="animeModeGroup">
+          <label class="anime-radio-option">
+            <input type="radio" name="animeMode" value="desactive" ${sa.mode === 'desactive' ? 'checked' : ''}>
+            <span class="anime-radio-mark"></span>
+            <span class="anime-radio-text">
+              <strong>Désactivé</strong>
+              <small>Pas de notification pour cette œuvre</small>
+            </span>
+          </label>
+          <label class="anime-radio-option">
+            <input type="radio" name="animeMode" value="saison_complete" ${sa.mode === 'saison_complete' ? 'checked' : ''}>
+            <span class="anime-radio-mark"></span>
+            <span class="anime-radio-text">
+              <strong>Saison complète</strong>
+              <small>Me prévenir quand toute la saison est disponible</small>
+            </span>
+          </label>
+          <label class="anime-radio-option">
+            <input type="radio" name="animeMode" value="chaque_episode" ${sa.mode === 'chaque_episode' ? 'checked' : ''}>
+            <span class="anime-radio-mark"></span>
+            <span class="anime-radio-text">
+              <strong>Chaque épisode</strong>
+              <small>Me prévenir à chaque sortie</small>
+            </span>
+          </label>
+        </div>
+        <div class="tracking-stat" id="animeStatusIndicator" style="margin-top:12px;">
+          Notifications : <span class="${sa.mode !== 'desactive' ? 'status-on' : 'status-off'}">${animeModeLabels[sa.mode] || 'DÉSACTIVÉ'}</span>
+        </div>
+      </div>
+
+      <div class="tracking-box tracking-box-detected">
+        <div class="tracking-row-label">📺 ANIME DÉTECTÉ</div>
+        ${sa.nom_detecte ? `
+          <div class="tracking-stat">Nom : <span>${escapeHtml(sa.nom_detecte)}</span></div>
+          <div class="tracking-stat">Saison actuelle : <span>${sa.saison_actuelle != null ? escapeHtml(String(sa.saison_actuelle)) : '—'}</span></div>
+          <div class="tracking-stat">Épisodes : <span>${sa.episodes_sortis != null ? sa.episodes_sortis : '—'} / ${sa.episodes_total != null ? sa.episodes_total : '?'}</span></div>
+          <div class="tracking-stat">Prochain épisode : <span>${sa.prochain_episode != null ? sa.prochain_episode : '—'}</span></div>
+          <div class="tracking-stat">Dernière vérification : <span>${fmtCheckTime(sa.derniere_verification)}</span></div>
+          ${episodesDiff != null && episodesDiff > 0 ? `<div class="tracking-hot">🔥 ${episodesDiff} épisode${episodesDiff > 1 ? 's' : ''} disponible${episodesDiff > 1 ? 's' : ''}</div>` : ''}
+        ` : `<p class="field-hint" style="margin:0;">Aucune donnée détectée pour l'instant — la vérification automatique côté anime n'est pas encore active. Ces informations se rempliront ici dès qu'elle le sera.</p>`}
+      </div>
+
+      <p class="field-hint">La vérification automatique des sorties (et l'envoi des notifications) se fait côté GitHub — pas besoin de garder ton téléphone ou ton PC allumés.</p>
 
       <div class="modal-footer">
         <button class="btn btn-ghost" id="suiviBack">← Retour à la fiche</button>
@@ -2244,6 +2403,16 @@ function openSuiviPanel(id) {
     render();
     openSuiviPanel(id); // rafraîchit le panneau en place
   };
+
+  document.querySelectorAll('#animeModeGroup input[name="animeMode"]').forEach(radio => {
+    radio.onchange = async () => {
+      e.suivi_anime.mode = radio.value;
+      await persist();
+      renderNav();
+      render();
+      openSuiviPanel(id); // rafraîchit le panneau en place
+    };
+  });
 }
 
 async function saveModal() {
