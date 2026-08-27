@@ -171,7 +171,7 @@ async function sendNtfyNotification(ntfyConfig, release) {
   console.error(`📡 Envoi notification pour "${label}" sur le topic "${topic}" (Chapitre ${release.latestChapter})...`);
 
   const headers = {
-    'Title': `🔔 Nouveau chapitre — ${label}`,
+    'Title': `Nouveau chapitre — ${label}`,
     'Tags': 'bookmark_tabs',
   };
   if (release.scan_url) headers['Click'] = release.scan_url;
