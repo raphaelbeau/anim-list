@@ -1,38 +1,14 @@
 #!/usr/bin/env node
 /**
  * ANIME//DB — moteur de vérification des chapitres (autonome)
- * -------------------------------------------------------------
- * Ne fait qu'une chose : pour une liste d'œuvres avec le suivi activé,
- * trouve le dernier chapitre paru et le compare à `suivi.dernier_chapitre_paru`.
- *
- * Aucune dépendance externe (fetch natif de Node 18+). Pas de notification,
- * pas d'écriture de fichier, pas de GitHub Actions ici — juste la logique
- * de vérification, pensée pour être appelée par un futur orchestrateur.
- *
- * Format d'entrée attendu par œuvre (voir modèle de données ANIME//DB) :
- *   {
- *     id, title, nickname, scan_url, manga_status,
- *     progress_chapter,               // prochain chapitre que l'utilisateur doit lire
- *     suivi: { suivi_actif, dernier_chapitre_paru, derniere_verification, ntfy_topic }
- *   }
- *
- * Usage en CLI (pour tester manuellement) :
- *   node check-releases.js chemin/vers/data.json
- *   cat data.json | node check-releases.js
  */
-
-/* ============================================================
-   SOURCES DE PARUTION — testées en cascade
-   ============================================================ */
 
 function cleanTitle(title) {
   return (title || '').replace(/\([^)]*\)/g, '').trim();
 }
 
 /**
- * Source 1 : MangaDex — recherche le titre, puis lit le flux "aggregate"
- * (résumé de tous les volumes/chapitres) pour en tirer le numéro le plus élevé.
- * Retourne un nombre (chapitre) ou null si le titre n'est pas trouvé / erreur.
+ * Source 1 : MangaDex
  */
 async function checkMangaDex(title) {
   try {
@@ -56,19 +32,12 @@ async function checkMangaDex(title) {
     }
     return maxChapter;
   } catch (e) {
-    return null; // réseau down, timeout, JSON invalide... on considère juste "pas trouvé ici"
+    return null;
   }
 }
 
 /**
- * Source 2 (repli) : RSS générique. On tente quelques emplacements usuels
- * (le lien lui-même, /feed, /rss, /rss.xml), ou on cherche une balise
- * <link rel="alternate" type="application/rss+xml"> sur la page du lien scan.
- * Une fois un flux trouvé, on extrait le plus grand numéro de chapitre
- * mentionné dans les titres d'items récents.
- *
- * Best-effort : beaucoup de sites de lecture n'exposent pas de RSS du tout,
- * dans ce cas on retourne simplement null (échec silencieux, pas une erreur).
+ * Source 2 : RSS générique
  */
 async function checkGenericRss(scanUrl) {
   if (!scanUrl) return null;
@@ -84,12 +53,12 @@ async function checkGenericRss(scanUrl) {
         const contentType = pageRes.headers.get('content-type') || '';
         const text = await pageRes.text();
         if (contentType.includes('xml') || text.trim().startsWith('<?xml') || text.includes('<rss')) {
-          feedUrl = url; // ce candidat est déjà un flux
+          feedUrl = url;
         } else {
           const m = text.match(/<link[^>]+type=["']application\/rss\+xml["'][^>]+href=["']([^"']+)["']/i);
           if (m) feedUrl = new URL(m[1], origin).toString();
         }
-      } catch (e) { /* on essaie le candidat suivant */ }
+      } catch (e) {}
 
       if (feedUrl) {
         const feedRes = await fetch(feedUrl);
@@ -107,15 +76,10 @@ async function checkGenericRss(scanUrl) {
         if (maxChapter !== null) return maxChapter;
       }
     }
-  } catch (e) { /* pas de RSS exploitable sur ce site */ }
+  } catch (e) {}
   return null;
 }
 
-/**
- * Vérification en cascade pour une œuvre : MangaDex d'abord, RSS ensuite
- * si MangaDex n'a rien donné (introuvable ou erreur). Retourne
- * { chapter, source } ou null si aucune source n'a rien trouvé.
- */
 async function findLatestChapter(entry) {
   const viaMangaDex = await checkMangaDex(entry.title);
   if (viaMangaDex !== null) return { chapter: viaMangaDex, source: 'mangadex' };
@@ -127,57 +91,49 @@ async function findLatestChapter(entry) {
 }
 
 /* ============================================================
-   VÉRIFICATION + COMPARAISON
+   VÉRIFICATION + COMPARAISON (CORRIGÉE)
    ============================================================ */
 
-/**
- * @param {Array} entries - toutes les œuvres (le filtrage sur suivi_actif est fait ici)
- * @returns {Promise<{results: Array, newReleases: Array}>}
- *
- * `results`     : une ligne par œuvre suivie et effectivement vérifiée, qu'il y ait
- *                 ou non un nouveau chapitre — utile pour mettre à jour
- *                 `dernier_chapitre_paru` / `derniere_verification` en aval.
- * `newReleases` : sous-ensemble de `results` où un nouveau chapitre a été détecté,
- *                 prêt à être notifié — contient explicitement `scan_url`.
- *
- * Règle de comparaison :
- *  - si `dernier_chapitre_paru` est encore `null` (aucune vérification précédente),
- *    on ne peut rien "comparer" : on remonte quand même la valeur trouvée (pour
- *    poser une première référence) mais on ne la classe PAS en `newReleases`,
- *    sinon la toute première exécution notifierait chaque œuvre suivie d'un coup.
- *  - sinon, nouveau chapitre = valeur trouvée strictement supérieure à la valeur connue.
- */
 async function checkReleases(entries) {
-  const tracked = (entries || []).filter(e => e && e.suivi && e.suivi.suivi_actif);
+  // Supporte les deux structures : e.suivi.suivi_actif OU directement présent/suivi dans data.json
+  const tracked = (entries || []).filter(e => {
+    if (!e) return false;
+    if (e.suivi && typeof e.suivi.suivi_actif !== 'undefined') return e.suivi.suivi_actif;
+    return true; // Par défaut, on prend les entrées du fichier
+  });
 
   const results = [];
   const newReleases = [];
 
   for (const entry of tracked) {
     const found = await findLatestChapter(entry);
-    const previous = entry.suivi.dernier_chapitre_paru;
+    
+    // Récupération souple des valeurs (objet suivi ou clés directes)
+    const previous = entry.suivi?.dernier_chapitre_paru ?? entry.previousChapter ?? entry.latestChapter ?? null;
+    const ntfyTopic = entry.suivi?.ntfy_topic ?? entry.ntfy_topic ?? null;
     const checkedAt = new Date().toISOString();
 
     if (!found) {
       results.push({
         id: entry.id, title: entry.title, nickname: entry.nickname || '',
-        scan_url: entry.scan_url || null, ntfy_topic: entry.suivi.ntfy_topic || null,
+        scan_url: entry.scan_url || null, ntfy_topic: ntfyTopic,
         previousChapter: previous, latestChapter: null,
         source: null, isNew: false, checkedAt,
       });
       continue;
     }
 
-    const isBaseline = previous === null || previous === undefined;
-    const isNew = !isBaseline && found.chapter > previous;
+    // Un chapitre est nouveau s'il existe une valeur précédente ET que la nouvelle valeur est strictement supérieure
+    const isNew = previous !== null && previous !== undefined && found.chapter > previous;
 
     const row = {
       id: entry.id, title: entry.title, nickname: entry.nickname || '',
-      scan_url: entry.scan_url || null, ntfy_topic: entry.suivi.ntfy_topic || null,
-      previousChapter: isBaseline ? null : previous,
+      scan_url: entry.scan_url || null, ntfy_topic: ntfyTopic,
+      previousChapter: previous,
       latestChapter: found.chapter,
       source: found.source, isNew, checkedAt,
     };
+
     results.push(row);
     if (isNew) newReleases.push(row);
   }
@@ -186,29 +142,24 @@ async function checkReleases(entries) {
 }
 
 /* ============================================================
-   NOTIFICATION — ntfy
+   NOTIFICATION — ntfy (AVEC FALLBACK TOPIC GLOBAL)
    ============================================================ */
 
-/**
- * Envoie une notification ntfy pour une œuvre donnée.
- * Payload :
- *   - Titre : 🔔 Nouveau chapitre — [Nom de l'œuvre]   (nickname si présent, sinon titre)
- *   - Corps : Chapitre [X] disponible
- *   - Click : le scan_url de l'œuvre (tap sur la notif -> ouverture directe du lien de lecture)
- *
- * @param {{server?: string, topic: string}} ntfyConfig
- * @param {{title: string, nickname?: string, latestChapter: number, scan_url?: string, ntfy_topic?: string}} release
- * @returns {Promise<{ok: boolean, error?: string}>}
- */
 async function sendNtfyNotification(ntfyConfig, release) {
+  // Prise en compte du fallback default_topic
   const topic = (release && release.ntfy_topic)
     || (ntfyConfig && ntfyConfig.default_topic)
-    || (ntfyConfig && ntfyConfig.topic); // compat avec d'anciennes config sauvegardées sous 'topic'
+    || (ntfyConfig && ntfyConfig.topic);
+
   if (!topic) {
-    return { ok: false, error: 'Aucun topic ntfy configuré (ni sur cette œuvre, ni en global via default_topic).' };
+    console.error(`❌ Échec envoi pour "${release.title}" : Aucun topic trouvé.`);
+    return { ok: false, error: 'Aucun topic ntfy configuré (ni sur cette œuvre, ni via default_topic).' };
   }
+
   const server = ((ntfyConfig && ntfyConfig.server) || 'https://ntfy.sh').replace(/\/+$/, '');
   const label = release.nickname || release.title;
+
+  console.error(`📡 Envoi notification pour "${label}" sur le topic "${topic}" (Chapitre ${release.latestChapter})...`);
 
   const headers = {
     'Title': `🔔 Nouveau chapitre — ${label}`,
@@ -225,20 +176,10 @@ async function sendNtfyNotification(ntfyConfig, release) {
     if (!res.ok) return { ok: false, error: `ntfy a répondu ${res.status}` };
     return { ok: true };
   } catch (e) {
-    return { ok: false, error: 'Impossible de contacter le serveur ntfy (réseau ?)' };
+    return { ok: false, error: 'Impossible de contacter le serveur ntfy' };
   }
 }
 
-/**
- * Envoie une notification pour chaque œuvre de `newReleases`. Continue même si
- * l'une des notifications échoue (ex: topic mal configuré) — chaque tentative
- * est reportée individuellement dans le tableau retourné, plutôt que de
- * bloquer les autres œuvres.
- *
- * @param {Array} newReleases - sortie de checkReleases().newReleases
- * @param {{server?: string, topic: string}} ntfyConfig
- * @returns {Promise<Array<{id: string, title: string, ok: boolean, error?: string}>>}
- */
 async function notifyNewReleases(newReleases, ntfyConfig) {
   const outcomes = [];
   for (const release of newReleases || []) {
@@ -254,10 +195,7 @@ module.exports = {
 };
 
 /* ============================================================
-   CLI — usage manuel / test :
-     node check-releases.js data.json
-     node check-releases.js data.json notif-config.json
-     cat data.json | node check-releases.js
+   CLI
    ============================================================ */
 if (require.main === module) {
   (async () => {
@@ -268,7 +206,7 @@ if (require.main === module) {
     const ntfyConfigPath = args[1];
 
     if (shouldWrite && !filePath) {
-      console.error('--write nécessite un chemin de fichier en 1er argument (pas de lecture via stdin).');
+      console.error('--write nécessite un chemin de fichier en 1er argument.');
       process.exit(1);
     }
 
@@ -280,17 +218,25 @@ if (require.main === module) {
     console.error(`Œuvres suivies vérifiées : ${results.length}`);
     console.error(`Nouveaux chapitres détectés : ${newReleases.length}`);
 
-    // 1) appliquer les résultats à data.json en premier : on ne veut jamais perdre
-    //    une mise à jour de suivi à cause d'un souci de notification en aval.
     let dataChanged = false;
     if (shouldWrite) {
       const byId = new Map(entries.map(e => [e.id, e]));
       for (const row of results) {
         const entry = byId.get(row.id);
-        if (!entry || !entry.suivi) continue;
-        entry.suivi.derniere_verification = row.checkedAt;
-        if (row.latestChapter !== null && row.latestChapter !== undefined) {
-          entry.suivi.dernier_chapitre_paru = row.latestChapter;
+        if (!entry) continue;
+
+        // Mise à jour de la structure à plat ou dans l'objet suivi
+        if (entry.suivi) {
+          entry.suivi.derniere_verification = row.checkedAt;
+          if (row.latestChapter !== null) entry.suivi.dernier_chapitre_paru = row.latestChapter;
+        } else {
+          entry.checkedAt = row.checkedAt;
+          if (row.previousChapter === null || row.previousChapter === undefined) {
+            entry.previousChapter = row.latestChapter;
+          } else {
+            entry.previousChapter = row.previousChapter;
+          }
+          if (row.latestChapter !== null) entry.latestChapter = row.latestChapter;
         }
         dataChanged = true;
       }
@@ -300,8 +246,6 @@ if (require.main === module) {
       }
     }
 
-    // 2) notifications — best-effort, ne doit jamais faire échouer tout le run
-    //    (ex: notif-config.json pas encore poussé sur le repo).
     let notifyOutcomes = [];
     if (newReleases.length) {
       let ntfyConfig = null;
@@ -309,10 +253,8 @@ if (require.main === module) {
         try {
           ntfyConfig = JSON.parse(fs.readFileSync(ntfyConfigPath, 'utf-8'));
         } catch (e) {
-          console.error(`⚠️ Impossible de lire ${ntfyConfigPath} (${e.code || e.message}) — notifications ignorées cette fois.`);
+          console.error(`⚠️ Impossible de lire ${ntfyConfigPath}`);
         }
-      } else {
-        console.error('(Aucun fichier de config ntfy fourni en 2e argument — notifications non envoyées.)');
       }
       if (ntfyConfig) {
         notifyOutcomes = await notifyNewReleases(newReleases, ntfyConfig);
