@@ -62,6 +62,28 @@ a{color:var(--neon-cyan);}
   min-height:100vh;
 }
 
+  /* Alignement du champ avec les boutons -1 et +1 */
+.stepper-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.btn-step {
+  padding: 4px 8px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f4f4f5;
+  cursor: pointer;
+  user-select: none;
+}
+
+.btn-step:hover {
+  background-color: #e4e4e7;
+}
+
 /* ---------- SIDEBAR ---------- */
 .sidebar{
   background:linear-gradient(180deg,var(--bg-panel) 0%, var(--bg-void) 100%);
@@ -1978,12 +2000,20 @@ function openModal(id, presetFinishSide) {
 
       <div class="field-row3">
         <div class="field">
-          <label>Prochain épisode</label>
-          <input type="text" id="fProgEp" value="${escapeHtml(e.progress_episode || '')}" placeholder="">
+          <label>dernier vu</label>
+          <div style="display: inline-flex; align-items: center; gap: 4px;">
+            <button type="button" onclick="stepInputValue(this, -1)" style="padding: 2px 6px; cursor: pointer;">-1</button>
+            <input type="text" id="fProgEp" value="${escapeHtml(e.progress_episode || '')}" placeholder="">
+            <button type="button" onclick="stepInputValue(this, 1)" style="padding: 2px 6px; cursor: pointer;">+1</button>
+          </div>
         </div>
         <div class="field">
-          <label>Prochain n° scan</label>
-          <input type="text" id="fProgCh" value="${escapeHtml(e.progress_chapter || '')}" placeholder="">
+          <label>dernier lu</label>
+          <div style="display: inline-flex; align-items: center; gap: 4px;">
+            <button type="button" onclick="stepInputValue(this, -1)" style="padding: 2px 6px; cursor: pointer;">-1</button>
+            <input type="text" id="fProgCh" value="${escapeHtml(e.progress_chapter || '')}" placeholder="">
+            <button type="button" onclick="stepInputValue(this, 1)" style="padding: 2px 6px; cursor: pointer;">+1</button>
+        </div>
         </div>
         <div class="field">
           <label>Suite prévue</label>
