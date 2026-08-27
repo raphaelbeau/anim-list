@@ -155,7 +155,6 @@ async function checkReleases(entries) {
    ============================================================ */
 
 async function sendNtfyNotification(ntfyConfig, release) {
-  // Prise en compte du fallback default_topic si ntfy_topic est null sur l'œuvre
   const topic = (release && release.ntfy_topic)
     || (ntfyConfig && ntfyConfig.default_topic)
     || (ntfyConfig && ntfyConfig.topic);
@@ -170,9 +169,12 @@ async function sendNtfyNotification(ntfyConfig, release) {
 
   console.error(`📡 Envoi notification pour "${label}" sur le topic "${topic}" (Chapitre ${release.latestChapter})...`);
 
+  // Nettoyage strict ASCII pour le header Title (empêche tout crash de ByteString)
+  const safeTitle = `Nouveau chapitre - ${label}`.replace(/[^\x00-\x7F]/g, '');
+
   const headers = {
-    'Title': `Nouveau chapitre | ${label}`,
-    'Tags': 'bookmark_tabs',
+    'Title': safeTitle,
+    'Tags': 'bookmark_tabs,bell',
   };
   if (release.scan_url) headers['Click'] = release.scan_url;
 
