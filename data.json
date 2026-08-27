@@ -93,8 +93,8 @@
   "anime_overall_note": null,
   "suivi": {
    "suivi_actif": true,
-   "dernier_chapitre_paru": null,
-   "derniere_verification": null,
+   "dernier_chapitre_paru": 234,
+   "derniere_verification": "2026-08-27T11:07:51.476Z",
    "ntfy_topic": null
   }
  },
@@ -127,7 +127,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 199,
-   "derniere_verification": "2026-08-27T10:42:50.451Z",
+   "derniere_verification": "2026-08-27T11:07:51.894Z",
    "ntfy_topic": null
   }
  },
@@ -192,7 +192,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 1191,
-   "derniere_verification": "2026-08-27T10:42:51.082Z",
+   "derniere_verification": "2026-08-27T11:07:52.784Z",
    "ntfy_topic": null
   }
  },
@@ -386,8 +386,8 @@
   "anime_overall_note": null,
   "suivi": {
    "suivi_actif": true,
-   "dernier_chapitre_paru": null,
-   "derniere_verification": null,
+   "dernier_chapitre_paru": 64,
+   "derniere_verification": "2026-08-27T11:07:53.530Z",
    "ntfy_topic": null
   }
  },
@@ -5000,8 +5000,8 @@
   },
   "suivi": {
    "suivi_actif": true,
-   "dernier_chapitre_paru": null,
-   "derniere_verification": null,
+   "dernier_chapitre_paru": 39.2,
+   "derniere_verification": "2026-08-27T11:07:54.271Z",
    "ntfy_topic": null
   }
  },
@@ -5033,8 +5033,8 @@
   },
   "suivi": {
    "suivi_actif": true,
-   "dernier_chapitre_paru": null,
-   "derniere_verification": null,
+   "dernier_chapitre_paru": 83,
+   "derniere_verification": "2026-08-27T11:07:55.012Z",
    "ntfy_topic": null
   }
  },
