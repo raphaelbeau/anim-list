@@ -94,7 +94,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 234,
-   "derniere_verification": "2026-08-27T11:24:27.916Z",
+   "derniere_verification": "2026-08-27T11:13:02.427Z",
    "ntfy_topic": null
   }
  },
@@ -127,7 +127,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 199,
-   "derniere_verification": "2026-08-27T11:24:28.208Z",
+   "derniere_verification": "2026-08-27T11:13:03.135Z",
    "ntfy_topic": null
   }
  },
@@ -191,8 +191,8 @@
   "anime_overall_note": null,
   "suivi": {
    "suivi_actif": true,
-   "dernier_chapitre_paru": 1190,
-   "derniere_verification": "2026-08-27T11:24:28.532Z",
+   "dernier_chapitre_paru": 1191,
+   "derniere_verification": "2026-08-27T11:13:03.801Z",
    "ntfy_topic": null
   }
  },
@@ -387,7 +387,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 64,
-   "derniere_verification": "2026-08-27T11:24:28.898Z",
+   "derniere_verification": "2026-08-27T11:13:03.849Z",
    "ntfy_topic": null
   }
  },
@@ -4984,7 +4984,7 @@
   "anime_url": "",
   "scan_url": "https://mangadex.org/title/c4ca02fb-8378-433b-8049-fbbea5d25cba/haimiya-senpai-wa-kowakute-kawaii",
   "progress_episode": "",
-  "progress_chapter": "39",
+  "progress_chapter": "38",
   "sequel_date": "",
   "anime_seasons": [
    {
@@ -5001,7 +5001,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 39.2,
-   "derniere_verification": "2026-08-27T11:24:29.153Z",
+   "derniere_verification": "2026-08-27T11:13:04.175Z",
    "ntfy_topic": null
   }
  },
@@ -5034,7 +5034,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 83,
-   "derniere_verification": "2026-08-27T11:24:29.494Z",
+   "derniere_verification": "2026-08-27T11:13:04.503Z",
    "ntfy_topic": null
   }
  },
