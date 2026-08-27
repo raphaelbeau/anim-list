@@ -1051,6 +1051,24 @@ async function githubGetFile(cfg, path) {
   }
 }
 
+  function stepInputValue(btn, delta) {
+  // Récupère l'input qui est juste à côté du bouton
+  const container = btn.parentElement;
+  const input = container.querySelector('input');
+  if (!input) return;
+
+  // Récupère la valeur numérique actuelle (0 si vide ou non numérique)
+  let val = parseFloat(input.value) || 0;
+  val = Math.max(0, val + delta);
+
+  // Remplace la valeur dans l'input
+  input.value = Number.isInteger(val) ? val : parseFloat(val.toFixed(2));
+
+  // Déclenche les événements pour avertir tes scripts de sauvegarde
+  input.dispatchEvent(new Event('input', { bubbles: true }));
+  input.dispatchEvent(new Event('change', { bubbles: true }));
+}
+
 async function githubPutFile(cfg, dataObj, sha, retried, path) {
   const branch = cfg.branch || 'main';
   const body = {
