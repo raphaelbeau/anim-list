@@ -30,6 +30,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -63,6 +73,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -94,7 +114,17 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 234,
-   "derniere_verification": "2026-08-27T22:41:36.571Z",
+   "derniere_verification": "2026-08-27T12:55:55.591Z",
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
    "ntfy_topic": null
   }
  },
@@ -127,7 +157,17 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 199,
-   "derniere_verification": "2026-08-27T22:41:37.159Z",
+   "derniere_verification": "2026-08-27T12:55:56.148Z",
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
    "ntfy_topic": null
   }
  },
@@ -161,6 +201,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -192,7 +242,17 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 1191,
-   "derniere_verification": "2026-08-27T22:41:38.262Z",
+   "derniere_verification": "2026-08-27T12:55:56.890Z",
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
    "ntfy_topic": null
   }
  },
@@ -226,6 +286,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -256,6 +326,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -291,6 +371,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -322,6 +412,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -356,6 +456,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -387,7 +497,17 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 64,
-   "derniere_verification": "2026-08-27T22:41:38.988Z",
+   "derniere_verification": "2026-08-27T12:55:57.518Z",
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
    "ntfy_topic": null
   }
  },
@@ -420,6 +540,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -455,6 +585,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -486,6 +626,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -526,6 +676,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -557,6 +717,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -592,6 +762,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -623,6 +803,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -658,6 +848,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -689,6 +889,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -724,6 +934,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -755,6 +975,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -790,6 +1020,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -821,6 +1061,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -856,6 +1106,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -887,6 +1147,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -921,6 +1191,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -953,6 +1233,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -983,6 +1273,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -1018,6 +1318,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -1051,6 +1361,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -1081,6 +1401,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -1121,6 +1451,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -1152,6 +1492,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -1187,6 +1537,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -1218,6 +1578,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -1253,6 +1623,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -1283,6 +1663,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -1317,6 +1707,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -1349,6 +1749,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -1379,6 +1789,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -1414,6 +1834,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -1445,6 +1875,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -1479,6 +1919,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -1509,6 +1959,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -1544,6 +2004,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -1577,6 +2047,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -1607,6 +2087,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -1642,6 +2132,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -1673,6 +2173,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -1708,6 +2218,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -1739,6 +2259,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -1774,6 +2304,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -1805,6 +2345,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -1840,6 +2390,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -1870,6 +2430,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -1904,6 +2474,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -1936,6 +2516,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -1966,6 +2556,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -2001,6 +2601,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -2031,6 +2641,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -2066,6 +2686,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -2097,6 +2727,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -2131,6 +2771,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -2161,6 +2811,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -2195,6 +2855,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -2225,6 +2895,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -2260,6 +2940,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -2293,6 +2983,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -2323,6 +3023,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -2358,6 +3068,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -2388,6 +3108,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -2422,6 +3152,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -2452,6 +3192,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -2487,6 +3237,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -2517,6 +3277,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -2552,6 +3322,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -2582,6 +3362,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -2616,6 +3406,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -2646,6 +3446,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -2681,6 +3491,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -2712,6 +3532,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -2746,6 +3576,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -2778,6 +3618,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -2808,6 +3658,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -2843,6 +3703,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -2873,6 +3743,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -2913,6 +3793,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -2944,6 +3834,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -2978,6 +3878,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -3008,6 +3918,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -3043,6 +3963,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -3076,6 +4006,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -3106,6 +4046,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -3141,6 +4091,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -3172,6 +4132,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -3206,6 +4176,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -3236,6 +4216,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -3270,6 +4260,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -3300,6 +4300,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -3335,6 +4345,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -3366,6 +4386,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -3400,6 +4430,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -3430,6 +4470,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -3465,6 +4515,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -3495,6 +4555,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -3529,6 +4599,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -3559,6 +4639,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -3594,6 +4684,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -3624,6 +4724,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -3659,6 +4769,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -3689,6 +4809,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -3723,6 +4853,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -3755,6 +4895,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -3785,6 +4935,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -3820,6 +4980,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -3850,6 +5020,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -3885,6 +5065,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -3916,6 +5106,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -3951,6 +5151,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -3983,6 +5193,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -4013,6 +5233,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -4048,6 +5278,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -4081,6 +5321,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -4111,6 +5361,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -4146,6 +5406,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -4177,6 +5447,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -4212,6 +5492,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -4242,6 +5532,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -4277,6 +5577,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -4308,6 +5618,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -4343,6 +5663,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -4374,6 +5704,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -4409,6 +5749,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -4422,14 +5772,14 @@
   "fmt": null,
   "anime_url": "https://anime-sama.to/catalogue/the-barbarians-bride/",
   "scan_url": "",
-  "progress_episode": "7",
+  "progress_episode": "",
   "progress_chapter": "",
   "sequel_date": "",
   "anime_seasons": [
    {
-    "label": "Anime",
-    "note": null,
-    "comment": ""
+    "label": "S1",
+    "note": 7,
+    "comment": "Sympa marrant\nCa avance un peu quand même mais c l'aspect shojo n'est pas vraiment centrale"
    }
   ],
   "anime_overall_note": null,
@@ -4440,6 +5790,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -4475,6 +5835,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -4506,6 +5876,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -4541,6 +5921,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -4572,6 +5962,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -4607,6 +6007,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -4638,6 +6048,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -4673,6 +6093,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -4704,6 +6134,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -4739,6 +6179,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -4770,6 +6220,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -4805,6 +6265,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -4836,6 +6306,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -4871,6 +6351,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -4902,6 +6392,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -4937,6 +6437,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -4970,6 +6480,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -5001,7 +6521,17 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 39.2,
-   "derniere_verification": "2026-08-27T22:41:39.665Z",
+   "derniere_verification": "2026-08-27T12:55:58.205Z",
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
    "ntfy_topic": null
   }
  },
@@ -5034,7 +6564,17 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 83,
-   "derniere_verification": "2026-08-27T22:41:40.379Z",
+   "derniere_verification": "2026-08-27T12:55:58.855Z",
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
    "ntfy_topic": null
   }
  },
@@ -5067,6 +6607,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
@@ -5102,6 +6652,16 @@
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -5133,6 +6693,16 @@
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "mode": "desactive",
+   "nom_detecte": null,
+   "saison_actuelle": null,
+   "episodes_sortis": null,
+   "episodes_total": null,
+   "prochain_episode": null,
    "derniere_verification": null,
    "ntfy_topic": null
   }
