@@ -92,7 +92,7 @@
   "progress_episode": "",
   "anime_overall_note": null,
   "suivi": {
-   "suivi_actif": false,
+   "suivi_actif": true,
    "dernier_chapitre_paru": null,
    "derniere_verification": null,
    "ntfy_topic": null
