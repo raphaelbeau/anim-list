@@ -1,217 +1,262 @@
 #!/usr/bin/env node
 /**
- * ANIME//DB — moteur de vérification des chapitres (autonome)
- * -------------------------------------------------------------
- * Ne fait qu'une chose : pour une liste d'œuvres avec le suivi activé,
- * trouve le dernier chapitre paru et le compare au chapitre précédent connu.
+ * ANIME//DB — moteur de vérification des sorties anime (AniList)
+ * -----------------------------------------------------------------
+ * Pour chaque anime suivi (`suivi_anime.notification_mode !== 'disabled'`),
+ * interroge l'API GraphQL AniList pour connaître le statut de diffusion de
+ * la saison, le nombre d'épisodes sortis, et la date du prochain épisode.
+ *
+ * Deux notifications possibles :
+ *   - "saison_complete" : dès que la SAISON EN COURS (le Media pointé par
+ *     anilist_id) passe à season_status === 'FINISHED'. Ça ne dépend jamais
+ *     de l'état de la franchise entière : sur AniList, chaque saison d'un
+ *     anime est en général sa propre fiche Media, donc `status` reflète déjà
+ *     naturellement l'état de CETTE saison précise, pas celui de la série
+ *     dans son ensemble (voir règle 3 du cahier des charges).
+ *   - "each_episode" : dès que `episodes_released` augmente par rapport à
+ *     `last_notified_episode`.
+ *
+ * Aucune dépendance externe (fetch natif de Node 18+).
  */
 
-function cleanTitle(title) {
-  return (title || '').replace(/\([^)]*\)/g, '').trim();
-}
+const ANILIST_URL = 'https://graphql.anilist.co';
 
-/**
- * Source 1 : MangaDex — recherche le titre, puis lit le flux "aggregate"
- */
-async function checkMangaDex(title) {
-  try {
-    const q = encodeURIComponent(cleanTitle(title));
-    const searchRes = await fetch(`https://api.mangadex.org/manga?title=${q}&limit=1`);
-    if (!searchRes.ok) return null;
-    const searchJson = await searchRes.json();
-    const manga = searchJson?.data?.[0];
-    if (!manga) return null;
+/* ============================================================
+   1. REQUÊTES GRAPHQL ANILIST
+   ============================================================ */
 
-    const aggRes = await fetch(`https://api.mangadex.org/manga/${manga.id}/aggregate`);
-    if (!aggRes.ok) return null;
-    const agg = await aggRes.json();
-
-    let maxChapter = null;
-    for (const vol of Object.values(agg.volumes || {})) {
-      for (const chap of Object.values(vol.chapters || {})) {
-        const n = parseFloat(chap.chapter);
-        if (!isNaN(n) && (maxChapter === null || n > maxChapter)) maxChapter = n;
-      }
+/** Recherche directe par anilist_id — cas nominal une fois l'ID connu. */
+const ANILIST_QUERY_BY_ID = `
+query ($id: Int) {
+  Media(id: $id, type: ANIME) {
+    id
+    title { romaji english }
+    status
+    episodes
+    nextAiringEpisode {
+      airingAt
+      timeUntilAiring
+      episode
     }
-    return maxChapter;
+  }
+}`;
+
+/** Repli par titre — utilisé si anilist_id est encore vide (première
+ *  vérification) ou si l'id enregistré ne répond plus (fiche supprimée/fusionnée
+ *  côté AniList). Permet de résoudre puis de mémoriser l'id pour la suite. */
+const ANILIST_QUERY_BY_SEARCH = `
+query ($search: String) {
+  Media(search: $search, type: ANIME) {
+    id
+    title { romaji english }
+    status
+    episodes
+    nextAiringEpisode {
+      airingAt
+      timeUntilAiring
+      episode
+    }
+  }
+}`;
+
+async function queryAnilist(query, variables) {
+  try {
+    const res = await fetch(ANILIST_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ query, variables }),
+    });
+    if (!res.ok) return null;
+    const json = await res.json();
+    return json?.data?.Media || null;
   } catch (e) {
     return null;
   }
 }
 
-/**
- * Source 2 (repli) : RSS générique
- */
-async function checkGenericRss(scanUrl) {
-  if (!scanUrl) return null;
-  try {
-    const origin = new URL(scanUrl).origin;
-    const candidates = [scanUrl, `${origin}/feed`, `${origin}/rss`, `${origin}/rss.xml`];
-
-    for (const url of candidates) {
-      let feedUrl = null;
-      try {
-        const pageRes = await fetch(url, { headers: { 'User-Agent': 'anime-db-checker' } });
-        if (!pageRes.ok) continue;
-        const contentType = pageRes.headers.get('content-type') || '';
-        const text = await pageRes.text();
-        if (contentType.includes('xml') || text.trim().startsWith('<?xml') || text.includes('<rss')) {
-          feedUrl = url;
-        } else {
-          const m = text.match(/<link[^>]+type=["']application\/rss\+xml["'][^>]+href=["']([^"']+)["']/i);
-          if (m) feedUrl = new URL(m[1], origin).toString();
-        }
-      } catch (e) {}
-
-      if (feedUrl) {
-        const feedRes = await fetch(feedUrl);
-        if (!feedRes.ok) continue;
-        const xml = await feedRes.text();
-        const titles = [...xml.matchAll(/<title>([^<]*)<\/title>/gi)].map(m => m[1]);
-        let maxChapter = null;
-        for (const t of titles) {
-          const m = t.match(/(?:chap(?:itre|ter)?\.?\s*)(\d+(?:\.\d+)?)/i);
-          if (m) {
-            const n = parseFloat(m[1]);
-            if (maxChapter === null || n > maxChapter) maxChapter = n;
-          }
-        }
-        if (maxChapter !== null) return maxChapter;
-      }
-    }
-  } catch (e) {}
-  return null;
+function cleanTitle(title) {
+  return (title || '').replace(/\([^)]*\)/g, '').trim();
 }
 
-/**
- * Vérification en cascade pour une œuvre : MangaDex d'abord, RSS ensuite
- */
-async function findLatestChapter(entry) {
-  const viaMangaDex = await checkMangaDex(entry.title);
-  if (viaMangaDex !== null) return { chapter: viaMangaDex, source: 'mangadex' };
+/** Récupère la fiche AniList d'une œuvre : par id si on l'a déjà, sinon par
+ *  recherche du titre (et dans ce cas on renverra aussi l'id résolu). */
+async function fetchAnilistMedia(entry) {
+  const sa = entry.suivi_anime || {};
+  if (sa.anilist_id) {
+    const byId = await queryAnilist(ANILIST_QUERY_BY_ID, { id: Number(sa.anilist_id) });
+    if (byId) return byId;
+    // id invalide/supprimé côté AniList -> on retente par titre ci-dessous
+  }
+  return await queryAnilist(ANILIST_QUERY_BY_SEARCH, { search: cleanTitle(entry.title) });
+}
 
-  const viaRss = await checkGenericRss(entry.scan_url);
-  if (viaRss !== null) return { chapter: viaRss, source: 'rss' };
-
-  return null;
+/** Déduit le nombre d'épisodes déjà sortis à partir de la fiche AniList. */
+function computeEpisodesReleased(media) {
+  if (media.nextAiringEpisode) {
+    // le prochain épisode n'est pas encore sorti -> tout ce qui précède l'est
+    return Math.max(0, media.nextAiringEpisode.episode - 1);
+  }
+  if (media.status === 'FINISHED') {
+    return media.episodes ?? null; // saison terminée : tout est sorti
+  }
+  if (media.status === 'NOT_YET_RELEASED') {
+    return 0;
+  }
+  return media.episodes ?? null; // repli best-effort (CANCELLED, HIATUS...)
 }
 
 /* ============================================================
-   VÉRIFICATION + COMPARAISON (CORRIGÉE)
+   2. VÉRIFICATION + DÉTECTION DES ALERTES
    ============================================================ */
 
-async function checkReleases(entries) {
-  // Prise en compte de la structure à plat OU sous-objet suivi
-  const tracked = (entries || []).filter(e => {
-    if (!e) return false;
-    if (e.suivi && typeof e.suivi.suivi_actif !== 'undefined') return e.suivi.suivi_actif;
-    return true; 
-  });
+/**
+ * @param {Array} entries - toutes les œuvres (le filtrage sur notification_mode est fait ici)
+ * @returns {Promise<{results: Array, seasonCompleteAlerts: Array, newEpisodeAlerts: Array}>}
+ */
+async function checkAnimeReleases(entries) {
+  const tracked = (entries || []).filter(
+    e => e && e.suivi_anime && e.suivi_anime.notification_mode && e.suivi_anime.notification_mode !== 'disabled'
+  );
 
   const results = [];
-  const newReleases = [];
+  const seasonCompleteAlerts = [];
+  const newEpisodeAlerts = [];
 
   for (const entry of tracked) {
-    const found = await findLatestChapter(entry);
-    
-    // Extraction souple du chapitre précédent et du topic ntfy
-    const previous = entry.previousChapter ?? entry.suivi?.dernier_chapitre_paru ?? null;
-    const ntfyTopic = entry.ntfy_topic ?? entry.suivi?.ntfy_topic ?? null;
+    const sa = entry.suivi_anime;
     const checkedAt = new Date().toISOString();
+    const media = await fetchAnilistMedia(entry);
 
-    if (!found) {
+    if (!media) {
       results.push({
         id: entry.id, title: entry.title, nickname: entry.nickname || '',
-        scan_url: entry.scan_url || null, ntfy_topic: ntfyTopic,
-        previousChapter: previous, latestChapter: null,
-        source: null, isNew: false, checkedAt,
+        found: false, checkedAt,
       });
       continue;
     }
 
-    // Un chapitre est NOUVEAU si :
-    // 1. Il y avait déjà un previousChapter enregistré
-    // 2. Le chapitre trouvé par l'API est strictement SUPÉRIEUR au previousChapter
-    const isBaseline = previous === null || previous === undefined;
-    const isNew = !isBaseline && found.chapter > previous;
+    const episodesReleased = computeEpisodesReleased(media);
+    const nextEpisodeDate = media.nextAiringEpisode
+      ? new Date(media.nextAiringEpisode.airingAt * 1000).toISOString()
+      : null;
+
+    // current_season : AniList n'expose pas de "numéro de saison" universel
+    // (chaque saison est simplement une fiche Media distincte). On garde donc
+    // la valeur déjà présente sur la fiche si elle existe ; sinon on pose 1
+    // par défaut, pour que la comparaison anti-spam ait quelque chose de
+    // concret à comparer. Le script ne tente pas de deviner un futur numéro.
+    const currentSeason = sa.current_season != null ? sa.current_season : 1;
+
+    const update = {
+      anilist_id: media.id,
+      current_season: currentSeason,
+      episodes_released: episodesReleased,
+      episodes_total: media.episodes ?? null,
+      season_status: media.status, // 'RELEASING' | 'FINISHED' | 'NOT_YET_RELEASED' | 'CANCELLED' | 'HIATUS'
+      next_episode_number: media.nextAiringEpisode ? media.nextAiringEpisode.episode : null,
+      next_episode_date: nextEpisodeDate,
+      last_check: checkedAt,
+    };
 
     const row = {
       id: entry.id, title: entry.title, nickname: entry.nickname || '',
-      scan_url: entry.scan_url || null, ntfy_topic: ntfyTopic,
-      previousChapter: previous,
-      latestChapter: found.chapter,
-      source: found.source, isNew, checkedAt,
+      ntfy_topic: sa.ntfy_topic || null,
+      found: true, checkedAt, ...update,
     };
-
     results.push(row);
-    if (isNew) newReleases.push(row);
+
+    /* --- Règle 3 : "saison complète" ne regarde QUE season_status de CETTE
+       saison (le Media identifié par anilist_id) — jamais un état "franchise
+       entière terminée". On ne notifie qu'une fois par saison grâce à
+       last_notified_season. */
+    if (sa.notification_mode === 'season_complete' && update.season_status === 'FINISHED') {
+      if (sa.last_notified_season !== currentSeason) {
+        seasonCompleteAlerts.push({ ...row, seasonKey: currentSeason });
+        update.last_notified_season = currentSeason;
+      }
+    }
+
+    /* --- "chaque épisode" : notifie à chaque nouvel épisode détecté.
+       Première vérification (last_notified_episode encore null) = juste une
+       référence de départ, pas de notification (sinon un anime à 900
+       épisodes déclencherait une alerte géante dès l'activation). */
+    if (sa.notification_mode === 'each_episode' && episodesReleased != null) {
+      const previouslyNotified = sa.last_notified_episode;
+      if (previouslyNotified === null || previouslyNotified === undefined) {
+        update.last_notified_episode = episodesReleased;
+      } else if (episodesReleased > previouslyNotified) {
+        newEpisodeAlerts.push({ ...row, previousEpisode: previouslyNotified });
+        update.last_notified_episode = episodesReleased;
+      }
+    }
+
+    row._update = update; // consommé par le CLI pour appliquer --write ; retiré avant impression
   }
 
-  return { results, newReleases };
+  return { results, seasonCompleteAlerts, newEpisodeAlerts };
 }
 
 /* ============================================================
-   NOTIFICATION — ntfy (AVEC REPLI SUR default_topic)
+   3. NOTIFICATION — ntfy (jamais de lien de visionnage pour les animes)
    ============================================================ */
 
-async function sendNtfyNotification(ntfyConfig, release) {
-  const topic = (release && release.ntfy_topic)
+async function sendAnimeNtfy(ntfyConfig, item, kind) {
+  const topic = item.ntfy_topic
     || (ntfyConfig && ntfyConfig.default_topic)
     || (ntfyConfig && ntfyConfig.topic);
-
   if (!topic) {
-    console.error(`❌ Échec envoi pour "${release.title}" : Aucun topic ntfy configuré.`);
     return { ok: false, error: 'Aucun topic ntfy configuré (ni sur cette œuvre, ni via default_topic).' };
   }
-
   const server = ((ntfyConfig && ntfyConfig.server) || 'https://ntfy.sh').replace(/\/+$/, '');
-  const label = release.nickname || release.title;
+  const label = item.nickname || item.title;
 
-  console.error(`📡 Envoi notification pour "${label}" sur le topic "${topic}" (Chapitre ${release.latestChapter})...`);
+  let title, message, tags;
+  if (kind === 'season_complete') {
+    title = `Saison terminee - ${label}`.replace(/[^\x00-\x7F]/g, '');
+    message = `La saison est maintenant complete (${item.episodes_released ?? '?'}/${item.episodes_total ?? '?'} episodes).`;
+    tags = 'checkered_flag';
+  } else {
+    title = `Nouvel episode - ${label}`.replace(/[^\x00-\x7F]/g, '');
+    message = `Episode ${item.episodes_released} disponible.`;
+    tags = 'tv';
+  }
 
-  // Nettoyage strict ASCII pour le header Title (empêche tout crash de ByteString)
-  const safeTitle = `Nouveau chapitre - ${label}`.replace(/[^\x00-\x7F]/g, '');
-
-  const headers = {
-    'Title': safeTitle,
-    'Tags': 'bookmark_tabs,bell',
-  };
-  if (release.scan_url) headers['Click'] = release.scan_url;
+  // Volontairement PAS de header "Click" : contrairement aux scans, on ne
+  // renvoie jamais vers un site de visionnage pour les notifications anime.
+  const headers = { Title: title, Tags: tags };
 
   try {
     const res = await fetch(`${server}/${encodeURIComponent(topic)}`, {
-      method: 'POST',
-      headers,
-      body: `Chapitre ${release.latestChapter} disponible`,
+      method: 'POST', headers, body: message,
     });
-    if (!res.ok) {
-      console.error(`❌ Erreur serveur ntfy (${res.status})`);
-      return { ok: false, error: `ntfy a répondu ${res.status}` };
-    }
-    console.error(`✅ Notification envoyée avec succès sur ntfy !`);
+    if (!res.ok) return { ok: false, error: `ntfy a répondu ${res.status}` };
     return { ok: true };
   } catch (e) {
-    console.error(`❌ Erreur réseau lors de l'envoi à ntfy :`, e.message);
-    return { ok: false, error: 'Impossible de contacter le serveur ntfy' };
+    return { ok: false, error: 'Impossible de contacter le serveur ntfy (réseau ?)' };
   }
 }
 
-async function notifyNewReleases(newReleases, ntfyConfig) {
+async function notifyAnimeAlerts(seasonCompleteAlerts, newEpisodeAlerts, ntfyConfig) {
   const outcomes = [];
-  for (const release of newReleases || []) {
-    const result = await sendNtfyNotification(ntfyConfig, release);
-    outcomes.push({ id: release.id, title: release.title, ok: result.ok, error: result.error });
+  for (const item of seasonCompleteAlerts || []) {
+    const r = await sendAnimeNtfy(ntfyConfig, item, 'season_complete');
+    outcomes.push({ id: item.id, title: item.title, kind: 'season_complete', ok: r.ok, error: r.error });
+  }
+  for (const item of newEpisodeAlerts || []) {
+    const r = await sendAnimeNtfy(ntfyConfig, item, 'each_episode');
+    outcomes.push({ id: item.id, title: item.title, kind: 'each_episode', ok: r.ok, error: r.error });
   }
   return outcomes;
 }
 
 module.exports = {
-  checkMangaDex, checkGenericRss, findLatestChapter, checkReleases,
-  sendNtfyNotification, notifyNewReleases,
+  queryAnilist, fetchAnilistMedia, computeEpisodesReleased, checkAnimeReleases,
+  sendAnimeNtfy, notifyAnimeAlerts,
 };
 
 /* ============================================================
-   EXECUTION CLI
+   CLI — usage :
+     node check-anime-releases.js data.json notif-config.json --write
    ============================================================ */
 if (require.main === module) {
   (async () => {
@@ -229,57 +274,57 @@ if (require.main === module) {
     const raw = filePath ? fs.readFileSync(filePath, 'utf-8') : fs.readFileSync(0, 'utf-8');
     const entries = JSON.parse(raw);
 
-    const { results, newReleases } = await checkReleases(entries);
+    const { results, seasonCompleteAlerts, newEpisodeAlerts } = await checkAnimeReleases(entries);
 
-    console.error(`Œuvres suivies vérifiées : ${results.length}`);
-    console.error(`Nouveaux chapitres détectés : ${newReleases.length}`);
+    console.error(`Animes suivis vérifiés : ${results.length}`);
+    console.error(`Saisons terminées détectées : ${seasonCompleteAlerts.length}`);
+    console.error(`Nouveaux épisodes détectés : ${newEpisodeAlerts.length}`);
 
+    // 1) appliquer les résultats à data.json en premier, comme pour le
+    //    scan checker — on ne veut jamais perdre une mise à jour à cause
+    //    d'un souci de notification en aval.
     let dataChanged = false;
     if (shouldWrite) {
       const byId = new Map(entries.map(e => [e.id, e]));
       for (const row of results) {
         const entry = byId.get(row.id);
-        if (!entry) continue;
-
-        // Mise à jour adaptative
-        if (entry.suivi) {
-          entry.suivi.derniere_verification = row.checkedAt;
-          if (row.latestChapter !== null) entry.suivi.dernier_chapitre_paru = row.latestChapter;
-        } else {
-          entry.checkedAt = row.checkedAt;
-          if (row.previousChapter === null || row.previousChapter === undefined) {
-            entry.previousChapter = row.latestChapter;
-          } else {
-            entry.previousChapter = row.previousChapter;
-          }
-          if (row.latestChapter !== null) entry.latestChapter = row.latestChapter;
-        }
+        if (!entry || !entry.suivi_anime || !row._update) continue;
+        Object.assign(entry.suivi_anime, row._update);
         dataChanged = true;
       }
       if (dataChanged) {
         fs.writeFileSync(filePath, JSON.stringify(entries, null, 1) + '\n', 'utf-8');
-        console.error(`${filePath} mis à jour (${results.length} œuvre(s) suivie(s)).`);
+        console.error(`${filePath} mis à jour (${results.length} anime(s) suivi(s)).`);
       }
     }
 
+    // 2) notifications — best-effort, ne doit jamais faire échouer le run
     let notifyOutcomes = [];
-    if (newReleases.length) {
+    const totalAlerts = seasonCompleteAlerts.length + newEpisodeAlerts.length;
+    if (totalAlerts) {
       let ntfyConfig = null;
       if (ntfyConfigPath) {
         try {
           ntfyConfig = JSON.parse(fs.readFileSync(ntfyConfigPath, 'utf-8'));
         } catch (e) {
-          console.error(`⚠️ Impossible de lire ${ntfyConfigPath}`);
+          console.error(`⚠️ Impossible de lire ${ntfyConfigPath} (${e.code || e.message}) — notifications ignorées cette fois.`);
         }
+      } else {
+        console.error('(Aucun fichier de config ntfy fourni en 2e argument — notifications non envoyées.)');
       }
       if (ntfyConfig) {
-        notifyOutcomes = await notifyNewReleases(newReleases, ntfyConfig);
+        notifyOutcomes = await notifyAnimeAlerts(seasonCompleteAlerts, newEpisodeAlerts, ntfyConfig);
         const sent = notifyOutcomes.filter(o => o.ok).length;
         console.error(`Notifications envoyées : ${sent}/${notifyOutcomes.length}`);
       }
     }
 
-    console.log(JSON.stringify({ results, newReleases, notifyOutcomes, dataChanged }, null, 1));
+    // nettoyage avant impression (l'objet interne _update ne doit pas fuiter dans la sortie)
+    const cleanResults = results.map(({ _update, ...rest }) => rest);
+
+    console.log(JSON.stringify({
+      results: cleanResults, seasonCompleteAlerts, newEpisodeAlerts, notifyOutcomes, dataChanged,
+    }, null, 1));
   })().catch(err => {
     console.error(err);
     process.exit(1);
