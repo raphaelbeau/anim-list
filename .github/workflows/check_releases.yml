@@ -29,8 +29,11 @@ jobs:
         with:
           node-version: '20' # fetch natif, aucune dépendance npm à installer
 
-      - name: Vérifier les parutions et notifier
+      - name: Vérifier les parutions manga/webtoon et notifier
         run: node scripts/check-releases.js data.json notif-config.json --write
+
+      - name: Vérifier les sorties anime (AniList) et notifier
+        run: node scripts/check-anime-releases.js data.json notif-config.json --write
 
       - name: Commiter les mises à jour de suivi
         run: |
@@ -38,7 +41,7 @@ jobs:
           git config user.email "actions@users.noreply.github.com"
           if ! git diff --quiet -- data.json; then
             git add data.json
-            git commit -m "chore: mise à jour automatique des parutions"
+            git commit -m "chore: mise à jour automatique des parutions (manga + anime)"
             git push
           else
             echo "Rien de nouveau à commiter."
