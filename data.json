@@ -114,7 +114,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 234,
-   "derniere_verification": "2026-08-28T06:24:50.150Z",
+   "derniere_verification": "2026-08-27T12:55:55.591Z",
    "ntfy_topic": null
   },
   "suivi_anime": {
@@ -157,7 +157,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 199,
-   "derniere_verification": "2026-08-28T06:24:50.927Z",
+   "derniere_verification": "2026-08-27T12:55:56.148Z",
    "ntfy_topic": null
   },
   "suivi_anime": {
@@ -242,7 +242,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 1191,
-   "derniere_verification": "2026-08-28T06:24:51.289Z",
+   "derniere_verification": "2026-08-27T12:55:56.890Z",
    "ntfy_topic": null
   },
   "suivi_anime": {
@@ -497,7 +497,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 64,
-   "derniere_verification": "2026-08-28T06:24:51.997Z",
+   "derniere_verification": "2026-08-27T12:55:57.518Z",
    "ntfy_topic": null
   },
   "suivi_anime": {
@@ -6067,12 +6067,12 @@
   "title": "氷の城壁",
   "nickname": "remparts of ice",
   "genre": "shojo",
-  "anime_status": null,
+  "anime_status": "en_cours",
   "manga_status": null,
-  "lang": null,
-  "fmt": null,
+  "lang": "vo",
+  "fmt": "serie",
   "anime_url": "https://anime-sama.to/catalogue/the-ramparts-of-ice/",
-  "scan_url": "",
+  "scan_url": "https://anime-sama.to/catalogue/the-ramparts-of-ice/",
   "progress_episode": "",
   "progress_chapter": "",
   "sequel_date": "",
@@ -6521,7 +6521,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 39.2,
-   "derniere_verification": "2026-08-28T06:24:52.471Z",
+   "derniere_verification": "2026-08-27T12:55:58.205Z",
    "ntfy_topic": null
   },
   "suivi_anime": {
@@ -6564,7 +6564,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 83,
-   "derniere_verification": "2026-08-28T06:24:52.934Z",
+   "derniere_verification": "2026-08-27T12:55:58.855Z",
    "ntfy_topic": null
   },
   "suivi_anime": {
