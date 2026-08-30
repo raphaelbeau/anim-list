@@ -11,7 +11,7 @@ function cleanTitle(title) {
 }
 
 /**
- * Source 1 : MangaDex — flux /feed filtré uniquement sur FR et EN.
+ * Source 1 : MangaDex — flux /feed filtré sur FR et EN.
  */
 async function checkMangaDex(title) {
   try {
@@ -47,25 +47,16 @@ async function checkMangaDex(title) {
 }
 
 /**
- * Source 2 : AniList (API GraphQL)
+ * Source 2 : Kitsu.io (API publique)
  */
-async function checkAniList(title) {
+async function checkKitsu(title) {
   try {
-    const query = `
-      query ($search: String) {
-        Media (search: $search, type: MANGA) {
-          chapters
-        }
-      }
-    `;
-    const res = await fetch('https://graphql.anilist.co', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({ query, variables: { search: cleanTitle(title) } })
-    });
+    const q = encodeURIComponent(cleanTitle(title));
+    const res = await fetch(`https://kitsu.io/api/edge/manga?filter[text]=${q}&page[limit]=1`);
     if (!res.ok) return null;
     const json = await res.json();
-    const ch = json?.data?.Media?.chapters;
+    const manga = json?.data?.[0]?.attributes;
+    const ch = manga?.chapterCount;
     return ch ? Math.round(ch * 100) / 100 : null;
   } catch (e) {
     return null;
@@ -73,7 +64,40 @@ async function checkAniList(title) {
 }
 
 /**
- * Source 3 : RSS générique
+ * Source 3 : Scraping direct de l'URL renseignée (Scan-Manga, etc.)
+ */
+async function checkDirectScanUrl(scanUrl) {
+  if (!scanUrl) return null;
+  try {
+    const res = await fetch(scanUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+      }
+    });
+    if (!res.ok) return null;
+    const html = await res.text();
+
+    // Expression régulière tolérante pour chopper les chapitres sur Scan-Manga & autres
+    const matches = [...html.matchAll(/(?:chapitre|chap|ch)[\s._-]*(\d+(?:\.\d+)?)/gi)];
+    if (matches.length === 0) return null;
+
+    let maxChapter = null;
+    for (const m of matches) {
+      const n = parseFloat(m[1]);
+      // Filtre anti-aberrations (ignore les faux positifs > 3000)
+      if (!isNaN(n) && n < 3000 && (maxChapter === null || n > maxChapter)) {
+        maxChapter = n;
+      }
+    }
+
+    return maxChapter !== null ? Math.round(maxChapter * 100) / 100 : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+/**
+ * Source 4 : RSS générique
  */
 async function checkGenericRss(scanUrl) {
   if (!scanUrl) return null;
@@ -117,77 +141,26 @@ async function checkGenericRss(scanUrl) {
 }
 
 /**
- * Source alternative : Kitsu.io
- * Renvoie le dernier chapitre connu pour un manga en cours
- */
-async function checkKitsu(title) {
-  try {
-    const q = encodeURIComponent(cleanTitle(title));
-    const res = await fetch(`https://kitsu.io/api/edge/manga?filter[text]=${q}&page[limit]=1`);
-    if (!res.ok) return null;
-    const json = await res.json();
-    const manga = json?.data?.[0]?.attributes;
-    const ch = manga?.chapterCount;
-    return ch ? Math.round(ch * 100) / 100 : null;
-  } catch (e) {
-    return null;
-  }
-}
-
-/**
- * Scraping direct de la page scan_url (pour Scan-Manga ou sites équivalents)
- */
-async function checkDirectScanUrl(scanUrl) {
-  if (!scanUrl) return null;
-  try {
-    const res = await fetch(scanUrl, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-      }
-    });
-    if (!res.ok) return null;
-    const html = await res.text();
-
-    // Recherche de motifs "Chapitre 178" ou "chapitre-178" ou "Ch.178"
-    const matches = [...html.matchAll(/(?:chapitre|chap|ch)[\s._-]*(\d+(?:\.\d+)?)/gi)];
-    if (matches.length === 0) return null;
-
-    let maxChapter = null;
-    for (const m of matches) {
-      const n = parseFloat(m[1]);
-      // Filtre les faux positifs (ex: chapitres aberrants > 3000)
-      if (!isNaN(n) && n < 3000 && (maxChapter === null || n > maxChapter)) {
-        maxChapter = n;
-      }
-    }
-
-    return maxChapter !== null ? Math.round(maxChapter * 100) / 100 : null;
-  } catch (e) {
-    return null;
-  }
-}
-
-/**
- * Recherche MULTI-SOURCES : teste toutes les sources en parallèle et garde le chapitre le plus élevé.
+ * Recherche MULTI-SOURCES simultanée : garde le chapitre LE PLUS ÉLEVÉ trouvé.
  */
 async function findLatestChapter(entry) {
-  const [viaMangaDex, viaKitsu, viaRss, viaDirectUrl] = await Promise.all([
+  const [viaMangaDex, viaKitsu, viaDirectUrl, viaRss] = await Promise.all([
     checkMangaDex(entry.title),
     checkKitsu(entry.title),
-    checkGenericRss(entry.scan_url),
-    checkDirectScanUrl(entry.scan_url)
+    checkDirectScanUrl(entry.scan_url),
+    checkGenericRss(entry.scan_url)
   ]);
 
   const candidates = [
     { chapter: viaMangaDex, source: 'mangadex' },
     { chapter: viaKitsu, source: 'kitsu' },
-    { chapter: viaRss, source: 'rss' },
-    { chapter: viaDirectUrl, source: 'scan_url' }
+    { chapter: viaDirectUrl, source: 'scan_url' },
+    { chapter: viaRss, source: 'rss' }
   ].filter(c => c.chapter !== null && !isNaN(c.chapter));
 
   if (candidates.length === 0) return null;
 
-  // On trie pour garder le chapitre le plus élevé
+  // Tri décroissant pour extraire la valeur la plus grande
   candidates.sort((a, b) => b.chapter - a.chapter);
   return candidates[0];
 }
@@ -296,7 +269,7 @@ async function notifyNewReleases(newReleases, ntfyConfig) {
 }
 
 module.exports = {
-  checkMangaDex, checkAniList, checkGenericRss, findLatestChapter, checkReleases,
+  checkMangaDex, checkKitsu, checkDirectScanUrl, checkGenericRss, findLatestChapter, checkReleases,
   sendNtfyNotification, notifyNewReleases,
 };
 
