@@ -71,7 +71,15 @@ async function checkDirectScanUrl(scanUrl) {
   try {
     // Utilisation d'un service proxy pour contourner le blocage IP des datacenters GitHub
     const targetUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(scanUrl)}`;
-    
+    /////////////
+    const res = await fetch(scanUrl, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' }
+    });
+    if (!res.ok) {
+      console.error(`[DEBUG] Direct URL HTTP ${res.status} pour ${scanUrl}`);
+      return null;
+    }
+    //////////////
     const res = await fetch(targetUrl);
     if (!res.ok) return null;
     const html = await res.text();
