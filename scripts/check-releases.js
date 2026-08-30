@@ -117,24 +117,77 @@ async function checkGenericRss(scanUrl) {
 }
 
 /**
+ * Source alternative : Kitsu.io
+ * Renvoie le dernier chapitre connu pour un manga en cours
+ */
+async function checkKitsu(title) {
+  try {
+    const q = encodeURIComponent(cleanTitle(title));
+    const res = await fetch(`https://kitsu.io/api/edge/manga?filter[text]=${q}&page[limit]=1`);
+    if (!res.ok) return null;
+    const json = await res.json();
+    const manga = json?.data?.[0]?.attributes;
+    const ch = manga?.chapterCount;
+    return ch ? Math.round(ch * 100) / 100 : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+/**
+ * Scraping direct de la page scan_url (pour Scan-Manga ou sites équivalents)
+ */
+async function checkDirectScanUrl(scanUrl) {
+  if (!scanUrl) return null;
+  try {
+    const res = await fetch(scanUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+      }
+    });
+    if (!res.ok) return null;
+    const html = await res.text();
+
+    // Recherche de motifs "Chapitre 178" ou "chapitre-178" ou "Ch.178"
+    const matches = [...html.matchAll(/(?:chapitre|chap|ch)[\s._-]*(\d+(?:\.\d+)?)/gi)];
+    if (matches.length === 0) return null;
+
+    let maxChapter = null;
+    for (const m of matches) {
+      const n = parseFloat(m[1]);
+      // Filtre les faux positifs (ex: chapitres aberrants > 3000)
+      if (!isNaN(n) && n < 3000 && (maxChapter === null || n > maxChapter)) {
+        maxChapter = n;
+      }
+    }
+
+    return maxChapter !== null ? Math.round(maxChapter * 100) / 100 : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+/**
  * Recherche MULTI-SOURCES : teste toutes les sources en parallèle et garde le chapitre le plus élevé.
  */
 async function findLatestChapter(entry) {
-  const [viaMangaDex, viaAniList, viaRss] = await Promise.all([
+  const [viaMangaDex, viaKitsu, viaRss, viaDirectUrl] = await Promise.all([
     checkMangaDex(entry.title),
-    checkAniList(entry.title),
-    checkGenericRss(entry.scan_url)
+    checkKitsu(entry.title),
+    checkGenericRss(entry.scan_url),
+    checkDirectScanUrl(entry.scan_url)
   ]);
 
   const candidates = [
     { chapter: viaMangaDex, source: 'mangadex' },
-    { chapter: viaAniList, source: 'anilist' },
-    { chapter: viaRss, source: 'rss' }
+    { chapter: viaKitsu, source: 'kitsu' },
+    { chapter: viaRss, source: 'rss' },
+    { chapter: viaDirectUrl, source: 'scan_url' }
   ].filter(c => c.chapter !== null && !isNaN(c.chapter));
 
   if (candidates.length === 0) return null;
 
-  // On retient la source qui renvoie le numéro de chapitre le plus élevé
+  // On trie pour garder le chapitre le plus élevé
   candidates.sort((a, b) => b.chapter - a.chapter);
   return candidates[0];
 }
