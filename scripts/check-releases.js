@@ -69,22 +69,20 @@ async function checkKitsu(title) {
 async function checkDirectScanUrl(scanUrl) {
   if (!scanUrl) return null;
   try {
-    const res = await fetch(scanUrl, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-      }
-    });
+    // Utilisation d'un service proxy pour contourner le blocage IP des datacenters GitHub
+    const targetUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(scanUrl)}`;
+    
+    const res = await fetch(targetUrl);
     if (!res.ok) return null;
     const html = await res.text();
 
-    // Expression régulière tolérante pour chopper les chapitres sur Scan-Manga & autres
+    // Expression régulière adaptée aux éléments HTML de Scan-Manga
     const matches = [...html.matchAll(/(?:chapitre|chap|ch)[\s._-]*(\d+(?:\.\d+)?)/gi)];
     if (matches.length === 0) return null;
 
     let maxChapter = null;
     for (const m of matches) {
       const n = parseFloat(m[1]);
-      // Filtre anti-aberrations (ignore les faux positifs > 3000)
       if (!isNaN(n) && n < 3000 && (maxChapter === null || n > maxChapter)) {
         maxChapter = n;
       }
