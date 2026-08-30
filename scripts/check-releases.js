@@ -10,7 +10,7 @@ function cleanTitle(title) {
   return (title || '').replace(/\([^)]*\)/g, '').trim();
 }
 
-
+/*
  * Source 1 : MangaDex — recherche le titre, puis lit le flux /feed
  * filtré uniquement sur le Français (fr) et l'Anglais (en).
  */
