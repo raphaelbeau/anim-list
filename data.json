@@ -122,7 +122,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 234,
-   "derniere_verification": "2026-08-30T10:43:47.669Z",
+   "derniere_verification": "2026-08-30T10:51:02.007Z",
    "ntfy_topic": null
   },
   "suivi_anime": {
@@ -169,7 +169,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 175.5,
-   "derniere_verification": "2026-08-30T10:43:55.011Z",
+   "derniere_verification": "2026-08-30T10:51:07.309Z",
    "ntfy_topic": null
   },
   "suivi_anime": {
@@ -262,7 +262,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 1191,
-   "derniere_verification": "2026-08-30T10:44:14.933Z",
+   "derniere_verification": "2026-08-30T10:51:13.476Z",
    "ntfy_topic": null
   },
   "suivi_anime": {
@@ -541,7 +541,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 33.5,
-   "derniere_verification": "2026-08-30T10:44:34.900Z",
+   "derniere_verification": "2026-08-30T10:51:33.289Z",
    "ntfy_topic": null
   },
   "suivi_anime": {
@@ -795,7 +795,7 @@
    "season_status": "FINISHED",
    "last_notified_season": 1,
    "last_notified_episode": null,
-   "last_check": "2026-08-30T10:44:46.405Z",
+   "last_check": "2026-08-30T10:51:43.853Z",
    "ntfy_topic": null
   }
  },
@@ -7129,7 +7129,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 39,
-   "derniere_verification": "2026-08-30T10:44:41.165Z",
+   "derniere_verification": "2026-08-30T10:51:39.274Z",
    "ntfy_topic": null
   },
   "suivi_anime": {
@@ -7176,7 +7176,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 83,
-   "derniere_verification": "2026-08-30T10:44:46.361Z",
+   "derniere_verification": "2026-08-30T10:51:43.808Z",
    "ntfy_topic": null
   },
   "suivi_anime": {
