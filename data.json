@@ -7127,7 +7127,7 @@
    "comment": ""
   },
   "suivi": {
-   "suivi_actif": false,
+   "suivi_actif": true,
    "dernier_chapitre_paru": 38,
    "derniere_verification": "2026-08-30T00:28:29.463Z",
    "ntfy_topic": null
