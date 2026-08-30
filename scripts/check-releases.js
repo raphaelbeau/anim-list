@@ -10,9 +10,8 @@ function cleanTitle(title) {
   return (title || '').replace(/\([^)]*\)/g, '').trim();
 }
 
-/*
- * Source 1 : MangaDex — recherche le titre, puis lit le flux /feed
- * filtré uniquement sur le Français (fr) et l'Anglais (en).
+/**
+ * Source 1 : MangaDex — flux /feed filtré uniquement sur FR et EN.
  */
 async function checkMangaDex(title) {
   try {
@@ -23,7 +22,6 @@ async function checkMangaDex(title) {
     const manga = searchJson?.data?.[0];
     if (!manga) return null;
 
-    // Récupération des 10 derniers chapitres parus uniquement en FR ou EN
     const feedUrl = `https://api.mangadex.org/manga/${manga.id}/feed?translatedLanguage[]=fr&translatedLanguage[]=en&order[chapter]=desc&limit=10`;
     const feedRes = await fetch(feedUrl);
     if (!feedRes.ok) return null;
@@ -32,22 +30,16 @@ async function checkMangaDex(title) {
 
     if (chapters.length === 0) return null;
 
-    // Le tout dernier chapitre paru (FR ou EN)
     const latestChapterNumStr = chapters[0].attributes.chapter;
     const rawChapter = parseFloat(latestChapterNumStr);
-
     if (isNaN(rawChapter)) return null;
 
-    // Si une version française existe pour ce tout dernier numéro de chapitre, on privilégie le FR
     const frVersion = chapters.find(
       c => c.attributes.chapter === latestChapterNumStr && c.attributes.translatedLanguage === 'fr'
     );
 
     const selected = frVersion || chapters[0];
     const cleanNum = parseFloat(selected.attributes.chapter);
-
-    // 💡 CORRECTION DU BUG DES DÉCIMALES (23.00000001 -> 23) :
-    // On arrondit à 2 décimales max (ex: 23.5 reste 23.5, mais 23.00000001 devient 23)
     return Math.round(cleanNum * 100) / 100;
   } catch (e) {
     return null;
@@ -55,7 +47,33 @@ async function checkMangaDex(title) {
 }
 
 /**
- * Source 2 (repli) : RSS générique
+ * Source 2 : AniList (API GraphQL)
+ */
+async function checkAniList(title) {
+  try {
+    const query = `
+      query ($search: String) {
+        Media (search: $search, type: MANGA) {
+          chapters
+        }
+      }
+    `;
+    const res = await fetch('https://graphql.anilist.co', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ query, variables: { search: cleanTitle(title) } })
+    });
+    if (!res.ok) return null;
+    const json = await res.json();
+    const ch = json?.data?.Media?.chapters;
+    return ch ? Math.round(ch * 100) / 100 : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+/**
+ * Source 3 : RSS générique
  */
 async function checkGenericRss(scanUrl) {
   if (!scanUrl) return null;
@@ -88,10 +106,10 @@ async function checkGenericRss(scanUrl) {
           const m = t.match(/(?:chap(?:itre|ter)?\.?\s*)(\d+(?:\.\d+)?)/i);
           if (m) {
             const n = parseFloat(m[1]);
-            if (maxChapter === null || n > maxChapter) maxChapter = n;
+            if (!isNaN(n) && (maxChapter === null || n > maxChapter)) maxChapter = n;
           }
         }
-        if (maxChapter !== null) return maxChapter;
+        if (maxChapter !== null) return Math.round(maxChapter * 100) / 100;
       }
     }
   } catch (e) {}
@@ -99,24 +117,33 @@ async function checkGenericRss(scanUrl) {
 }
 
 /**
- * Vérification en cascade pour une œuvre : MangaDex d'abord, RSS ensuite
+ * Recherche MULTI-SOURCES : teste toutes les sources en parallèle et garde le chapitre le plus élevé.
  */
 async function findLatestChapter(entry) {
-  const viaMangaDex = await checkMangaDex(entry.title);
-  if (viaMangaDex !== null) return { chapter: viaMangaDex, source: 'mangadex' };
+  const [viaMangaDex, viaAniList, viaRss] = await Promise.all([
+    checkMangaDex(entry.title),
+    checkAniList(entry.title),
+    checkGenericRss(entry.scan_url)
+  ]);
 
-  const viaRss = await checkGenericRss(entry.scan_url);
-  if (viaRss !== null) return { chapter: viaRss, source: 'rss' };
+  const candidates = [
+    { chapter: viaMangaDex, source: 'mangadex' },
+    { chapter: viaAniList, source: 'anilist' },
+    { chapter: viaRss, source: 'rss' }
+  ].filter(c => c.chapter !== null && !isNaN(c.chapter));
 
-  return null;
+  if (candidates.length === 0) return null;
+
+  // On retient la source qui renvoie le numéro de chapitre le plus élevé
+  candidates.sort((a, b) => b.chapter - a.chapter);
+  return candidates[0];
 }
 
 /* ============================================================
-   VÉRIFICATION + COMPARAISON (CORRIGÉE)
+   VÉRIFICATION + COMPARAISON
    ============================================================ */
 
 async function checkReleases(entries) {
-  // Prise en compte de la structure à plat OU sous-objet suivi
   const tracked = (entries || []).filter(e => {
     if (!e) return false;
     if (e.suivi && typeof e.suivi.suivi_actif !== 'undefined') return e.suivi.suivi_actif;
@@ -129,7 +156,6 @@ async function checkReleases(entries) {
   for (const entry of tracked) {
     const found = await findLatestChapter(entry);
     
-    // Extraction souple du chapitre précédent et du topic ntfy
     const previous = entry.previousChapter ?? entry.suivi?.dernier_chapitre_paru ?? null;
     const ntfyTopic = entry.ntfy_topic ?? entry.suivi?.ntfy_topic ?? null;
     const checkedAt = new Date().toISOString();
@@ -144,9 +170,6 @@ async function checkReleases(entries) {
       continue;
     }
 
-    // Un chapitre est NOUVEAU si :
-    // 1. Il y avait déjà un previousChapter enregistré
-    // 2. Le chapitre trouvé par l'API est strictement SUPÉRIEUR au previousChapter
     const isBaseline = previous === null || previous === undefined;
     const isNew = !isBaseline && found.chapter > previous;
 
@@ -166,7 +189,7 @@ async function checkReleases(entries) {
 }
 
 /* ============================================================
-   NOTIFICATION — ntfy (AVEC REPLI SUR default_topic)
+   NOTIFICATION — ntfy
    ============================================================ */
 
 async function sendNtfyNotification(ntfyConfig, release) {
@@ -184,7 +207,6 @@ async function sendNtfyNotification(ntfyConfig, release) {
 
   console.error(`📡 Envoi notification pour "${label}" sur le topic "${topic}" (Chapitre ${release.latestChapter})...`);
 
-  // Nettoyage strict ASCII pour le header Title (empêche tout crash de ByteString)
   const safeTitle = `Nouveau chapitre - ${label}`.replace(/[^\x00-\x7F]/g, '');
 
   const headers = {
@@ -221,7 +243,7 @@ async function notifyNewReleases(newReleases, ntfyConfig) {
 }
 
 module.exports = {
-  checkMangaDex, checkGenericRss, findLatestChapter, checkReleases,
+  checkMangaDex, checkAniList, checkGenericRss, findLatestChapter, checkReleases,
   sendNtfyNotification, notifyNewReleases,
 };
 
@@ -256,7 +278,6 @@ if (require.main === module) {
         const entry = byId.get(row.id);
         if (!entry) continue;
 
-        // Mise à jour adaptative
         if (entry.suivi) {
           entry.suivi.derniere_verification = row.checkedAt;
           if (row.latestChapter !== null) entry.suivi.dernier_chapitre_paru = row.latestChapter;
