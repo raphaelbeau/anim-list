@@ -11,7 +11,8 @@ function cleanTitle(title) {
 }
 
 /**
- * Source 1 : MangaDex — recherche le titre, puis lit le flux "aggregate"
+ * Source 1 : MangaDex — recherche le titre, puis lit le flux /feed
+ * filtré uniquement sur le Français (fr) et l'Anglais (en).
  */
 async function checkMangaDex(title) {
   try {
@@ -22,18 +23,28 @@ async function checkMangaDex(title) {
     const manga = searchJson?.data?.[0];
     if (!manga) return null;
 
-    const aggRes = await fetch(`https://api.mangadex.org/manga/${manga.id}/aggregate`);
-    if (!aggRes.ok) return null;
-    const agg = await aggRes.json();
+    // Récupération des 10 derniers chapitres parus uniquement en FR ou EN
+    const feedUrl = `https://api.mangadex.org/manga/${manga.id}/feed?translatedLanguage[]=fr&translatedLanguage[]=en&order[chapter]=desc&limit=10`;
+    const feedRes = await fetch(feedUrl);
+    if (!feedRes.ok) return null;
+    const feedJson = await feedRes.json();
+    const chapters = feedJson?.data || [];
 
-    let maxChapter = null;
-    for (const vol of Object.values(agg.volumes || {})) {
-      for (const chap of Object.values(vol.chapters || {})) {
-        const n = parseFloat(chap.chapter);
-        if (!isNaN(n) && (maxChapter === null || n > maxChapter)) maxChapter = n;
-      }
-    }
-    return maxChapter;
+    if (chapters.length === 0) return null;
+
+    // Le tout dernier chapitre paru (FR ou EN)
+    const latestChapterNumStr = chapters[0].attributes.chapter;
+    const maxChapter = parseFloat(latestChapterNumStr);
+
+    if (isNaN(maxChapter)) return null;
+
+    // Si une version française existe pour ce tout dernier numéro de chapitre, on privilégie le FR
+    const frVersion = chapters.find(
+      c => c.attributes.chapter === latestChapterNumStr && c.attributes.translatedLanguage === 'fr'
+    );
+
+    const selected = frVersion || chapters[0];
+    return parseFloat(selected.attributes.chapter);
   } catch (e) {
     return null;
   }
