@@ -10,7 +10,7 @@ function cleanTitle(title) {
   return (title || '').replace(/\([^)]*\)/g, '').trim();
 }
 
-/**
+
  * Source 1 : MangaDex — recherche le titre, puis lit le flux /feed
  * filtré uniquement sur le Français (fr) et l'Anglais (en).
  */
@@ -34,9 +34,9 @@ async function checkMangaDex(title) {
 
     // Le tout dernier chapitre paru (FR ou EN)
     const latestChapterNumStr = chapters[0].attributes.chapter;
-    const maxChapter = parseFloat(latestChapterNumStr);
+    const rawChapter = parseFloat(latestChapterNumStr);
 
-    if (isNaN(maxChapter)) return null;
+    if (isNaN(rawChapter)) return null;
 
     // Si une version française existe pour ce tout dernier numéro de chapitre, on privilégie le FR
     const frVersion = chapters.find(
@@ -44,7 +44,11 @@ async function checkMangaDex(title) {
     );
 
     const selected = frVersion || chapters[0];
-    return parseFloat(selected.attributes.chapter);
+    const cleanNum = parseFloat(selected.attributes.chapter);
+
+    // 💡 CORRECTION DU BUG DES DÉCIMALES (23.00000001 -> 23) :
+    // On arrondit à 2 décimales max (ex: 23.5 reste 23.5, mais 23.00000001 devient 23)
+    return Math.round(cleanNum * 100) / 100;
   } catch (e) {
     return null;
   }
