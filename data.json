@@ -6945,7 +6945,7 @@
    "ntfy_topic": null
   },
   "suivi_anime": {
-   "notification_mode": "disabled",
+   "notification_mode": "each_episode",
    "anilist_id": null,
    "current_season": null,
    "episodes_released": null,
