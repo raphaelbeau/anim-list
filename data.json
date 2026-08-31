@@ -122,7 +122,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 234,
-   "derniere_verification": "2026-08-31T17:56:06.076Z",
+   "derniere_verification": "2026-08-30T10:43:47.669Z",
    "ntfy_topic": null
   },
   "suivi_anime": {
@@ -168,8 +168,8 @@
   "anime_overall_note": null,
   "suivi": {
    "suivi_actif": true,
-   "dernier_chapitre_paru": 198,
-   "derniere_verification": "2026-08-31T17:56:07.848Z",
+   "dernier_chapitre_paru": 175.5,
+   "derniere_verification": "2026-08-30T10:43:55.011Z",
    "ntfy_topic": null
   },
   "suivi_anime": {
@@ -262,7 +262,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 1191,
-   "derniere_verification": "2026-08-31T17:56:28.003Z",
+   "derniere_verification": "2026-08-30T10:44:14.933Z",
    "ntfy_topic": null
   },
   "suivi_anime": {
@@ -395,7 +395,7 @@
    "comment": ""
   },
   "sequel_date": "",
-  "progress_chapter": "vol 17",
+  "progress_chapter": "vol 18",
   "progress_episode": "",
   "anime_overall_note": null,
   "suivi": {
@@ -541,7 +541,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 33.5,
-   "derniere_verification": "2026-08-31T17:56:47.974Z",
+   "derniere_verification": "2026-08-30T10:44:34.900Z",
    "ntfy_topic": null
   },
   "suivi_anime": {
@@ -795,7 +795,7 @@
    "season_status": "FINISHED",
    "last_notified_season": 1,
    "last_notified_episode": null,
-   "last_check": "2026-08-31T17:57:09.066Z",
+   "last_check": "2026-08-30T10:44:46.405Z",
    "ntfy_topic": null
   }
  },
@@ -4026,7 +4026,7 @@
   "anime_url": "https://anime-sama.to/catalogue/uruwashi-no-yoi-no-tsuki/saison1/vostfr/",
   "scan_url": "",
   "anime_status": "fini",
-  "manga_status": "a_lire",
+  "manga_status": "en_cours",
   "anime_seasons": [
    {
     "label": "Anime",
@@ -4039,7 +4039,7 @@
    "comment": ""
   },
   "sequel_date": "",
-  "progress_chapter": "",
+  "progress_chapter": "43",
   "progress_episode": "",
   "anime_overall_note": null,
   "suivi": {
@@ -7129,7 +7129,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 39,
-   "derniere_verification": "2026-08-31T17:57:07.937Z",
+   "derniere_verification": "2026-08-30T10:44:41.165Z",
    "ntfy_topic": null
   },
   "suivi_anime": {
@@ -7176,7 +7176,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 83,
-   "derniere_verification": "2026-08-31T17:57:08.754Z",
+   "derniere_verification": "2026-08-30T10:44:46.361Z",
    "ntfy_topic": null
   },
   "suivi_anime": {
