@@ -116,7 +116,7 @@
    "comment": ""
   },
   "sequel_date": "",
-  "progress_chapter": "233",
+  "progress_chapter": "234",
   "progress_episode": "",
   "anime_overall_note": null,
   "suivi": {
@@ -7413,6 +7413,26 @@
   },
   "checkedAt": "2026-09-01T21:32:04.724Z",
   "previousChapter": 67.5,
-  "latestChapter": 67.5
+  "latestChapter": 67.5,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "notification_mode": "disabled",
+   "anilist_id": null,
+   "current_season": null,
+   "episodes_released": null,
+   "episodes_total": null,
+   "next_episode_number": null,
+   "next_episode_date": null,
+   "season_status": null,
+   "last_notified_season": null,
+   "last_notified_episode": null,
+   "last_check": null,
+   "ntfy_topic": null
+  }
  }
 ]
