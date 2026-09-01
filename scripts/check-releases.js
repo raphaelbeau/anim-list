@@ -96,7 +96,8 @@ async function scrapeScanUrl(scanUrl) {
       const href = match[1];
       const text = match[2].replace(/<[^>]+>/g, '').trim();
 
-      const isChapterLink = /(?:chapitre|chapter|scan|ch[-_]|/chapter/|/scan/)/i.test(href) ||
+      // Correction de la Regex (slashs échappés)
+      const isChapterLink = /(?:chapitre|chapter|scan|ch[-_]|\/chapter\/|\/scan\/)/i.test(href) ||
                             /(?:chapitre|chapter|scan|ch\.)/i.test(text);
 
       if (isChapterLink) {
@@ -181,13 +182,11 @@ async function checkMangaReleases(entries, ntfyConfig = null) {
     const preferredLang = sa.language || entry.language || sa.lang || 'fr';
     const scanUrl = entry.scan_url || entry.url || sa.scan_url || null;
 
-    // Récupération en parallèle des deux sources si disponibles
     const [mangadexRes, scanUrlRes] = await Promise.all([
       mangadexId ? fetchMangaDexLatestChapter(mangadexId, preferredLang) : null,
       scanUrl ? scrapeScanUrl(scanUrl) : null
     ]);
 
-    // Sélection du chapitre le plus élevé entre MangaDex et scan_url
     let releaseInfo = null;
 
     if (mangadexRes && scanUrlRes) {
