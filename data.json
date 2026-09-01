@@ -122,7 +122,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 234,
-   "derniere_verification": "2026-08-31T22:12:19.936Z",
+   "derniere_verification": "2026-09-01T01:20:06.917Z",
    "ntfy_topic": null
   },
   "suivi_anime": {
@@ -169,7 +169,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 198,
-   "derniere_verification": "2026-08-31T22:12:20.944Z",
+   "derniere_verification": "2026-09-01T01:20:10.942Z",
    "ntfy_topic": null
   },
   "suivi_anime": {
@@ -262,7 +262,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 1191,
-   "derniere_verification": "2026-08-31T22:12:36.590Z",
+   "derniere_verification": "2026-09-01T01:20:31.156Z",
    "ntfy_topic": null
   },
   "suivi_anime": {
@@ -541,7 +541,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 33.5,
-   "derniere_verification": "2026-08-31T22:12:56.924Z",
+   "derniere_verification": "2026-09-01T01:20:44.550Z",
    "ntfy_topic": null
   },
   "suivi_anime": {
@@ -795,7 +795,7 @@
    "season_status": "FINISHED",
    "last_notified_season": 1,
    "last_notified_episode": null,
-   "last_check": "2026-08-31T22:13:17.023Z",
+   "last_check": "2026-09-01T01:20:53.376Z",
    "ntfy_topic": null
   }
  },
@@ -6955,7 +6955,7 @@
    "season_status": "RELEASING",
    "last_notified_season": null,
    "last_notified_episode": 9,
-   "last_check": "2026-08-31T22:13:17.320Z",
+   "last_check": "2026-09-01T01:20:53.597Z",
    "ntfy_topic": null
   }
  },
@@ -7129,7 +7129,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 39,
-   "derniere_verification": "2026-08-31T22:13:15.447Z",
+   "derniere_verification": "2026-09-01T01:20:50.150Z",
    "ntfy_topic": null
   },
   "suivi_anime": {
@@ -7176,7 +7176,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 84,
-   "derniere_verification": "2026-08-31T22:13:16.552Z",
+   "derniere_verification": "2026-09-01T01:20:52.455Z",
    "ntfy_topic": null
   },
   "suivi_anime": {
@@ -7360,6 +7360,9 @@
   "manga": {
    "note": null,
    "comment": ""
-  }
+  },
+  "checkedAt": "2026-09-01T01:20:53.330Z",
+  "previousChapter": 97,
+  "latestChapter": 97
  }
 ]
