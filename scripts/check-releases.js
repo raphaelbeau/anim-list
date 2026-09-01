@@ -2,18 +2,18 @@
 /**
  * ANIME//DB — Moteur de vérification des sorties de chapitres (Scans)
  * -----------------------------------------------------------------
- * Logique de comparaison multi-sources :
- * Vérifie MangaDex ET `scan_url`, puis retient le chapitre le plus élevé.
+ * Structure ajustée sur `suivi` et `suivi.suivi_actif`.
  */
 
 const MANGADEX_API_URL = 'https://api.mangadex.org';
 
 /* ============================================================
-   1. OUTILS D'EXTRACTION & DE PARSING
+   1. PARSING DE NUMÉRO DE CHAPITRE
    ============================================================ */
 
 function parseChapterNumber(text) {
   if (!text) return null;
+  // Détecte "chapitre 12.5", "chapter-12.5", "ch. 12", "c12" ou chiffre isolé
   const match = text.match(/(?:chapitre|chapter|scan|ch|c)[^\d]*(\d+(?:\.\d+)?)/i) 
              || text.match(/(\d+(?:\.\d+)?)/);
   if (!match) return null;
@@ -22,7 +22,7 @@ function parseChapterNumber(text) {
 }
 
 /* ============================================================
-   2. MANGADEX API (FILTRE DE LANGUE)
+   2. MANGADEX API
    ============================================================ */
 
 async function fetchMangaDexLatestChapter(mangadexId, preferredLang = 'fr') {
@@ -70,7 +70,7 @@ async function fetchMangaDexLatestChapter(mangadexId, preferredLang = 'fr') {
 }
 
 /* ============================================================
-   3. SCRAPING DE `SCAN_URL` (ANALYSE DE LIENS)
+   3. SCRAPING DE `SCAN_URL`
    ============================================================ */
 
 async function scrapeScanUrl(scanUrl) {
@@ -96,7 +96,7 @@ async function scrapeScanUrl(scanUrl) {
       const href = match[1];
       const text = match[2].replace(/<[^>]+>/g, '').trim();
 
-      // Correction de la Regex (slashs échappés)
+      // Détection sur href ou texte du lien
       const isChapterLink = /(?:chapitre|chapter|scan|ch[-_]|\/chapter\/|\/scan\/)/i.test(href) ||
                             /(?:chapitre|chapter|scan|ch\.)/i.test(text);
 
@@ -136,16 +136,17 @@ async function scrapeScanUrl(scanUrl) {
 }
 
 /* ============================================================
-   4. ÉVALUATION ET COMPARAISON MULTI-SOURCES
+   4. ÉVALUATION DES NOTIFICATIONS ET COMPARAISON
    ============================================================ */
 
 function evaluateMangaNotification(entry, latestChapter, latestUrl) {
-  const sa = entry.suivi_manga || entry.suivi || {};
-  if (!sa || sa.notification_mode === 'disabled') return null;
+  const suivi = entry.suivi || {};
+  if (!suivi || suivi.suivi_actif !== true) return null;
 
   const label = entry.nickname || entry.title;
-  const lastNotified = sa.last_notified_chapter ?? sa.dernier_chapitre_notifie ?? null;
+  const lastNotified = suivi.last_notified_chapter ?? suivi.dernier_chapitre_notifie ?? null;
 
+  // Premier passage / Baseline
   if (lastNotified === null || lastNotified === undefined) {
     return {
       type: 'baseline_only',
@@ -160,35 +161,34 @@ function evaluateMangaNotification(entry, latestChapter, latestUrl) {
     title: '📖 Nouveau chapitre disponible',
     message: `${label} — Chapitre ${latestChapter}\nUn nouveau chapitre est en ligne !`,
     tags: ['books', 'open_book'],
-    click: latestUrl || entry.scan_url || entry.url || null,
+    click: latestUrl || entry.scan_url || null,
     newLastNotifiedChapter: latestChapter
   };
 }
 
 async function checkMangaReleases(entries, ntfyConfig = null) {
-  const tracked = (entries || []).filter(e => {
-    const sa = e.suivi_manga || e.suivi || {};
-    return sa && sa.notification_mode && sa.notification_mode !== 'disabled';
-  });
+  // Filtrage basé strictement sur suivi.suivi_actif === true
+  const tracked = (entries || []).filter(e => e.suivi && e.suivi.suivi_actif === true);
 
   const results = [];
   const newChapterAlerts = [];
   const defaultTopic = ntfyConfig?.default_topic || ntfyConfig?.topic || null;
 
   for (const entry of tracked) {
-    const sa = entry.suivi_manga || entry.suivi || {};
+    const suivi = entry.suivi || {};
     const checkedAt = new Date().toISOString();
-    const mangadexId = sa.mangadex_id || entry.mangadex_id || null;
-    const preferredLang = sa.language || entry.language || sa.lang || 'fr';
-    const scanUrl = entry.scan_url || entry.url || sa.scan_url || null;
+    
+    const mangadexId = suivi.mangadex_id || entry.mangadex_id || null;
+    const preferredLang = entry.lang || suivi.language || 'fr';
+    const scanUrl = entry.scan_url || suivi.scan_url || null;
 
+    // Récupération multi-sources en parallèle
     const [mangadexRes, scanUrlRes] = await Promise.all([
       mangadexId ? fetchMangaDexLatestChapter(mangadexId, preferredLang) : null,
       scanUrl ? scrapeScanUrl(scanUrl) : null
     ]);
 
     let releaseInfo = null;
-
     if (mangadexRes && scanUrlRes) {
       releaseInfo = mangadexRes.chapter >= scanUrlRes.chapter ? mangadexRes : scanUrlRes;
     } else {
@@ -204,14 +204,13 @@ async function checkMangaReleases(entries, ntfyConfig = null) {
     }
 
     const update = {
-      dernier_chapitre_sorti: releaseInfo.chapter,
-      last_check: checkedAt,
+      dernier_chapitre_paru: releaseInfo.chapter,
+      derniere_verification: checkedAt,
       source_used: releaseInfo.source
     };
 
-    const upToDateSa = { ...sa, ...update };
     const alert = evaluateMangaNotification(entry, releaseInfo.chapter, releaseInfo.url);
-    const resolvedTopic = sa.ntfy_topic || defaultTopic;
+    const resolvedTopic = suivi.ntfy_topic || defaultTopic;
 
     if (alert && alert.type === 'baseline_only') {
       update.last_notified_chapter = alert.newLastNotifiedChapter;
@@ -228,7 +227,7 @@ async function checkMangaReleases(entries, ntfyConfig = null) {
 
     const row = {
       id: entry.id, title: entry.title, nickname: entry.nickname || '',
-      ntfy_topic: sa.ntfy_topic || null,
+      ntfy_topic: suivi.ntfy_topic || null,
       found: true, checkedAt, ...update
     };
     row._update = update;
@@ -239,7 +238,7 @@ async function checkMangaReleases(entries, ntfyConfig = null) {
 }
 
 /* ============================================================
-   5. ÉMISSION NTFY
+   5. ÉMISSION NTFY & CLI
    ============================================================ */
 
 async function sendNtfyNotification(ntfyConfig, item) {
@@ -247,9 +246,7 @@ async function sendNtfyNotification(ntfyConfig, item) {
     || (ntfyConfig && ntfyConfig.default_topic)
     || (ntfyConfig && ntfyConfig.topic);
 
-  if (!topic) {
-    return { ok: false, error: 'Aucun topic ntfy configuré.' };
-  }
+  if (!topic) return { ok: false, error: 'Aucun topic ntfy configuré.' };
 
   const server = ((ntfyConfig && ntfyConfig.server) || 'https://ntfy.sh').replace(/\/+$/, '');
 
@@ -287,9 +284,6 @@ module.exports = {
   checkMangaReleases, fetchMangaDexLatestChapter, scrapeScanUrl, evaluateMangaNotification, notifyMangaAlerts
 };
 
-/* ============================================================
-   CLI
-   ============================================================ */
 if (require.main === module) {
   (async () => {
     const fs = require('fs');
@@ -326,8 +320,10 @@ if (require.main === module) {
       for (const row of results) {
         const entry = byId.get(row.id);
         if (!entry || !row._update) continue;
-        const targetSa = entry.suivi_manga || entry.suivi || entry;
-        Object.assign(targetSa, row._update);
+        
+        // Mise à jour ciblée dans le sous-objet `suivi`
+        if (!entry.suivi) entry.suivi = {};
+        Object.assign(entry.suivi, row._update);
         dataChanged = true;
       }
       if (dataChanged) {
