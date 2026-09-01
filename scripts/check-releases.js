@@ -34,27 +34,31 @@ function cleanTitle(title) {
 async function searchMangaDexIdByTitle(title) {
   if (!title) return null;
   
+  // Variantes du titre à tester automatiquement
   const searchQueries = [
     cleanTitle(title),
-    // Si le titre est long (ex: Kuroiwa Medaka ni...), tente les 3 premiers mots
-    cleanTitle(title).split(/\s+/).slice(0, 3).join(' ')
+    cleanTitle(title).split(/\s+/).slice(0, 3).join(' '), // Ex: "Kuroiwa Medaka ni"
   ];
+
+  // Cas particuliers connus / Alias
+  if (title.toLowerCase().includes('medaka')) {
+    searchQueries.push('Medaka Kuroiwa Is Impervious to My Charms');
+  }
 
   for (const q of searchQueries) {
     if (!q || q.length < 2) continue;
     try {
       const query = encodeURIComponent(q);
-      // Permet de trouver aussi les titres avec des tags romcom/suggestifs
       const url = `${MANGADEX_API_URL}/manga?title=${query}&limit=5&contentRating[]=safe&contentRating[]=suggestive&contentRating[]=erotica`;
       const res = await fetch(url, { headers: { 'User-Agent': 'AnimeDB-Checker/2.0' } });
       if (!res.ok) continue;
 
       const json = await res.json();
       if (json?.data && json.data.length > 0) {
-        return json.data[0].id; // Retourne le 1er ID correspondant
+        return json.data[0].id;
       }
     } catch (e) {
-      // Ignorer et essayer la requête suivante
+      // Suite à l'essai suivant
     }
   }
   return null;
