@@ -786,16 +786,16 @@
   },
   "suivi_anime": {
    "notification_mode": "season_complete",
-   "anilist_id": 184951,
-   "current_season": 1,
-   "episodes_released": 12,
-   "episodes_total": 12,
-   "next_episode_number": null,
-   "next_episode_date": null,
-   "season_status": "FINISHED",
+   "anilist_id": 210031,
+   "current_season": 2,
+   "episodes_released": 9,
+   "episodes_total": 13,
+   "next_episode_number": 10,
+   "next_episode_date": "2026-09-06T08:00:00.000Z",
+   "season_status": "RELEASING",
    "last_notified_season": 1,
    "last_notified_episode": null,
-   "last_check": "2026-09-01T19:49:20.421Z",
+   "last_check": "2026-09-01T22:57:04.524Z",
    "ntfy_topic": null
   }
  },
@@ -6955,7 +6955,7 @@
    "season_status": "RELEASING",
    "last_notified_season": null,
    "last_notified_episode": 9,
-   "last_check": "2026-09-01T19:49:20.723Z",
+   "last_check": "2026-09-01T22:57:04.811Z",
    "ntfy_topic": null
   }
  },
