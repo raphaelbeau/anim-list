@@ -1,286 +1,295 @@
 #!/usr/bin/env node
 /**
- * ANIME//DB — moteur de vérification des chapitres (autonome)
- * -------------------------------------------------------------
- * Ne fait qu'une chose : pour une liste d'œuvres avec le suivi activé,
- * trouve le dernier chapitre paru et le compare au chapitre précédent connu.
+ * ANIME//DB — Moteur de vérification des sorties de chapitres (Scans)
+ * -----------------------------------------------------------------
+ * Logique de comparaison multi-sources :
+ * Vérifie MangaDex ET `scan_url`, puis retient le chapitre le plus élevé.
  */
 
-function cleanTitle(title) {
-  return (title || '').replace(/\([^)]*\)/g, '').trim();
-}
+const MANGADEX_API_URL = 'https://api.mangadex.org';
 
-/**
- * Source 1 : MangaDex — flux /feed filtré sur FR et EN.
- */
-async function checkMangaDex(title) {
-  try {
-    const q = encodeURIComponent(cleanTitle(title));
-    const searchRes = await fetch(`https://api.mangadex.org/manga?title=${q}&limit=1`);
-    if (!searchRes.ok) return null;
-    const searchJson = await searchRes.json();
-    const manga = searchJson?.data?.[0];
-    if (!manga) return null;
+/* ============================================================
+   1. OUTILS D'EXTRACTION & DE PARSING
+   ============================================================ */
 
-    const feedUrl = `https://api.mangadex.org/manga/${manga.id}/feed?translatedLanguage[]=fr&translatedLanguage[]=en&order[chapter]=desc&limit=10`;
-    const feedRes = await fetch(feedUrl);
-    if (!feedRes.ok) return null;
-    const feedJson = await feedRes.json();
-    const chapters = feedJson?.data || [];
-
-    if (chapters.length === 0) return null;
-
-    const latestChapterNumStr = chapters[0].attributes.chapter;
-    const rawChapter = parseFloat(latestChapterNumStr);
-    if (isNaN(rawChapter)) return null;
-
-    const frVersion = chapters.find(
-      c => c.attributes.chapter === latestChapterNumStr && c.attributes.translatedLanguage === 'fr'
-    );
-
-    const selected = frVersion || chapters[0];
-    const cleanNum = parseFloat(selected.attributes.chapter);
-    return Math.round(cleanNum * 100) / 100;
-  } catch (e) {
-    return null;
-  }
-}
-
-/**
- * Source 2 : Kitsu.io (API publique)
- */
-async function checkKitsu(title) {
-  try {
-    const q = encodeURIComponent(cleanTitle(title));
-    const res = await fetch(`https://kitsu.io/api/edge/manga?filter[text]=${q}&page[limit]=1`);
-    if (!res.ok) return null;
-    const json = await res.json();
-    const manga = json?.data?.[0]?.attributes;
-    const ch = manga?.chapterCount;
-    return ch ? Math.round(ch * 100) / 100 : null;
-  } catch (e) {
-    return null;
-  }
-}
-
-/**
- * Source 3 : Scraping direct de l'URL renseignée (Scan-Manga, etc.)
- */
-async function checkDirectScanUrl(scanUrl) {
-  if (!scanUrl) return null;
-  try {
-    // Utilisation d'un service proxy pour contourner le blocage IP des datacenters GitHub
-    const targetUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(scanUrl)}`;
-    /////////////
-    const res1 = await fetch(scanUrl, {
-      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' }
-    });
-    if (!res1.ok) {
-      console.error(`[DEBUG] Direct URL HTTP ${res1.status} pour ${scanUrl}`);
-      return null;
-    }
-    //////////////
-    const res = await fetch(targetUrl);
-    if (!res.ok) return null;
-    const html = await res.text();
-
-    // Expression régulière adaptée aux éléments HTML de Scan-Manga
-    const matches = [...html.matchAll(/(?:chapitre|chap|ch)[\s._-]*(\d+(?:\.\d+)?)/gi)];
-    if (matches.length === 0) return null;
-
-    let maxChapter = null;
-    for (const m of matches) {
-      const n = parseFloat(m[1]);
-      if (!isNaN(n) && n < 3000 && (maxChapter === null || n > maxChapter)) {
-        maxChapter = n;
-      }
-    }
-
-    return maxChapter !== null ? Math.round(maxChapter * 100) / 100 : null;
-  } catch (e) {
-    return null;
-  }
-}
-
-/**
- * Source 4 : RSS générique
- */
-async function checkGenericRss(scanUrl) {
-  if (!scanUrl) return null;
-  try {
-    const origin = new URL(scanUrl).origin;
-    const candidates = [scanUrl, `${origin}/feed`, `${origin}/rss`, `${origin}/rss.xml`];
-
-    for (const url of candidates) {
-      let feedUrl = null;
-      try {
-        const pageRes = await fetch(url, { headers: { 'User-Agent': 'anime-db-checker' } });
-        if (!pageRes.ok) continue;
-        const contentType = pageRes.headers.get('content-type') || '';
-        const text = await pageRes.text();
-        if (contentType.includes('xml') || text.trim().startsWith('<?xml') || text.includes('<rss')) {
-          feedUrl = url;
-        } else {
-          const m = text.match(/<link[^>]+type=["']application\/rss\+xml["'][^>]+href=["']([^"']+)["']/i);
-          if (m) feedUrl = new URL(m[1], origin).toString();
-        }
-      } catch (e) {}
-
-      if (feedUrl) {
-        const feedRes = await fetch(feedUrl);
-        if (!feedRes.ok) continue;
-        const xml = await feedRes.text();
-        const titles = [...xml.matchAll(/<title>([^<]*)<\/title>/gi)].map(m => m[1]);
-        let maxChapter = null;
-        for (const t of titles) {
-          const m = t.match(/(?:chap(?:itre|ter)?\.?\s*)(\d+(?:\.\d+)?)/i);
-          if (m) {
-            const n = parseFloat(m[1]);
-            if (!isNaN(n) && (maxChapter === null || n > maxChapter)) maxChapter = n;
-          }
-        }
-        if (maxChapter !== null) return Math.round(maxChapter * 100) / 100;
-      }
-    }
-  } catch (e) {}
-  return null;
-}
-
-/**
- * Recherche MULTI-SOURCES simultanée : garde le chapitre LE PLUS ÉLEVÉ trouvé.
- */
-async function findLatestChapter(entry) {
-  const [viaMangaDex, viaKitsu, viaDirectUrl, viaRss] = await Promise.all([
-    checkMangaDex(entry.title),
-    checkKitsu(entry.title),
-    checkDirectScanUrl(entry.scan_url),
-    checkGenericRss(entry.scan_url)
-  ]);
-
-  const candidates = [
-    { chapter: viaMangaDex, source: 'mangadex' },
-    { chapter: viaKitsu, source: 'kitsu' },
-    { chapter: viaDirectUrl, source: 'scan_url' },
-    { chapter: viaRss, source: 'rss' }
-  ].filter(c => c.chapter !== null && !isNaN(c.chapter));
-
-  if (candidates.length === 0) return null;
-
-  // Tri décroissant pour extraire la valeur la plus grande
-  candidates.sort((a, b) => b.chapter - a.chapter);
-  return candidates[0];
+function parseChapterNumber(text) {
+  if (!text) return null;
+  const match = text.match(/(?:chapitre|chapter|scan|ch|c)[^\d]*(\d+(?:\.\d+)?)/i) 
+             || text.match(/(\d+(?:\.\d+)?)/);
+  if (!match) return null;
+  const num = parseFloat(match[1]);
+  return isNaN(num) ? null : num;
 }
 
 /* ============================================================
-   VÉRIFICATION + COMPARAISON
+   2. MANGADEX API (FILTRE DE LANGUE)
    ============================================================ */
 
-async function checkReleases(entries) {
+async function fetchMangaDexLatestChapter(mangadexId, preferredLang = 'fr') {
+  if (!mangadexId) return null;
+
+  try {
+    const lang = (preferredLang || 'fr').toLowerCase();
+    const langParams = lang === 'fr' ? 'translatedLanguage[]=fr' : `translatedLanguage[]=${lang}`;
+
+    const url = `${MANGADEX_API_URL}/manga/${mangadexId}/feed?limit=500&order[chapter]=desc&${langParams}&includeFuturePublishAt=0`;
+    
+    const res = await fetch(url, { headers: { 'User-Agent': 'AnimeDB-Checker/2.0' } });
+    if (!res.ok) return null;
+
+    const json = await res.json();
+    if (!json.data || !Array.isArray(json.data) || json.data.length === 0) {
+      if (lang === 'fr') {
+        return await fetchMangaDexLatestChapter(mangadexId, 'en');
+      }
+      return null;
+    }
+
+    let maxChapter = -1;
+    let latestChapterObj = null;
+
+    for (const item of json.data) {
+      const chAttr = item.attributes;
+      if (!chAttr || !chAttr.chapter) continue;
+      
+      const chNum = parseFloat(chAttr.chapter);
+      if (!isNaN(chNum) && chNum > maxChapter) {
+        maxChapter = chNum;
+        latestChapterObj = {
+          chapter: chNum,
+          url: `https://mangadex.org/chapter/${item.id}`,
+          source: 'mangadex'
+        };
+      }
+    }
+
+    return latestChapterObj;
+  } catch (e) {
+    return null;
+  }
+}
+
+/* ============================================================
+   3. SCRAPING DE `SCAN_URL` (ANALYSE DE LIENS)
+   ============================================================ */
+
+async function scrapeScanUrl(scanUrl) {
+  if (!scanUrl) return null;
+
+  try {
+    const res = await fetch(scanUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+      },
+    });
+
+    if (!res.ok) return null;
+    const html = await res.text();
+
+    const linkRegex = /<a\s+[^>]*href=["']([^"']+)["'][^>]*>(.*?)<\/a>/gi;
+    let match;
+    let maxChapter = -1;
+    let bestLink = null;
+
+    while ((match = linkRegex.exec(html)) !== null) {
+      const href = match[1];
+      const text = match[2].replace(/<[^>]+>/g, '').trim();
+
+      const isChapterLink = /(?:chapitre|chapter|scan|ch[-_]|/chapter/|/scan/)/i.test(href) ||
+                            /(?:chapitre|chapter|scan|ch\.)/i.test(text);
+
+      if (isChapterLink) {
+        const numFromText = parseChapterNumber(text);
+        const numFromHref = parseChapterNumber(href);
+        const chNum = numFromText !== null ? numFromText : numFromHref;
+
+        if (chNum !== null && chNum > maxChapter) {
+          maxChapter = chNum;
+          
+          let fullUrl = href;
+          if (href.startsWith('/')) {
+            const urlObj = new URL(scanUrl);
+            fullUrl = `${urlObj.origin}${href}`;
+          } else if (!href.startsWith('http')) {
+            fullUrl = `${scanUrl.replace(/\/+$/, '')}/${href}`;
+          }
+          
+          bestLink = fullUrl;
+        }
+      }
+    }
+
+    if (maxChapter > -1) {
+      return {
+        chapter: maxChapter,
+        url: bestLink || scanUrl,
+        source: 'scan_url'
+      };
+    }
+
+    return null;
+  } catch (e) {
+    return null;
+  }
+}
+
+/* ============================================================
+   4. ÉVALUATION ET COMPARAISON MULTI-SOURCES
+   ============================================================ */
+
+function evaluateMangaNotification(entry, latestChapter, latestUrl) {
+  const sa = entry.suivi_manga || entry.suivi || {};
+  if (!sa || sa.notification_mode === 'disabled') return null;
+
+  const label = entry.nickname || entry.title;
+  const lastNotified = sa.last_notified_chapter ?? sa.dernier_chapitre_notifie ?? null;
+
+  if (lastNotified === null || lastNotified === undefined) {
+    return {
+      type: 'baseline_only',
+      newLastNotifiedChapter: latestChapter
+    };
+  }
+
+  if (latestChapter <= lastNotified) return null;
+
+  return {
+    type: 'new_chapter',
+    title: '📖 Nouveau chapitre disponible',
+    message: `${label} — Chapitre ${latestChapter}\nUn nouveau chapitre est en ligne !`,
+    tags: ['books', 'open_book'],
+    click: latestUrl || entry.scan_url || entry.url || null,
+    newLastNotifiedChapter: latestChapter
+  };
+}
+
+async function checkMangaReleases(entries, ntfyConfig = null) {
   const tracked = (entries || []).filter(e => {
-    if (!e) return false;
-    if (e.suivi && typeof e.suivi.suivi_actif !== 'undefined') return e.suivi.suivi_actif;
-    return true; 
+    const sa = e.suivi_manga || e.suivi || {};
+    return sa && sa.notification_mode && sa.notification_mode !== 'disabled';
   });
 
   const results = [];
-  const newReleases = [];
+  const newChapterAlerts = [];
+  const defaultTopic = ntfyConfig?.default_topic || ntfyConfig?.topic || null;
 
   for (const entry of tracked) {
-    const found = await findLatestChapter(entry);
-    
-    const previous = entry.previousChapter ?? entry.suivi?.dernier_chapitre_paru ?? null;
-    const ntfyTopic = entry.ntfy_topic ?? entry.suivi?.ntfy_topic ?? null;
+    const sa = entry.suivi_manga || entry.suivi || {};
     const checkedAt = new Date().toISOString();
+    const mangadexId = sa.mangadex_id || entry.mangadex_id || null;
+    const preferredLang = sa.language || entry.language || sa.lang || 'fr';
+    const scanUrl = entry.scan_url || entry.url || sa.scan_url || null;
 
-    if (!found) {
+    // Récupération en parallèle des deux sources si disponibles
+    const [mangadexRes, scanUrlRes] = await Promise.all([
+      mangadexId ? fetchMangaDexLatestChapter(mangadexId, preferredLang) : null,
+      scanUrl ? scrapeScanUrl(scanUrl) : null
+    ]);
+
+    // Sélection du chapitre le plus élevé entre MangaDex et scan_url
+    let releaseInfo = null;
+
+    if (mangadexRes && scanUrlRes) {
+      releaseInfo = mangadexRes.chapter >= scanUrlRes.chapter ? mangadexRes : scanUrlRes;
+    } else {
+      releaseInfo = mangadexRes || scanUrlRes || null;
+    }
+
+    if (!releaseInfo) {
       results.push({
         id: entry.id, title: entry.title, nickname: entry.nickname || '',
-        scan_url: entry.scan_url || null, ntfy_topic: ntfyTopic,
-        previousChapter: previous, latestChapter: null,
-        source: null, isNew: false, checkedAt,
+        found: false, checkedAt
       });
       continue;
     }
 
-    const isBaseline = previous === null || previous === undefined;
-    const isNew = !isBaseline && found.chapter > previous;
+    const update = {
+      dernier_chapitre_sorti: releaseInfo.chapter,
+      last_check: checkedAt,
+      source_used: releaseInfo.source
+    };
+
+    const upToDateSa = { ...sa, ...update };
+    const alert = evaluateMangaNotification(entry, releaseInfo.chapter, releaseInfo.url);
+    const resolvedTopic = sa.ntfy_topic || defaultTopic;
+
+    if (alert && alert.type === 'baseline_only') {
+      update.last_notified_chapter = alert.newLastNotifiedChapter;
+      update.dernier_chapitre_notifie = alert.newLastNotifiedChapter;
+    } else if (alert && alert.type === 'new_chapter') {
+      update.last_notified_chapter = alert.newLastNotifiedChapter;
+      update.dernier_chapitre_notifie = alert.newLastNotifiedChapter;
+      newChapterAlerts.push({
+        id: entry.id, title: entry.title, nickname: entry.nickname || '',
+        ntfy_topic: resolvedTopic,
+        ...alert
+      });
+    }
 
     const row = {
       id: entry.id, title: entry.title, nickname: entry.nickname || '',
-      scan_url: entry.scan_url || null, ntfy_topic: ntfyTopic,
-      previousChapter: previous,
-      latestChapter: found.chapter,
-      source: found.source, isNew, checkedAt,
+      ntfy_topic: sa.ntfy_topic || null,
+      found: true, checkedAt, ...update
     };
-
+    row._update = update;
     results.push(row);
-    if (isNew) newReleases.push(row);
   }
 
-  return { results, newReleases };
+  return { results, newChapterAlerts };
 }
 
 /* ============================================================
-   NOTIFICATION — ntfy
+   5. ÉMISSION NTFY
    ============================================================ */
 
-async function sendNtfyNotification(ntfyConfig, release) {
-  const topic = (release && release.ntfy_topic)
+async function sendNtfyNotification(ntfyConfig, item) {
+  const topic = item.ntfy_topic
     || (ntfyConfig && ntfyConfig.default_topic)
     || (ntfyConfig && ntfyConfig.topic);
 
   if (!topic) {
-    console.error(`❌ Échec envoi pour "${release.title}" : Aucun topic ntfy configuré.`);
-    return { ok: false, error: 'Aucun topic ntfy configuré (ni sur cette œuvre, ni via default_topic).' };
+    return { ok: false, error: 'Aucun topic ntfy configuré.' };
   }
 
   const server = ((ntfyConfig && ntfyConfig.server) || 'https://ntfy.sh').replace(/\/+$/, '');
-  const label = release.nickname || release.title;
 
-  console.error(`📡 Envoi notification pour "${label}" sur le topic "${topic}" (Chapitre ${release.latestChapter})...`);
-
-  const safeTitle = `Nouveau chapitre - ${label}`.replace(/[^\x00-\x7F]/g, '');
-
-  const headers = {
-    'Title': safeTitle,
-    'Tags': 'bookmark_tabs,bell',
+  const payload = {
+    topic,
+    title: item.title,
+    message: item.message,
+    tags: item.tags,
   };
-  if (release.scan_url) headers['Click'] = release.scan_url;
+  if (item.click) payload.click = item.click;
 
   try {
-    const res = await fetch(`${server}/${encodeURIComponent(topic)}`, {
+    const res = await fetch(server, {
       method: 'POST',
-      headers,
-      body: `Chapitre ${release.latestChapter} disponible`,
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      body: JSON.stringify(payload),
     });
-    if (!res.ok) {
-      console.error(`❌ Erreur serveur ntfy (${res.status})`);
-      return { ok: false, error: `ntfy a répondu ${res.status}` };
-    }
-    console.error(`✅ Notification envoyée avec succès sur ntfy !`);
+    if (!res.ok) return { ok: false, error: `ntfy a répondu ${res.status}` };
     return { ok: true };
   } catch (e) {
-    console.error(`❌ Erreur réseau lors de l'envoi à ntfy :`, e.message);
-    return { ok: false, error: 'Impossible de contacter le serveur ntfy' };
+    return { ok: false, error: 'Impossible de contacter le serveur ntfy.' };
   }
 }
 
-async function notifyNewReleases(newReleases, ntfyConfig) {
+async function notifyMangaAlerts(newChapterAlerts, ntfyConfig) {
   const outcomes = [];
-  for (const release of newReleases || []) {
-    const result = await sendNtfyNotification(ntfyConfig, release);
-    outcomes.push({ id: release.id, title: release.title, ok: result.ok, error: result.error });
+  for (const item of newChapterAlerts || []) {
+    const r = await sendNtfyNotification(ntfyConfig, item);
+    outcomes.push({ id: item.id, title: item.title, kind: 'new_chapter', ok: r.ok, error: r.error });
   }
   return outcomes;
 }
 
 module.exports = {
-  checkMangaDex, checkKitsu, checkDirectScanUrl, checkGenericRss, findLatestChapter, checkReleases,
-  sendNtfyNotification, notifyNewReleases,
+  checkMangaReleases, fetchMangaDexLatestChapter, scrapeScanUrl, evaluateMangaNotification, notifyMangaAlerts
 };
 
 /* ============================================================
-   EXECUTION CLI
+   CLI
    ============================================================ */
 if (require.main === module) {
   (async () => {
@@ -295,59 +304,51 @@ if (require.main === module) {
       process.exit(1);
     }
 
+    let ntfyConfig = null;
+    if (ntfyConfigPath) {
+      try {
+        ntfyConfig = JSON.parse(fs.readFileSync(ntfyConfigPath, 'utf-8'));
+      } catch (e) {
+        console.error(`⚠️ Impossible de lire ${ntfyConfigPath} (${e.code || e.message}) — notifications ignorées.`);
+      }
+    }
+
     const raw = filePath ? fs.readFileSync(filePath, 'utf-8') : fs.readFileSync(0, 'utf-8');
     const entries = JSON.parse(raw);
 
-    const { results, newReleases } = await checkReleases(entries);
+    const { results, newChapterAlerts } = await checkMangaReleases(entries, ntfyConfig);
 
-    console.error(`Œuvres suivies vérifiées : ${results.length}`);
-    console.error(`Nouveaux chapitres détectés : ${newReleases.length}`);
+    console.error(`Mangas suivis vérifiés : ${results.length}`);
+    console.error(`Nouveaux chapitres détectés : ${newChapterAlerts.length}`);
 
     let dataChanged = false;
     if (shouldWrite) {
       const byId = new Map(entries.map(e => [e.id, e]));
       for (const row of results) {
         const entry = byId.get(row.id);
-        if (!entry) continue;
-
-        if (entry.suivi) {
-          entry.suivi.derniere_verification = row.checkedAt;
-          if (row.latestChapter !== null) entry.suivi.dernier_chapitre_paru = row.latestChapter;
-        } else {
-          entry.checkedAt = row.checkedAt;
-          if (row.previousChapter === null || row.previousChapter === undefined) {
-            entry.previousChapter = row.latestChapter;
-          } else {
-            entry.previousChapter = row.previousChapter;
-          }
-          if (row.latestChapter !== null) entry.latestChapter = row.latestChapter;
-        }
+        if (!entry || !row._update) continue;
+        const targetSa = entry.suivi_manga || entry.suivi || entry;
+        Object.assign(targetSa, row._update);
         dataChanged = true;
       }
       if (dataChanged) {
         fs.writeFileSync(filePath, JSON.stringify(entries, null, 1) + '\n', 'utf-8');
-        console.error(`${filePath} mis à jour (${results.length} œuvre(s) suivie(s)).`);
+        console.error(`${filePath} mis à jour (${results.length} manga(s) suivi(s)).`);
       }
     }
 
     let notifyOutcomes = [];
-    if (newReleases.length) {
-      let ntfyConfig = null;
-      if (ntfyConfigPath) {
-        try {
-          ntfyConfig = JSON.parse(fs.readFileSync(ntfyConfigPath, 'utf-8'));
-        } catch (e) {
-          console.error(`⚠️ Impossible de lire ${ntfyConfigPath}`);
-        }
-      }
-      if (ntfyConfig) {
-        notifyOutcomes = await notifyNewReleases(newReleases, ntfyConfig);
-        const sent = notifyOutcomes.filter(o => o.ok).length;
-        console.error(`Notifications envoyées : ${sent}/${notifyOutcomes.length}`);
-      }
+    if (newChapterAlerts.length && ntfyConfig) {
+      notifyOutcomes = await notifyMangaAlerts(newChapterAlerts, ntfyConfig);
+      const sent = notifyOutcomes.filter(o => o.ok).length;
+      console.error(`Notifications envoyées : ${sent}/${notifyOutcomes.length}`);
     }
 
-    console.log(JSON.stringify({ results, newReleases, notifyOutcomes, dataChanged }, null, 1));
+    const cleanResults = results.map(({ _update, ...rest }) => rest);
+
+    console.log(JSON.stringify({
+      results: cleanResults, newChapterAlerts, notifyOutcomes, dataChanged,
+    }, null, 1));
   })().catch(err => {
     console.error(err);
     process.exit(1);
