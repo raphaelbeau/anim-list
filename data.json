@@ -7363,6 +7363,26 @@
   },
   "checkedAt": "2026-09-01T18:58:06.610Z",
   "previousChapter": 97,
-  "latestChapter": 97
+  "latestChapter": 97,
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "notification_mode": "disabled",
+   "anilist_id": null,
+   "current_season": null,
+   "episodes_released": null,
+   "episodes_total": null,
+   "next_episode_number": null,
+   "next_episode_date": null,
+   "season_status": null,
+   "last_notified_season": null,
+   "last_notified_episode": null,
+   "last_check": null,
+   "ntfy_topic": null
+  }
  }
 ]
