@@ -6954,7 +6954,7 @@
    "next_episode_date": "2026-09-07T14:30:00.000Z",
    "season_status": "RELEASING",
    "last_notified_season": null,
-   "last_notified_episode": 9,
+   "last_notified_episode": 8,
    "last_check": "2026-09-01T20:02:57.660Z",
    "ntfy_topic": null
   }
