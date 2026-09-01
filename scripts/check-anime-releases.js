@@ -2,18 +2,16 @@
 /**
  * ANIME//DB — moteur de vérification des sorties anime (AniList)
  * -----------------------------------------------------------------
- * Pour chaque anime suivi (`suivi_anime.notification_mode !== 'disabled'`),
- * interroge l'API GraphQL AniList pour connaître le statut de diffusion de
- * la saison, le nombre d'épisodes sortis, et la date du prochain épisode.
+ * Gestion automatique du passage de saison via les relations `SEQUEL` d'AniList.
  */
 
 const ANILIST_URL = 'https://graphql.anilist.co';
 
 /* ============================================================
-   1. REQUÊTES GRAPHQL ANILIST
+   1. REQUÊTES GRAPHQL ANILIST (AVEC RELATIONS DE SUITE)
    ============================================================ */
 
-/** Recherche directe par anilist_id — cas nominal une fois l'ID connu. */
+/** Requête AniList incluant la relation SEQUEL pour détecter automatiquement la saison suivante */
 const ANILIST_QUERY_BY_ID = `
 query ($id: Int) {
   Media(id: $id, type: ANIME) {
@@ -26,10 +24,25 @@ query ($id: Int) {
       timeUntilAiring
       episode
     }
+    relations {
+      edges {
+        relationType(version: 2)
+        node {
+          id
+          title { romaji english }
+          status
+          episodes
+          nextAiringEpisode {
+            airingAt
+            timeUntilAiring
+            episode
+          }
+        }
+      }
+    }
   }
 }`;
 
-/** Repli par titre — utilisé si anilist_id est encore vide */
 const ANILIST_QUERY_BY_SEARCH = `
 query ($search: String) {
   Media(search: $search, type: ANIME) {
@@ -41,6 +54,22 @@ query ($search: String) {
       airingAt
       timeUntilAiring
       episode
+    }
+    relations {
+      edges {
+        relationType(version: 2)
+        node {
+          id
+          title { romaji english }
+          status
+          episodes
+          nextAiringEpisode {
+            airingAt
+            timeUntilAiring
+            episode
+          }
+        }
+      }
     }
   }
 }`;
@@ -64,7 +93,6 @@ function cleanTitle(title) {
   return (title || '').replace(/\([^)]*\)/g, '').trim();
 }
 
-/** Récupère la fiche AniList d'une œuvre */
 async function fetchAnilistMedia(entry) {
   const sa = entry.suivi_anime || {};
   if (sa.anilist_id) {
@@ -74,7 +102,6 @@ async function fetchAnilistMedia(entry) {
   return await queryAnilist(ANILIST_QUERY_BY_SEARCH, { search: cleanTitle(entry.title) });
 }
 
-/** Déduit le nombre d'épisodes déjà sortis à partir de la fiche AniList. */
 function computeEpisodesReleased(media) {
   if (media.nextAiringEpisode) {
     return Math.max(0, media.nextAiringEpisode.episode - 1);
@@ -86,6 +113,13 @@ function computeEpisodesReleased(media) {
     return 0;
   }
   return media.episodes ?? null;
+}
+
+/** Cherche s'il existe une suite (SEQUEL) dans l'arbre des relations AniList */
+function findSequelMedia(media) {
+  if (!media?.relations?.edges) return null;
+  const sequelEdge = media.relations.edges.find(edge => edge.relationType === 'SEQUEL');
+  return sequelEdge ? sequelEdge.node : null;
 }
 
 /* ============================================================
@@ -134,7 +168,7 @@ function evaluateAnimeNotification(entry, sa) {
 
 /**
  * @param {Array} entries
- * @param {object} [ntfyConfig] - Configuration de notification globale optionnelle
+ * @param {object} [ntfyConfig]
  */
 async function checkAnimeReleases(entries, ntfyConfig = null) {
   const tracked = (entries || []).filter(
@@ -150,7 +184,7 @@ async function checkAnimeReleases(entries, ntfyConfig = null) {
   for (const entry of tracked) {
     const sa = entry.suivi_anime;
     const checkedAt = new Date().toISOString();
-    const media = await fetchAnilistMedia(entry);
+    let media = await fetchAnilistMedia(entry);
 
     if (!media) {
       results.push({
@@ -160,12 +194,23 @@ async function checkAnimeReleases(entries, ntfyConfig = null) {
       continue;
     }
 
+    let currentSeason = sa.current_season != null ? sa.current_season : 1;
+
+    // --- TRANSITION AUTOMATIQUE DE SAISON ---
+    // Si la saison actuelle enregistrée est FINISHED, on regarde si une suite existe déjà
+    if (media.status === 'FINISHED') {
+      const sequel = findSequelMedia(media);
+      if (sequel) {
+        // Une suite (Saison suivante) est trouvée ! On bascule automatiquement dessus.
+        media = sequel;
+        currentSeason += 1;
+      }
+    }
+
     const episodesReleased = computeEpisodesReleased(media);
     const nextEpisodeDate = media.nextAiringEpisode
       ? new Date(media.nextAiringEpisode.airingAt * 1000).toISOString()
       : null;
-
-    const currentSeason = sa.current_season != null ? sa.current_season : 1;
 
     const update = {
       anilist_id: media.id,
