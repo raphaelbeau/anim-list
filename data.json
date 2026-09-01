@@ -122,7 +122,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 234,
-   "derniere_verification": "2026-09-01T20:09:32.034Z",
+   "derniere_verification": "2026-09-01T19:48:16.351Z",
    "ntfy_topic": null
   },
   "suivi_anime": {
@@ -169,7 +169,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 198,
-   "derniere_verification": "2026-09-01T20:09:38.403Z",
+   "derniere_verification": "2026-09-01T19:48:22.360Z",
    "ntfy_topic": null
   },
   "suivi_anime": {
@@ -262,7 +262,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 1191,
-   "derniere_verification": "2026-09-01T20:09:58.259Z",
+   "derniere_verification": "2026-09-01T19:48:31.789Z",
    "ntfy_topic": null
   },
   "suivi_anime": {
@@ -541,7 +541,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 33.5,
-   "derniere_verification": "2026-09-01T20:10:18.227Z",
+   "derniere_verification": "2026-09-01T19:48:52.994Z",
    "ntfy_topic": null
   },
   "suivi_anime": {
@@ -795,7 +795,7 @@
    "season_status": "FINISHED",
    "last_notified_season": 1,
    "last_notified_episode": null,
-   "last_check": "2026-09-01T20:10:39.115Z",
+   "last_check": "2026-09-01T19:49:20.421Z",
    "ntfy_topic": null
   }
  },
@@ -6955,7 +6955,7 @@
    "season_status": "RELEASING",
    "last_notified_season": null,
    "last_notified_episode": 9,
-   "last_check": "2026-09-01T20:10:39.352Z",
+   "last_check": "2026-09-01T19:49:20.723Z",
    "ntfy_topic": null
   }
  },
@@ -7129,7 +7129,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 39,
-   "derniere_verification": "2026-09-01T20:10:32.179Z",
+   "derniere_verification": "2026-09-01T19:49:12.962Z",
    "ntfy_topic": null
   },
   "suivi_anime": {
@@ -7176,7 +7176,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 84,
-   "derniere_verification": "2026-09-01T20:10:39.071Z",
+   "derniere_verification": "2026-09-01T19:49:20.371Z",
    "ntfy_topic": null
   },
   "suivi_anime": {
@@ -7383,6 +7383,33 @@
    "last_notified_episode": null,
    "last_check": null,
    "ntfy_topic": null
+  }
+ },
+ {
+  "id": "e-mtj63th2v7jt4",
+  "title": "nichijou",
+  "nickname": "",
+  "genre": "autre",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "lang": "vo",
+  "fmt": "serie",
+  "anime_url": "",
+  "scan_url": "",
+  "progress_episode": "",
+  "progress_chapter": "",
+  "sequel_date": "",
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "anime_overall_note": null,
+  "manga": {
+   "note": null,
+   "comment": ""
   }
  }
 ]
