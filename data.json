@@ -116,13 +116,13 @@
    "comment": ""
   },
   "sequel_date": "",
-  "progress_chapter": "234",
+  "progress_chapter": "233",
   "progress_episode": "",
   "anime_overall_note": null,
   "suivi": {
    "suivi_actif": true,
-   "dernier_chapitre_paru": 235,
-   "derniere_verification": "2026-09-01T21:31:21.779Z",
+   "dernier_chapitre_paru": 234,
+   "derniere_verification": "2026-09-01T19:48:16.351Z",
    "ntfy_topic": null
   },
   "suivi_anime": {
@@ -169,7 +169,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 198,
-   "derniere_verification": "2026-09-01T21:31:32.145Z",
+   "derniere_verification": "2026-09-01T19:48:22.360Z",
    "ntfy_topic": null
   },
   "suivi_anime": {
@@ -262,7 +262,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 1191,
-   "derniere_verification": "2026-09-01T21:31:38.305Z",
+   "derniere_verification": "2026-09-01T19:48:31.789Z",
    "ntfy_topic": null
   },
   "suivi_anime": {
@@ -541,7 +541,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 33.5,
-   "derniere_verification": "2026-09-01T21:31:43.499Z",
+   "derniere_verification": "2026-09-01T19:48:52.994Z",
    "ntfy_topic": null
   },
   "suivi_anime": {
@@ -786,16 +786,16 @@
   },
   "suivi_anime": {
    "notification_mode": "season_complete",
-   "anilist_id": 210031,
-   "current_season": 2,
-   "episodes_released": 9,
-   "episodes_total": 13,
-   "next_episode_number": 10,
-   "next_episode_date": "2026-09-06T08:00:00.000Z",
-   "season_status": "RELEASING",
+   "anilist_id": 184951,
+   "current_season": 1,
+   "episodes_released": 12,
+   "episodes_total": 12,
+   "next_episode_number": null,
+   "next_episode_date": null,
+   "season_status": "FINISHED",
    "last_notified_season": 1,
    "last_notified_episode": null,
-   "last_check": "2026-09-01T21:32:04.825Z",
+   "last_check": "2026-09-01T19:49:20.421Z",
    "ntfy_topic": null
   }
  },
@@ -6955,7 +6955,7 @@
    "season_status": "RELEASING",
    "last_notified_season": null,
    "last_notified_episode": 9,
-   "last_check": "2026-09-01T21:32:05.045Z",
+   "last_check": "2026-09-01T19:49:20.723Z",
    "ntfy_topic": null
   }
  },
@@ -7112,7 +7112,7 @@
   "anime_url": "",
   "scan_url": "https://mangadex.org/title/c4ca02fb-8378-433b-8049-fbbea5d25cba/haimiya-senpai-wa-kowakute-kawaii",
   "progress_episode": "",
-  "progress_chapter": "38",
+  "progress_chapter": "39",
   "sequel_date": "",
   "anime_seasons": [
    {
@@ -7129,7 +7129,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 39,
-   "derniere_verification": "2026-09-01T21:31:52.279Z",
+   "derniere_verification": "2026-09-01T19:49:12.962Z",
    "ntfy_topic": null
   },
   "suivi_anime": {
@@ -7176,7 +7176,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 84,
-   "derniere_verification": "2026-09-01T21:31:58.144Z",
+   "derniere_verification": "2026-09-01T19:49:20.371Z",
    "ntfy_topic": null
   },
   "suivi_anime": {
@@ -7410,29 +7410,6 @@
   "manga": {
    "note": null,
    "comment": ""
-  },
-  "checkedAt": "2026-09-01T21:32:04.724Z",
-  "previousChapter": 67.5,
-  "latestChapter": 67.5,
-  "suivi": {
-   "suivi_actif": false,
-   "dernier_chapitre_paru": null,
-   "derniere_verification": null,
-   "ntfy_topic": null
-  },
-  "suivi_anime": {
-   "notification_mode": "disabled",
-   "anilist_id": null,
-   "current_season": null,
-   "episodes_released": null,
-   "episodes_total": null,
-   "next_episode_number": null,
-   "next_episode_date": null,
-   "season_status": null,
-   "last_notified_season": null,
-   "last_notified_episode": null,
-   "last_check": null,
-   "ntfy_topic": null
   }
  }
 ]
