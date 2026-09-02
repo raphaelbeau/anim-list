@@ -65,10 +65,11 @@ async function fetchAniListLatestChapter(title) {
 }
 
 /**
- * Recherche de secours sur AniList si MangaDex ne renvoie aucun chapitre (ex: manga licencié)
+ * Recherche de secours sur AniList avec le titre texte du manga
  */
 async function fetchAniListLatestChapter(title) {
   if (!title) return null;
+  const clean = cleanTitle(title);
   const query = `
     query ($search: String) {
       Media (search: $search, type: MANGA) {
@@ -82,7 +83,7 @@ async function fetchAniListLatestChapter(title) {
     const res = await fetch('https://graphql.anilist.co', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({ query, variables: { search: cleanTitle(title) } })
+      body: JSON.stringify({ query, variables: { search: clean } })
     });
     if (!res.ok) return null;
     const json = await res.json();
@@ -110,25 +111,22 @@ async function fetchMangaDexLatestChapter(mangadexIdOrTitle, preferredLang = 'fr
     let mangadexId = mangadexIdOrTitle;
     let foundNewId = null;
     
-    // Si la valeur n'est pas un UUID, c'est un titre -> On cherche l'ID automatiquement
     const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(mangadexIdOrTitle);
     if (!isUuid) {
       mangadexId = await searchMangaDexIdByTitle(mangadexIdOrTitle);
-      foundNewId = mangadexId; // Garde en mémoire l'ID trouvé (ou null) pour data.json
+      if (mangadexId) foundNewId = mangadexId;
     }
 
-    // 1. Si on a un ID MangaDex valide, on tente le flux MangaDex
+    // 1. Tente MangaDex si un ID est présent
     if (mangadexId) {
       const lang = (preferredLang || 'fr').toLowerCase();
       const langParams = lang === 'fr' ? 'translatedLanguage[]=fr' : `translatedLanguage[]=${lang}`;
-
       const url = `${MANGADEX_API_URL}/manga/${mangadexId}/feed?limit=500&order[chapter]=desc&${langParams}&includeFuturePublishAt=0`;
       
       const res = await fetch(url, { headers: { 'User-Agent': 'AnimeDB-Checker/2.0' } });
       
       if (res.ok) {
         const json = await res.json();
-
         if (json.data && Array.isArray(json.data) && json.data.length > 0) {
           let maxChapter = -1;
           let latestChapterObj = null;
@@ -148,11 +146,9 @@ async function fetchMangaDexLatestChapter(mangadexIdOrTitle, preferredLang = 'fr
               };
             }
           }
-
           if (latestChapterObj) return latestChapterObj;
         }
 
-        // Tente en Anglais si aucun chapitre trouvé en Français
         if (lang === 'fr') {
           const fallbackEn = await fetchMangaDexLatestChapter(mangadexId, 'en');
           if (fallbackEn) {
@@ -163,10 +159,10 @@ async function fetchMangaDexLatestChapter(mangadexIdOrTitle, preferredLang = 'fr
       }
     }
 
-    // 2. SECOURS ULTIME : AniList si MangaDex n'a rien donné ou est bloqué
+    // 2. Secours sur AniList en passant le titre texte original
     const aniListRes = await fetchAniListLatestChapter(mangadexIdOrTitle);
     if (aniListRes) {
-      aniListRes.discovered_id = foundNewId;
+      if (foundNewId) aniListRes.discovered_id = foundNewId;
       return aniListRes;
     }
 
@@ -175,7 +171,6 @@ async function fetchMangaDexLatestChapter(mangadexIdOrTitle, preferredLang = 'fr
     return null;
   }
 }
-
 /* ============================================================
    3. SCRAPING DES SITES SCAN_URL
    ============================================================ */
