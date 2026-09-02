@@ -29,51 +29,80 @@ function cleanTitle(title) {
    ============================================================ */
 
 /**
- * Recherche automatique de l'ID MangaDex par titre avec filtres élargis.
+ * Recherche de secours sur AniList si MangaDex ne renvoie aucun chapitre (ex: manga licencié)
  */
-async function searchMangaDexIdByTitle(title) {
+async function fetchAniListLatestChapter(title) {
   if (!title) return null;
-  
-  // Différents mots-clés à tenter
-  const clean = cleanTitle(title);
-  const words = clean.split(/\s+/);
-  
-  const searchQueries = [
-    clean,
-    words.slice(0, 3).join(' '),
-    words[0] // Premier mot unique si le titre est très spécifique
-  ];
-
-  if (title.toLowerCase().includes('medaka')) {
-    searchQueries.unshift('Medaka Kuroiwa');
-  }
-
-  for (const q of searchQueries) {
-    if (!q || q.length < 2) continue;
-    try {
-      const query = encodeURIComponent(q);
-      // Correction des paramètres d'appel API MangaDex
-      const url = `${MANGADEX_API_URL}/manga?title=${query}&limit=10&contentRating[]=safe&contentRating[]=suggestive&contentRating[]=erotica&contentRating[]=pornographic`;
-      const res = await fetch(url, { 
-        headers: { 
-          'User-Agent': 'AnimeDB-Checker/2.0',
-          'Accept': 'application/json'
-        } 
-      });
-      if (!res.ok) continue;
-
-      const json = await res.json();
-      if (json?.data && json.data.length > 0) {
-        // Retourne le premier manga trouvé
-        return json.data[0].id;
+  const query = `
+    query ($search: String) {
+      Media (search: $search, type: MANGA) {
+        id
+        chapters
+        title { romaji english native }
       }
-    } catch (e) {
-      // Continuer
     }
+  `;
+  try {
+    const res = await fetch('https://graphql.anilist.co', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ query, variables: { search: cleanTitle(title) } })
+    });
+    if (!res.ok) return null;
+    const json = await res.json();
+    const chapters = json?.data?.Media?.chapters;
+    if (chapters && chapters > 0) {
+      return {
+        chapter: chapters,
+        url: `https://anilist.co/manga/${json.data.Media.id}`,
+        source: 'anilist'
+      };
+    }
+  } catch (e) {
+    return null;
   }
   return null;
 }
 
+/**
+ * Recherche de secours sur AniList si MangaDex ne renvoie aucun chapitre (ex: manga licencié)
+ */
+async function fetchAniListLatestChapter(title) {
+  if (!title) return null;
+  const query = `
+    query ($search: String) {
+      Media (search: $search, type: MANGA) {
+        id
+        chapters
+        title { romaji english native }
+      }
+    }
+  `;
+  try {
+    const res = await fetch('https://graphql.anilist.co', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ query, variables: { search: cleanTitle(title) } })
+    });
+    if (!res.ok) return null;
+    const json = await res.json();
+    const chapters = json?.data?.Media?.chapters;
+    if (chapters && chapters > 0) {
+      return {
+        chapter: chapters,
+        url: `https://anilist.co/manga/${json.data.Media.id}`,
+        source: 'anilist'
+      };
+    }
+  } catch (e) {
+    return null;
+  }
+  return null;
+}
+
+/**
+ * Récupère le dernier chapitre via MangaDex (avec fallback Anglais puis AniList)
+ */
 async function fetchMangaDexLatestChapter(mangadexIdOrTitle, preferredLang = 'fr') {
   if (!mangadexIdOrTitle) return null;
 
@@ -85,48 +114,63 @@ async function fetchMangaDexLatestChapter(mangadexIdOrTitle, preferredLang = 'fr
     const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(mangadexIdOrTitle);
     if (!isUuid) {
       mangadexId = await searchMangaDexIdByTitle(mangadexIdOrTitle);
-      if (!mangadexId) return null;
-      foundNewId = mangadexId; // Garde en mémoire l'ID trouvé pour l'enregistrer dans data.json
+      foundNewId = mangadexId; // Garde en mémoire l'ID trouvé (ou null) pour data.json
     }
 
-    const lang = (preferredLang || 'fr').toLowerCase();
-    const langParams = lang === 'fr' ? 'translatedLanguage[]=fr' : `translatedLanguage[]=${lang}`;
+    // 1. Si on a un ID MangaDex valide, on tente le flux MangaDex
+    if (mangadexId) {
+      const lang = (preferredLang || 'fr').toLowerCase();
+      const langParams = lang === 'fr' ? 'translatedLanguage[]=fr' : `translatedLanguage[]=${lang}`;
 
-    const url = `${MANGADEX_API_URL}/manga/${mangadexId}/feed?limit=500&order[chapter]=desc&${langParams}&includeFuturePublishAt=0`;
-    
-    const res = await fetch(url, { headers: { 'User-Agent': 'AnimeDB-Checker/2.0' } });
-    if (!res.ok) return null;
-
-    const json = await res.json();
-    if (!json.data || !Array.isArray(json.data) || json.data.length === 0) {
-      if (lang === 'fr') {
-        const fallback = await fetchMangaDexLatestChapter(mangadexId, 'en');
-        if (fallback) fallback.discovered_id = foundNewId;
-        return fallback;
-      }
-      return null;
-    }
-
-    let maxChapter = -1;
-    let latestChapterObj = null;
-
-    for (const item of json.data) {
-      const chAttr = item.attributes;
-      if (!chAttr || !chAttr.chapter) continue;
+      const url = `${MANGADEX_API_URL}/manga/${mangadexId}/feed?limit=500&order[chapter]=desc&${langParams}&includeFuturePublishAt=0`;
       
-      const chNum = parseFloat(chAttr.chapter);
-      if (!isNaN(chNum) && chNum > maxChapter) {
-        maxChapter = chNum;
-        latestChapterObj = {
-          chapter: chNum,
-          url: `https://mangadex.org/chapter/${item.id}`,
-          source: 'mangadex',
-          discovered_id: foundNewId
-        };
+      const res = await fetch(url, { headers: { 'User-Agent': 'AnimeDB-Checker/2.0' } });
+      
+      if (res.ok) {
+        const json = await res.json();
+
+        if (json.data && Array.isArray(json.data) && json.data.length > 0) {
+          let maxChapter = -1;
+          let latestChapterObj = null;
+
+          for (const item of json.data) {
+            const chAttr = item.attributes;
+            if (!chAttr || !chAttr.chapter) continue;
+            
+            const chNum = parseFloat(chAttr.chapter);
+            if (!isNaN(chNum) && chNum > maxChapter) {
+              maxChapter = chNum;
+              latestChapterObj = {
+                chapter: chNum,
+                url: `https://mangadex.org/chapter/${item.id}`,
+                source: 'mangadex',
+                discovered_id: foundNewId
+              };
+            }
+          }
+
+          if (latestChapterObj) return latestChapterObj;
+        }
+
+        // Tente en Anglais si aucun chapitre trouvé en Français
+        if (lang === 'fr') {
+          const fallbackEn = await fetchMangaDexLatestChapter(mangadexId, 'en');
+          if (fallbackEn) {
+            fallbackEn.discovered_id = foundNewId;
+            return fallbackEn;
+          }
+        }
       }
     }
 
-    return latestChapterObj;
+    // 2. SECOURS ULTIME : AniList si MangaDex n'a rien donné ou est bloqué
+    const aniListRes = await fetchAniListLatestChapter(mangadexIdOrTitle);
+    if (aniListRes) {
+      aniListRes.discovered_id = foundNewId;
+      return aniListRes;
+    }
+
+    return null;
   } catch (e) {
     return null;
   }
