@@ -169,7 +169,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 151,
-   "derniere_verification": "2026-09-02T23:25:41.845Z",
+   "derniere_verification": "2026-09-03T01:15:44.846Z",
    "ntfy_topic": null,
    "source_used": "mangadex",
    "last_notified_chapter": 151,
@@ -266,7 +266,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 1191,
-   "derniere_verification": "2026-09-02T23:25:42.745Z",
+   "derniere_verification": "2026-09-03T01:15:45.356Z",
    "ntfy_topic": null,
    "source_used": "mangadex",
    "last_notified_chapter": 1191,
@@ -549,7 +549,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 63,
-   "derniere_verification": "2026-09-02T23:25:43.258Z",
+   "derniere_verification": "2026-09-03T01:15:45.784Z",
    "ntfy_topic": null,
    "source_used": "scan_url",
    "last_notified_chapter": 63,
@@ -4057,7 +4057,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 43,
-   "derniere_verification": "2026-09-02T23:25:43.808Z",
+   "derniere_verification": "2026-09-03T01:15:46.342Z",
    "ntfy_topic": null,
    "source_used": "scan_url",
    "last_notified_chapter": 43,
@@ -7144,7 +7144,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 30,
-   "derniere_verification": "2026-09-02T23:25:44.194Z",
+   "derniere_verification": "2026-09-03T01:15:46.587Z",
    "ntfy_topic": null,
    "source_used": "mangadex",
    "last_notified_chapter": 30,
@@ -7195,7 +7195,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 84,
-   "derniere_verification": "2026-09-02T23:25:44.572Z",
+   "derniere_verification": "2026-09-03T01:15:46.908Z",
    "ntfy_topic": null,
    "source_used": "mangadex",
    "last_notified_chapter": 84,
