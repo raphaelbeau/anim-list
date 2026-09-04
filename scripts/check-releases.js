@@ -29,42 +29,6 @@ function cleanTitle(title) {
    ============================================================ */
 
 /**
- * Recherche de secours sur AniList si MangaDex ne renvoie aucun chapitre (ex: manga licencié)
- */
-async function fetchAniListLatestChapter(title) {
-  if (!title) return null;
-  const query = `
-    query ($search: String) {
-      Media (search: $search, type: MANGA) {
-        id
-        chapters
-        title { romaji english native }
-      }
-    }
-  `;
-  try {
-    const res = await fetch('https://graphql.anilist.co', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({ query, variables: { search: cleanTitle(title) } })
-    });
-    if (!res.ok) return null;
-    const json = await res.json();
-    const chapters = json?.data?.Media?.chapters;
-    if (chapters && chapters > 0) {
-      return {
-        chapter: chapters,
-        url: `https://anilist.co/manga/${json.data.Media.id}`,
-        source: 'anilist'
-      };
-    }
-  } catch (e) {
-    return null;
-  }
-  return null;
-}
-
-/**
  * Recherche de secours sur AniList avec le titre texte du manga
  */
 async function fetchAniListLatestChapter(title) {
@@ -99,6 +63,51 @@ async function fetchAniListLatestChapter(title) {
     return null;
   }
   return null;
+}
+
+/**
+ * Recherche l'ID MangaDex correspondant à un titre texte.
+ * Utilise l'endpoint de recherche /manga et tente de trouver une correspondance
+ * exacte (titre principal ou titre alternatif) avant de se rabattre sur le
+ * premier résultat renvoyé (le plus pertinent selon MangaDex).
+ */
+async function searchMangaDexIdByTitle(title) {
+  if (!title) return null;
+  const clean = cleanTitle(title);
+  if (!clean) return null;
+
+  try {
+    const params = new URLSearchParams();
+    params.set('title', clean);
+    params.set('limit', '5');
+    params.append('order[relevance]', 'desc');
+
+    const url = `${MANGADEX_API_URL}/manga?${params.toString()}`;
+    const res = await fetch(url, { headers: { 'User-Agent': 'AnimeDB-Checker/2.0' } });
+    if (!res.ok) return null;
+
+    const json = await res.json();
+    if (!json.data || !Array.isArray(json.data) || json.data.length === 0) return null;
+
+    const normalizedSearch = clean.toLowerCase();
+
+    // 1. On cherche une correspondance exacte (titre principal ou alternatif)
+    for (const manga of json.data) {
+      const attrs = manga.attributes || {};
+      const candidateTitles = [
+        ...Object.values(attrs.title || {}),
+        ...(attrs.altTitles || []).flatMap(t => Object.values(t))
+      ];
+      if (candidateTitles.some(t => (t || '').toLowerCase() === normalizedSearch)) {
+        return manga.id;
+      }
+    }
+
+    // 2. Sinon, on prend le résultat le plus pertinent renvoyé par MangaDex
+    return json.data[0].id || null;
+  } catch (e) {
+    return null;
+  }
 }
 
 /**
