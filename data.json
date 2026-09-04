@@ -169,7 +169,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 151,
-   "derniere_verification": "2026-09-04T01:06:32.009Z",
+   "derniere_verification": "2026-09-04T06:06:22.280Z",
    "ntfy_topic": null,
    "source_used": "mangadex",
    "last_notified_chapter": 151,
@@ -266,7 +266,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 1191,
-   "derniere_verification": "2026-09-04T01:06:32.747Z",
+   "derniere_verification": "2026-09-04T06:06:22.907Z",
    "ntfy_topic": null,
    "source_used": "mangadex",
    "last_notified_chapter": 1191,
@@ -549,7 +549,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 63,
-   "derniere_verification": "2026-09-04T01:06:33.081Z",
+   "derniere_verification": "2026-09-04T06:06:23.444Z",
    "ntfy_topic": null,
    "source_used": "scan_url",
    "last_notified_chapter": 63,
@@ -806,7 +806,7 @@
    "season_status": "RELEASING",
    "last_notified_season": 1,
    "last_notified_episode": null,
-   "last_check": "2026-09-04T01:06:34.972Z",
+   "last_check": "2026-09-04T06:06:25.138Z",
    "ntfy_topic": null
   }
  },
@@ -4057,7 +4057,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 43,
-   "derniere_verification": "2026-09-04T01:06:33.685Z",
+   "derniere_verification": "2026-09-04T06:06:24.037Z",
    "ntfy_topic": null,
    "source_used": "scan_url",
    "last_notified_chapter": 43,
@@ -6970,7 +6970,7 @@
    "season_status": "RELEASING",
    "last_notified_season": null,
    "last_notified_episode": 9,
-   "last_check": "2026-09-04T01:06:35.311Z",
+   "last_check": "2026-09-04T06:06:25.551Z",
    "ntfy_topic": null
   }
  },
@@ -7144,7 +7144,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 30,
-   "derniere_verification": "2026-09-04T01:06:34.093Z",
+   "derniere_verification": "2026-09-04T06:06:24.467Z",
    "ntfy_topic": null,
    "source_used": "mangadex",
    "last_notified_chapter": 30,
@@ -7195,7 +7195,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 84,
-   "derniere_verification": "2026-09-04T01:06:34.596Z",
+   "derniere_verification": "2026-09-04T06:06:24.750Z",
    "ntfy_topic": null,
    "source_used": "mangadex",
    "last_notified_chapter": 84,
