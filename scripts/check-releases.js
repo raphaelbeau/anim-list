@@ -111,7 +111,46 @@ async function searchMangaDexIdByTitle(title) {
 }
 
 /**
- * Récupère le dernier chapitre via MangaDex (avec fallback Anglais puis AniList)
+ * Interroge le flux de chapitres MangaDex pour UNE langue donnée et renvoie
+ * le chapitre le plus élevé trouvé (ou null si rien n'est disponible).
+ */
+async function fetchMangaDexFeedForLang(mangadexId, lang) {
+  try {
+    const url = `${MANGADEX_API_URL}/manga/${mangadexId}/feed?limit=500&order[chapter]=desc&translatedLanguage[]=${lang}&includeFuturePublishAt=0`;
+    const res = await fetch(url, { headers: { 'User-Agent': 'AnimeDB-Checker/2.0' } });
+    if (!res.ok) return null;
+
+    const json = await res.json();
+    if (!json.data || !Array.isArray(json.data) || json.data.length === 0) return null;
+
+    let maxChapter = -1;
+    let latestChapterObj = null;
+
+    for (const item of json.data) {
+      const chAttr = item.attributes;
+      if (!chAttr || !chAttr.chapter) continue;
+
+      const chNum = parseFloat(chAttr.chapter);
+      if (!isNaN(chNum) && chNum > maxChapter) {
+        maxChapter = chNum;
+        latestChapterObj = {
+          chapter: chNum,
+          url: `https://mangadex.org/chapter/${item.id}`,
+          source: `mangadex_${lang}`
+        };
+      }
+    }
+
+    return latestChapterObj;
+  } catch (e) {
+    return null;
+  }
+}
+
+/**
+ * Récupère le dernier chapitre via MangaDex, en comparant les scans FR et EN
+ * (les deux flux sont interrogés en parallèle, on garde le chapitre le plus
+ * récent des deux), avec secours sur AniList si aucun des deux ne remonte rien.
  */
 async function fetchMangaDexLatestChapter(mangadexIdOrTitle, preferredLang = 'fr') {
   if (!mangadexIdOrTitle) return null;
@@ -119,52 +158,32 @@ async function fetchMangaDexLatestChapter(mangadexIdOrTitle, preferredLang = 'fr
   try {
     let mangadexId = mangadexIdOrTitle;
     let foundNewId = null;
-    
+
     const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(mangadexIdOrTitle);
     if (!isUuid) {
       mangadexId = await searchMangaDexIdByTitle(mangadexIdOrTitle);
       if (mangadexId) foundNewId = mangadexId;
     }
 
-    // 1. Tente MangaDex si un ID est présent
+    // 1. Tente MangaDex si un ID est présent : FR et EN en parallèle
     if (mangadexId) {
-      const lang = (preferredLang || 'fr').toLowerCase();
-      const langParams = lang === 'fr' ? 'translatedLanguage[]=fr' : `translatedLanguage[]=${lang}`;
-      const url = `${MANGADEX_API_URL}/manga/${mangadexId}/feed?limit=500&order[chapter]=desc&${langParams}&includeFuturePublishAt=0`;
-      
-      const res = await fetch(url, { headers: { 'User-Agent': 'AnimeDB-Checker/2.0' } });
-      
-      if (res.ok) {
-        const json = await res.json();
-        if (json.data && Array.isArray(json.data) && json.data.length > 0) {
-          let maxChapter = -1;
-          let latestChapterObj = null;
+      const langsToCheck = new Set(['fr', 'en']);
+      if (preferredLang) langsToCheck.add(preferredLang.toLowerCase());
 
-          for (const item of json.data) {
-            const chAttr = item.attributes;
-            if (!chAttr || !chAttr.chapter) continue;
-            
-            const chNum = parseFloat(chAttr.chapter);
-            if (!isNaN(chNum) && chNum > maxChapter) {
-              maxChapter = chNum;
-              latestChapterObj = {
-                chapter: chNum,
-                url: `https://mangadex.org/chapter/${item.id}`,
-                source: 'mangadex',
-                discovered_id: foundNewId
-              };
-            }
-          }
-          if (latestChapterObj) return latestChapterObj;
-        }
+      const feedResults = await Promise.all(
+        [...langsToCheck].map(lang => fetchMangaDexFeedForLang(mangadexId, lang))
+      );
 
-        if (lang === 'fr') {
-          const fallbackEn = await fetchMangaDexLatestChapter(mangadexId, 'en');
-          if (fallbackEn) {
-            fallbackEn.discovered_id = foundNewId;
-            return fallbackEn;
-          }
+      let best = null;
+      for (const res of feedResults) {
+        if (res && (!best || res.chapter > best.chapter)) {
+          best = res;
         }
+      }
+
+      if (best) {
+        best.discovered_id = foundNewId;
+        return best;
       }
     }
 
