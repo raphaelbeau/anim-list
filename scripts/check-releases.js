@@ -5,7 +5,7 @@
  * Auto-détection MangaDex & Auto-sauvegarde de l'ID dans data.json.
  */
 
-const cheerio = require('cheerio');
+import * as cheerio from 'cheerio';
 
 const MANGADEX_API_URL = 'https://api.mangadex.org';
 
