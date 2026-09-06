@@ -5,6 +5,8 @@
  * Auto-détection MangaDex & Auto-sauvegarde de l'ID dans data.json.
  */
 
+const cheerio = require('cheerio');
+
 const MANGADEX_API_URL = 'https://api.mangadex.org';
 
 /* ============================================================
@@ -203,62 +205,130 @@ async function fetchMangaDexLatestChapter(mangadexIdOrTitle, preferredLang = 'fr
    3. SCRAPING DES SITES SCAN_URL
    ============================================================ */
 
+function resolveUrl(href, baseUrl) {
+  try {
+    return new URL(href, baseUrl).href;
+  } catch (e) {
+    return href;
+  }
+}
+
+/**
+ * Stratégie 1 : thème WordPress "Madara", utilisé par une grande partie des
+ * sites de scan FR/EN (structure très stable : <li class="wp-manga-chapter">
+ * contenant un <a> avec le texte "Chapter XXX").
+ */
+function extractMadaraChapters($, baseUrl) {
+  const selectors = [
+    '.wp-manga-chapter a',
+    'li.wp-manga-chapter a',
+    '.listing-chapters_wrap a',
+    '.chapter-item a',
+  ];
+
+  let maxChapter = -1;
+  let bestLink = null;
+
+  for (const sel of selectors) {
+    $(sel).each((_, el) => {
+      const $el = $(el);
+      const text = $el.text().trim();
+      const href = $el.attr('href');
+      if (!href) return;
+
+      const chNum = parseChapterNumber(text);
+      if (chNum !== null && chNum > maxChapter) {
+        maxChapter = chNum;
+        bestLink = resolveUrl(href, baseUrl);
+      }
+    });
+    if (maxChapter > -1) break; // un sélecteur a fonctionné, inutile de tester les autres
+  }
+
+  return maxChapter > -1 ? { chapter: maxChapter, url: bestLink } : null;
+}
+
+/**
+ * Stratégie 2 (fallback) : recherche générique, restreinte en priorité aux
+ * conteneurs dont la classe/id évoque une liste de chapitres, pour éviter de
+ * remonter des liens de navigation/sidebar sans rapport. Le "premier nombre
+ * trouvé" (sans mot-clé chapitre/chapter) n'est utilisé qu'en tout dernier
+ * recours, à l'intérieur d'un conteneur ciblé.
+ */
+function extractGenericChapters($, baseUrl) {
+  const containerSelector = '[class*="chapter" i], [id*="chapter" i], [class*="episode" i]';
+  const scopes = [$(containerSelector), $('body')];
+
+  for (const [scopeIndex, $scope] of scopes.entries()) {
+    const isTargetedScope = scopeIndex === 0;
+    let maxChapter = -1;
+    let bestLink = null;
+
+    $scope.find('a').addBack('a').each((_, el) => {
+      const $el = $(el);
+      const href = $el.attr('href');
+      if (!href || href.startsWith('#')) return;
+      const text = $el.text().trim();
+
+      const looksLikeChapterLink =
+        /(?:chapitre|chapter|scan|ch[-_]|\/chapter\/|\/scan\/|\/read\/)/i.test(href) ||
+        /(?:chapitre|chapter|scan|ch\.)/i.test(text);
+      if (!looksLikeChapterLink) return;
+
+      // On exige un mot-clé explicite avant le nombre pour éviter de confondre
+      // avec une date, un compteur de vues ou un numéro de tome. Le fallback
+      // "premier nombre trouvé" n'est autorisé que dans un conteneur ciblé.
+      const keywordMatch = text.match(/(?:chapitre|chapter|scan|ch)[^\d]*(\d+(?:\.\d+)?)/i)
+                         || href.match(/(?:chapter|chapitre|scan)[-_/]?(\d+(?:\.\d+)?)/i);
+      const chNum = keywordMatch
+        ? parseFloat(keywordMatch[1])
+        : (isTargetedScope ? (parseChapterNumber(text) ?? parseChapterNumber(href)) : null);
+
+      if (chNum !== null && !isNaN(chNum) && chNum > maxChapter) {
+        maxChapter = chNum;
+        bestLink = resolveUrl(href, baseUrl);
+      }
+    });
+
+    if (maxChapter > -1) return { chapter: maxChapter, url: bestLink };
+  }
+
+  return null;
+}
+
 async function scrapeScanUrl(scanUrl) {
   if (!scanUrl) return null;
 
   try {
-    const res = await fetch(scanUrl, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-      },
-    });
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000);
+
+    let res;
+    try {
+      res = await fetch(scanUrl, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+          'Accept-Language': 'fr-FR,fr;q=0.9,en;q=0.8',
+        },
+        signal: controller.signal,
+      });
+    } finally {
+      clearTimeout(timeout);
+    }
 
     if (!res.ok) return null;
     const html = await res.text();
+    const $ = cheerio.load(html);
 
-    const linkRegex = /<a\s+[^>]*href=["']([^"']+)["'][^>]*>(.*?)<\/a>/gi;
-    let match;
-    let maxChapter = -1;
-    let bestLink = null;
+    const result = extractMadaraChapters($, scanUrl) || extractGenericChapters($, scanUrl);
+    if (!result) return null;
 
-    while ((match = linkRegex.exec(html)) !== null) {
-      const href = match[1];
-      const text = match[2].replace(/<[^>]+>/g, '').trim();
-
-      const isChapterLink = /(?:chapitre|chapter|scan|ch[-_]|\/chapter\/|\/scan\/)/i.test(href) ||
-                            /(?:chapitre|chapter|scan|ch\.)/i.test(text);
-
-      if (isChapterLink) {
-        const numFromText = parseChapterNumber(text);
-        const numFromHref = parseChapterNumber(href);
-        const chNum = numFromText !== null ? numFromText : numFromHref;
-
-        if (chNum !== null && chNum > maxChapter) {
-          maxChapter = chNum;
-          
-          let fullUrl = href;
-          if (href.startsWith('/')) {
-            const urlObj = new URL(scanUrl);
-            fullUrl = `${urlObj.origin}${href}`;
-          } else if (!href.startsWith('http')) {
-            fullUrl = `${scanUrl.replace(/\/+$/, '')}/${href}`;
-          }
-          
-          bestLink = fullUrl;
-        }
-      }
-    }
-
-    if (maxChapter > -1) {
-      return {
-        chapter: maxChapter,
-        url: bestLink || scanUrl,
-        source: 'scan_url'
-      };
-    }
-
-    return null;
+    return {
+      chapter: result.chapter,
+      url: result.url || scanUrl,
+      source: 'scan_url',
+    };
   } catch (e) {
     return null;
   }
