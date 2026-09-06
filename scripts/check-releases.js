@@ -481,7 +481,7 @@ async function notifyMangaAlerts(newChapterAlerts, ntfyConfig) {
   return outcomes;
 }
 
-exports = {
+exports {
   checkMangaReleases, fetchMangaDexLatestChapter, scrapeScanUrl, evaluateMangaNotification, notifyMangaAlerts
 };
 
