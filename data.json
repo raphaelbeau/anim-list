@@ -4060,11 +4060,11 @@
   "anime_overall_note": null,
   "suivi": {
    "suivi_actif": true,
-   "dernier_chapitre_paru": 43,
+   "dernier_chapitre_paru": 42,
    "derniere_verification": "2026-09-06T18:23:54.738Z",
    "ntfy_topic": null,
    "source_used": "scan_url",
-   "last_notified_chapter": 43,
+   "last_notified_chapter": 42,
    "dernier_chapitre_notifie": 43
   },
   "suivi_anime": {
