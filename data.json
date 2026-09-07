@@ -4653,9 +4653,9 @@
   "lang": "vo",
   "fmt": "serie",
   "anime_url": "https://anime-sama.fr/catalogue/hokkaido-gals-are-super-adorable/",
-  "scan_url": "",
+  "scan_url": "https://comix.to/title/1y5ee-hokkaido-gals-are-super-adorable",
   "anime_status": "fini",
-  "manga_status": null,
+  "manga_status": "a_lire",
   "anime_seasons": [
    {
     "label": "Anime",
@@ -4689,7 +4689,8 @@
    "last_notified_episode": null,
    "last_check": null,
    "ntfy_topic": null
-  }
+  },
+  "anime_overall_note": null
  },
  {
   "id": "imp-101-shikimori-san",
