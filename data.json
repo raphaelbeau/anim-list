@@ -5302,9 +5302,9 @@
   "lang": "vf",
   "fmt": "serie",
   "anime_url": "https://anime-sama.fr/catalogue/love-after-world-domination/",
-  "scan_url": "",
+  "scan_url": "https://comix.to/title/73l2-love-after-world-domination",
   "anime_status": "fini",
-  "manga_status": null,
+  "manga_status": "a_lire",
   "anime_seasons": [
    {
     "label": "Anime",
@@ -5338,7 +5338,8 @@
    "last_notified_episode": null,
    "last_check": null,
    "ntfy_topic": null
-  }
+  },
+  "anime_overall_note": null
  },
  {
   "id": "imp-116-my-wife-has-no-emotion",
