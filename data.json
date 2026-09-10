@@ -7554,5 +7554,32 @@
    "last_check": null,
    "ntfy_topic": null
   }
+ },
+ {
+  "id": "e-mtw5hmp2u26d9",
+  "title": "code geass",
+  "nickname": "",
+  "genre": "autre",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "lang": "vf",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.to/catalogue/code-geass/",
+  "scan_url": "",
+  "progress_episode": "",
+  "progress_chapter": "",
+  "sequel_date": "",
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "anime_overall_note": null,
+  "manga": {
+   "note": null,
+   "comment": ""
+  }
  }
 ]
