@@ -7608,5 +7608,32 @@
    "note": null,
    "comment": ""
   }
+ },
+ {
+  "id": "e-mtw5jel6p8io9",
+  "title": "fire force",
+  "nickname": "",
+  "genre": "autre",
+  "anime_status": "a_voir",
+  "manga_status": "a_lire",
+  "lang": "vf",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.to/catalogue/fire-force/",
+  "scan_url": "https://anime-sama.to/catalogue/fire-force/",
+  "progress_episode": "",
+  "progress_chapter": "",
+  "sequel_date": "",
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "anime_overall_note": null,
+  "manga": {
+   "note": null,
+   "comment": ""
+  }
  }
 ]
