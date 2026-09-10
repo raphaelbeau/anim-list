@@ -7581,5 +7581,32 @@
    "note": null,
    "comment": ""
   }
+ },
+ {
+  "id": "e-mtw5ii8sv33e7",
+  "title": "black clover",
+  "nickname": "",
+  "genre": "autre",
+  "anime_status": null,
+  "manga_status": null,
+  "lang": "vf",
+  "fmt": "serie",
+  "anime_url": "https://anime-sama.to/catalogue/black-clover/",
+  "scan_url": "",
+  "progress_episode": "",
+  "progress_chapter": "",
+  "sequel_date": "",
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "anime_overall_note": null,
+  "manga": {
+   "note": null,
+   "comment": ""
+  }
  }
 ]
