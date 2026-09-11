@@ -122,7 +122,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 236,
-   "derniere_verification": "2026-09-11T00:17:23.887Z",
+   "derniere_verification": "2026-09-10T22:01:51.305Z",
    "ntfy_topic": null,
    "source_used": "mangadex_fr",
    "mangadex_id": "87ffa375-bd2c-49ba-ba0c-6d78ea07c342",
@@ -173,7 +173,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 199,
-   "derniere_verification": "2026-09-11T00:17:24.844Z",
+   "derniere_verification": "2026-09-10T22:01:52.230Z",
    "ntfy_topic": null,
    "source_used": "mangadex_en",
    "last_notified_chapter": 199,
@@ -270,7 +270,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 1192,
-   "derniere_verification": "2026-09-11T00:17:25.174Z",
+   "derniere_verification": "2026-09-10T22:01:52.558Z",
    "ntfy_topic": null,
    "source_used": "mangadex_fr",
    "last_notified_chapter": 1192,
@@ -553,7 +553,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 63,
-   "derniere_verification": "2026-09-11T00:17:25.520Z",
+   "derniere_verification": "2026-09-10T22:01:52.871Z",
    "ntfy_topic": null,
    "source_used": "scan_url",
    "last_notified_chapter": 63,
@@ -3067,13 +3067,13 @@
   "fmt": "serie",
   "anime_url": "https://anime-sama.to/catalogue/otaku-ni-yasashii-gal-wa-inai/",
   "scan_url": "",
-  "anime_status": "en_cours",
+  "anime_status": "fini",
   "manga_status": null,
   "anime_seasons": [
    {
     "label": "Anime",
-    "note": null,
-    "comment": ""
+    "note": 7,
+    "comment": "Sympa. - triangle + marrant et principe cool sur l'otaku"
    }
   ],
   "manga": {
@@ -3082,7 +3082,7 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": "9",
+  "progress_episode": "",
   "suivi": {
    "suivi_actif": false,
    "dernier_chapitre_paru": null,
@@ -4061,7 +4061,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 43,
-   "derniere_verification": "2026-09-11T00:17:26.323Z",
+   "derniere_verification": "2026-09-10T22:01:53.627Z",
    "ntfy_topic": null,
    "source_used": "scan_url",
    "last_notified_chapter": 43,
@@ -7150,7 +7150,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 41,
-   "derniere_verification": "2026-09-11T00:17:27.039Z",
+   "derniere_verification": "2026-09-10T22:01:54.466Z",
    "ntfy_topic": null,
    "source_used": "mangadex_en",
    "last_notified_chapter": 41,
@@ -7201,7 +7201,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 85,
-   "derniere_verification": "2026-09-11T00:17:27.465Z",
+   "derniere_verification": "2026-09-10T22:01:54.856Z",
    "ntfy_topic": null,
    "source_used": "mangadex_fr",
    "last_notified_chapter": 85,
@@ -7580,6 +7580,26 @@
   "manga": {
    "note": null,
    "comment": ""
+  },
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "notification_mode": "disabled",
+   "anilist_id": null,
+   "current_season": null,
+   "episodes_released": null,
+   "episodes_total": null,
+   "next_episode_number": null,
+   "next_episode_date": null,
+   "season_status": null,
+   "last_notified_season": null,
+   "last_notified_episode": null,
+   "last_check": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -7607,6 +7627,26 @@
   "manga": {
    "note": null,
    "comment": ""
+  },
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "notification_mode": "disabled",
+   "anilist_id": null,
+   "current_season": null,
+   "episodes_released": null,
+   "episodes_total": null,
+   "next_episode_number": null,
+   "next_episode_date": null,
+   "season_status": null,
+   "last_notified_season": null,
+   "last_notified_episode": null,
+   "last_check": null,
+   "ntfy_topic": null
   }
  },
  {
@@ -7634,6 +7674,26 @@
   "manga": {
    "note": null,
    "comment": ""
+  },
+  "suivi": {
+   "suivi_actif": false,
+   "dernier_chapitre_paru": null,
+   "derniere_verification": null,
+   "ntfy_topic": null
+  },
+  "suivi_anime": {
+   "notification_mode": "disabled",
+   "anilist_id": null,
+   "current_season": null,
+   "episodes_released": null,
+   "episodes_total": null,
+   "next_episode_number": null,
+   "next_episode_date": null,
+   "season_status": null,
+   "last_notified_season": null,
+   "last_notified_episode": null,
+   "last_check": null,
+   "ntfy_topic": null
   }
  }
 ]
