@@ -2973,9 +2973,9 @@
   "lang": "vo",
   "fmt": "serie",
   "anime_url": "https://v6.voiranime.com/anime/please-put-them-on-takamine-san/",
-  "scan_url": "",
-  "anime_status": "a_voir",
-  "manga_status": null,
+  "scan_url": "https://m.scan-manga.com/6136/Haite-Kudasai-Takamine-San.html",
+  "anime_status": null,
+  "manga_status": "a_lire",
   "anime_seasons": [
    {
     "label": "Anime",
