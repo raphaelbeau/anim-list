@@ -122,7 +122,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 236,
-   "derniere_verification": "2026-09-14T18:47:32.383Z",
+   "derniere_verification": "2026-09-14T13:27:36.169Z",
    "ntfy_topic": null,
    "source_used": "mangadex_fr",
    "mangadex_id": "87ffa375-bd2c-49ba-ba0c-6d78ea07c342",
@@ -173,7 +173,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 199,
-   "derniere_verification": "2026-09-14T18:47:33.068Z",
+   "derniere_verification": "2026-09-14T13:27:36.865Z",
    "ntfy_topic": null,
    "source_used": "mangadex_en",
    "last_notified_chapter": 199,
@@ -270,7 +270,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 1193,
-   "derniere_verification": "2026-09-14T18:47:33.656Z",
+   "derniere_verification": "2026-09-14T13:27:37.181Z",
    "ntfy_topic": null,
    "source_used": "mangadex_fr",
    "last_notified_chapter": 1193,
@@ -553,7 +553,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 63,
-   "derniere_verification": "2026-09-14T18:47:34.328Z",
+   "derniere_verification": "2026-09-14T13:27:37.679Z",
    "ntfy_topic": null,
    "source_used": "scan_url",
    "last_notified_chapter": 63,
@@ -570,7 +570,7 @@
    "season_status": "RELEASING",
    "last_notified_season": null,
    "last_notified_episode": null,
-   "last_check": "2026-09-14T18:47:38.299Z",
+   "last_check": "2026-09-14T13:27:40.776Z",
    "ntfy_topic": null
   }
  },
@@ -810,7 +810,7 @@
    "season_status": "RELEASING",
    "last_notified_season": 1,
    "last_notified_episode": null,
-   "last_check": "2026-09-14T18:47:38.540Z",
+   "last_check": "2026-09-14T13:27:41.002Z",
    "ntfy_topic": null
   }
  },
@@ -3205,7 +3205,7 @@
   "lang": "vo",
   "fmt": "serie",
   "anime_url": "https://anime-sama.to/catalogue/aishiteru-game-wo-owarasetai/",
-  "scan_url": "https://bigsolo.org/manga/i-want-to-end-this-love-game/1/1",
+  "scan_url": "https://bigsolo.org/manga/i-want-to-end-this-love-game",
   "anime_status": "fini",
   "manga_status": "en_cours",
   "anime_seasons": [
@@ -3226,7 +3226,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 5,
-   "derniere_verification": "2026-09-14T18:47:36.484Z",
+   "derniere_verification": "2026-09-14T13:27:38.628Z",
    "ntfy_topic": null,
    "source_used": "mangadex_en",
    "mangadex_id": "b5ceba59-69c4-4cd7-b866-e26c6f6c512a",
@@ -4065,7 +4065,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 43,
-   "derniere_verification": "2026-09-14T18:47:36.766Z",
+   "derniere_verification": "2026-09-14T13:27:38.949Z",
    "ntfy_topic": null,
    "source_used": "scan_url",
    "last_notified_chapter": 43,
@@ -5309,7 +5309,7 @@
   "anime_url": "https://anime-sama.fr/catalogue/love-after-world-domination/",
   "scan_url": "https://comix.to/title/73l2-love-after-world-domination",
   "anime_status": "fini",
-  "manga_status": "fini",
+  "manga_status": "a_lire",
   "anime_seasons": [
    {
     "label": "Anime",
@@ -5318,8 +5318,8 @@
    }
   ],
   "manga": {
-   "note": 8,
-   "comment": "Très bien marrant mignon.\nBonne fin, et effectivement, ils s'assument."
+   "note": null,
+   "comment": ""
   },
   "sequel_date": "",
   "progress_chapter": "",
@@ -6604,7 +6604,7 @@
    "season_status": "RELEASING",
    "last_notified_season": null,
    "last_notified_episode": null,
-   "last_check": "2026-09-14T18:47:38.679Z",
+   "last_check": "2026-09-14T13:27:41.101Z",
    "ntfy_topic": null
   }
  },
@@ -6933,7 +6933,7 @@
    "season_status": "RELEASING",
    "last_notified_season": null,
    "last_notified_episode": null,
-   "last_check": "2026-09-14T18:47:38.809Z",
+   "last_check": "2026-09-14T13:27:41.210Z",
    "ntfy_topic": null
   }
  },
@@ -6973,14 +6973,14 @@
    "notification_mode": "season_complete",
    "anilist_id": 169583,
    "current_season": 1,
-   "episodes_released": 11,
+   "episodes_released": 10,
    "episodes_total": 12,
-   "next_episode_number": 12,
-   "next_episode_date": "2026-09-21T14:30:00.000Z",
+   "next_episode_number": 11,
+   "next_episode_date": "2026-09-14T14:30:00.000Z",
    "season_status": "RELEASING",
    "last_notified_season": null,
    "last_notified_episode": 9,
-   "last_check": "2026-09-14T18:47:38.957Z",
+   "last_check": "2026-09-14T13:27:41.311Z",
    "ntfy_topic": null
   }
  },
@@ -7154,7 +7154,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 41,
-   "derniere_verification": "2026-09-14T18:47:37.535Z",
+   "derniere_verification": "2026-09-14T13:27:39.794Z",
    "ntfy_topic": null,
    "source_used": "mangadex_en",
    "last_notified_chapter": 41,
@@ -7205,7 +7205,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 85,
-   "derniere_verification": "2026-09-14T18:47:37.990Z",
+   "derniere_verification": "2026-09-14T13:27:40.183Z",
    "ntfy_topic": null,
    "source_used": "mangadex_fr",
    "last_notified_chapter": 85,
