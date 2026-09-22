@@ -3064,53 +3064,6 @@
   }
  },
  {
-  "id": "imp-65-are-there-no-gals-who-are-kind-to-otaku",
-  "title": "Otaku ni Yasashii Gal wa Inai!?",
-  "nickname": "",
-  "genre": "shojo",
-  "lang": "vo",
-  "fmt": "serie",
-  "anime_url": "https://anime-sama.to/catalogue/otaku-ni-yasashii-gal-wa-inai/",
-  "scan_url": "",
-  "anime_status": "fini",
-  "manga_status": null,
-  "anime_seasons": [
-   {
-    "label": "Anime",
-    "note": 7,
-    "comment": "Sympa. - triangle + marrant et principe cool sur l'otaku"
-   }
-  ],
-  "manga": {
-   "note": null,
-   "comment": ""
-  },
-  "sequel_date": "",
-  "progress_chapter": "",
-  "progress_episode": "",
-  "suivi": {
-   "suivi_actif": false,
-   "dernier_chapitre_paru": null,
-   "derniere_verification": null,
-   "ntfy_topic": null
-  },
-  "suivi_anime": {
-   "notification_mode": "disabled",
-   "anilist_id": null,
-   "current_season": null,
-   "episodes_released": null,
-   "episodes_total": null,
-   "next_episode_number": null,
-   "next_episode_date": null,
-   "season_status": null,
-   "last_notified_season": null,
-   "last_notified_episode": null,
-   "last_check": null,
-   "ntfy_topic": null
-  },
-  "anime_overall_note": null
- },
- {
   "id": "imp-66-mayonaka-heart-tune",
   "title": "mayonaka heart tune",
   "nickname": "",
