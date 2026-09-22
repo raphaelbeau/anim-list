@@ -121,13 +121,13 @@
   "anime_overall_note": null,
   "suivi": {
    "suivi_actif": true,
-   "dernier_chapitre_paru": 237,
-   "derniere_verification": "2026-09-22T17:05:57.757Z",
+   "dernier_chapitre_paru": 236,
+   "derniere_verification": "2026-09-22T06:59:05.200Z",
    "ntfy_topic": null,
    "source_used": "mangadex_fr",
    "mangadex_id": "87ffa375-bd2c-49ba-ba0c-6d78ea07c342",
-   "last_notified_chapter": 237,
-   "dernier_chapitre_notifie": 237
+   "last_notified_chapter": 236,
+   "dernier_chapitre_notifie": 236
   },
   "suivi_anime": {
    "notification_mode": "disabled",
@@ -173,7 +173,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 199,
-   "derniere_verification": "2026-09-22T17:05:59.082Z",
+   "derniere_verification": "2026-09-22T06:59:06.013Z",
    "ntfy_topic": null,
    "source_used": "mangadex_en",
    "last_notified_chapter": 199,
@@ -270,7 +270,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 1193,
-   "derniere_verification": "2026-09-22T17:05:59.350Z",
+   "derniere_verification": "2026-09-22T06:59:06.366Z",
    "ntfy_topic": null,
    "source_used": "mangadex_fr",
    "last_notified_chapter": 1193,
@@ -570,7 +570,7 @@
    "season_status": "RELEASING",
    "last_notified_season": null,
    "last_notified_episode": null,
-   "last_check": "2026-09-22T17:06:02.605Z",
+   "last_check": "2026-09-22T06:59:09.688Z",
    "ntfy_topic": null
   }
  },
@@ -810,7 +810,7 @@
    "season_status": "RELEASING",
    "last_notified_season": 1,
    "last_notified_episode": null,
-   "last_check": "2026-09-22T17:06:02.911Z",
+   "last_check": "2026-09-22T06:59:09.860Z",
    "ntfy_topic": null
   }
  },
@@ -3231,7 +3231,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 5,
-   "derniere_verification": "2026-09-22T17:06:00.641Z",
+   "derniere_verification": "2026-09-22T06:59:07.551Z",
    "ntfy_topic": null,
    "source_used": "mangadex_en",
    "mangadex_id": "b5ceba59-69c4-4cd7-b866-e26c6f6c512a",
@@ -6614,7 +6614,7 @@
    "season_status": "FINISHED",
    "last_notified_season": 1,
    "last_notified_episode": null,
-   "last_check": "2026-09-22T17:06:03.071Z",
+   "last_check": "2026-09-22T06:59:09.930Z",
    "ntfy_topic": null
   }
  },
@@ -6943,7 +6943,7 @@
    "season_status": "RELEASING",
    "last_notified_season": null,
    "last_notified_episode": null,
-   "last_check": "2026-09-22T17:06:03.225Z",
+   "last_check": "2026-09-22T06:59:10.008Z",
    "ntfy_topic": null
   }
  },
@@ -6958,14 +6958,14 @@
   "fmt": null,
   "anime_url": "https://anime-sama.to/catalogue/oh-boy-was-i-wrong-about-her/",
   "scan_url": "",
-  "progress_episode": "8",
+  "progress_episode": "",
   "progress_chapter": "",
-  "sequel_date": "Att fin",
+  "sequel_date": "",
   "anime_seasons": [
    {
     "label": "Anime",
-    "note": null,
-    "comment": ""
+    "note": 6.5,
+    "comment": "Il se passe pas grand chose\nLe principe est cool mais on l'oublie vite. Le fait que ca soit en fait une fille est accepter facilement et rien ne découle très dommage. Et puis ca avance pas trop"
    }
   ],
   "anime_overall_note": null,
@@ -6990,7 +6990,7 @@
    "season_status": "FINISHED",
    "last_notified_season": 1,
    "last_notified_episode": 9,
-   "last_check": "2026-09-22T17:06:03.378Z",
+   "last_check": "2026-09-22T06:59:10.073Z",
    "ntfy_topic": null
   }
  },
@@ -7164,7 +7164,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 41,
-   "derniere_verification": "2026-09-22T17:06:01.985Z",
+   "derniere_verification": "2026-09-22T06:59:08.719Z",
    "ntfy_topic": null,
    "source_used": "mangadex_en",
    "last_notified_chapter": 41,
@@ -7215,7 +7215,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 86,
-   "derniere_verification": "2026-09-22T17:06:02.284Z",
+   "derniere_verification": "2026-09-22T06:59:09.254Z",
    "ntfy_topic": null,
    "source_used": "mangadex_fr",
    "last_notified_chapter": 86,
