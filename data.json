@@ -3633,8 +3633,8 @@
   "fmt": "serie",
   "anime_url": "https://v5.voiranime.com/anime/kaguya-sama-wa-kokurasetai-tensai-tachi-no-renai-zunousen-vf/",
   "scan_url": "",
-  "anime_status": "a_voir",
-  "manga_status": "att_suite",
+  "anime_status": "att_suite",
+  "manga_status": "fini",
   "anime_seasons": [
    {
     "label": "Anime",
@@ -3653,7 +3653,7 @@
   },
   "sequel_date": "",
   "progress_chapter": "",
-  "progress_episode": "film",
+  "progress_episode": "",
   "anime_overall_note": null,
   "suivi": {
    "suivi_actif": false,
