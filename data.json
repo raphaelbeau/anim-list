@@ -122,7 +122,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 238,
-   "derniere_verification": "2026-09-29T06:22:25.877Z",
+   "derniere_verification": "2026-09-28T14:14:55.291Z",
    "ntfy_topic": null,
    "source_used": "mangadex_fr",
    "mangadex_id": "87ffa375-bd2c-49ba-ba0c-6d78ea07c342",
@@ -173,7 +173,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 199,
-   "derniere_verification": "2026-09-29T06:22:27.025Z",
+   "derniere_verification": "2026-09-28T14:14:55.819Z",
    "ntfy_topic": null,
    "source_used": "mangadex_en",
    "last_notified_chapter": 199,
@@ -264,13 +264,13 @@
    "comment": ""
   },
   "sequel_date": "",
-  "progress_chapter": "1194",
+  "progress_chapter": "1191",
   "progress_episode": "",
   "anime_overall_note": null,
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 1194,
-   "derniere_verification": "2026-09-29T06:22:27.496Z",
+   "derniere_verification": "2026-09-28T14:14:56.162Z",
    "ntfy_topic": null,
    "source_used": "mangadex_fr",
    "last_notified_chapter": 1194,
@@ -575,7 +575,7 @@
    "season_status": "FINISHED",
    "last_notified_season": 1,
    "last_notified_episode": null,
-   "last_check": "2026-09-29T06:22:32.308Z",
+   "last_check": "2026-09-28T14:14:59.425Z",
    "ntfy_topic": null
   }
  },
@@ -815,7 +815,7 @@
    "season_status": "RELEASING",
    "last_notified_season": 1,
    "last_notified_episode": null,
-   "last_check": "2026-09-29T06:22:33.067Z",
+   "last_check": "2026-09-28T14:14:59.630Z",
    "ntfy_topic": null
   }
  },
@@ -3189,7 +3189,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 5,
-   "derniere_verification": "2026-09-29T06:22:29.568Z",
+   "derniere_verification": "2026-09-28T14:14:57.417Z",
    "ntfy_topic": null,
    "source_used": "mangadex_en",
    "mangadex_id": "b5ceba59-69c4-4cd7-b866-e26c6f6c512a",
@@ -6572,7 +6572,7 @@
    "season_status": "FINISHED",
    "last_notified_season": 1,
    "last_notified_episode": null,
-   "last_check": "2026-09-29T06:22:33.477Z",
+   "last_check": "2026-09-28T14:14:59.716Z",
    "ntfy_topic": null
   }
  },
@@ -6822,17 +6822,12 @@
   "fmt": null,
   "anime_url": "",
   "scan_url": "",
-  "progress_episode": "s8ep3",
+  "progress_episode": "s5ep5",
   "progress_chapter": "",
   "sequel_date": "",
   "anime_seasons": [
    {
     "label": "Anime",
-    "note": null,
-    "comment": ""
-   },
-   {
-    "label": "S2",
     "note": null,
     "comment": ""
    }
@@ -6874,7 +6869,7 @@
   "fmt": null,
   "anime_url": "https://anime-sama.to/catalogue/hanaori-san-still-wants-to-fight-in-the-next-life/",
   "scan_url": "",
-  "progress_episode": "att fin",
+  "progress_episode": "2",
   "progress_chapter": "",
   "sequel_date": "",
   "anime_seasons": [
@@ -6906,7 +6901,7 @@
    "season_status": "FINISHED",
    "last_notified_season": 1,
    "last_notified_episode": null,
-   "last_check": "2026-09-29T06:22:33.881Z",
+   "last_check": "2026-09-28T14:14:59.799Z",
    "ntfy_topic": null
   }
  },
@@ -6953,7 +6948,7 @@
    "season_status": "FINISHED",
    "last_notified_season": 1,
    "last_notified_episode": 9,
-   "last_check": "2026-09-29T06:22:34.287Z",
+   "last_check": "2026-09-28T14:14:59.878Z",
    "ntfy_topic": null
   }
  },
@@ -7110,7 +7105,7 @@
   "anime_url": "",
   "scan_url": "https://mangadex.org/title/c4ca02fb-8378-433b-8049-fbbea5d25cba/haimiya-senpai-wa-kowakute-kawaii",
   "progress_episode": "",
-  "progress_chapter": "41",
+  "progress_chapter": "42",
   "sequel_date": "",
   "anime_seasons": [
    {
@@ -7127,7 +7122,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 42,
-   "derniere_verification": "2026-09-29T06:22:31.226Z",
+   "derniere_verification": "2026-09-28T14:14:58.589Z",
    "ntfy_topic": null,
    "source_used": "mangadex_en",
    "last_notified_chapter": 42,
@@ -7178,7 +7173,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 86,
-   "derniere_verification": "2026-09-29T06:22:31.798Z",
+   "derniere_verification": "2026-09-28T14:14:59.000Z",
    "ntfy_topic": null,
    "source_used": "mangadex_fr",
    "last_notified_chapter": 86,
@@ -7396,7 +7391,7 @@
   "title": "nichijou",
   "nickname": "",
   "genre": "autre",
-  "anime_status": "a_voir",
+  "anime_status": "en_cours",
   "manga_status": null,
   "lang": "vo",
   "fmt": "serie",
