@@ -7667,32 +7667,5 @@
    "last_check": null,
    "ntfy_topic": null
   }
- },
- {
-  "id": "e-muqxsavwv9x34",
-  "title": "net-juu no susume",
-  "nickname": "recovery of an mmo junkie",
-  "genre": "shojo",
-  "anime_status": null,
-  "manga_status": null,
-  "lang": null,
-  "fmt": null,
-  "anime_url": "https://anime-sama.to/catalogue/recovery-of-an-mmo-junkie/",
-  "scan_url": "",
-  "progress_episode": "",
-  "progress_chapter": "",
-  "sequel_date": "",
-  "anime_seasons": [
-   {
-    "label": "Anime",
-    "note": null,
-    "comment": ""
-   }
-  ],
-  "anime_overall_note": null,
-  "manga": {
-   "note": null,
-   "comment": ""
-  }
  }
 ]
