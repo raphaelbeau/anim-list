@@ -122,7 +122,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 239,
-   "derniere_verification": "2026-10-02T07:08:02.889Z",
+   "derniere_verification": "2026-10-02T13:58:34.146Z",
    "ntfy_topic": null,
    "source_used": "mangadex_fr",
    "mangadex_id": "87ffa375-bd2c-49ba-ba0c-6d78ea07c342",
@@ -173,7 +173,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 199,
-   "derniere_verification": "2026-10-02T07:08:03.497Z",
+   "derniere_verification": "2026-10-02T13:58:34.864Z",
    "ntfy_topic": null,
    "source_used": "mangadex_en",
    "last_notified_chapter": 199,
@@ -270,7 +270,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 1194,
-   "derniere_verification": "2026-10-02T07:08:03.840Z",
+   "derniere_verification": "2026-10-02T13:58:35.118Z",
    "ntfy_topic": null,
    "source_used": "mangadex_fr",
    "last_notified_chapter": 1194,
@@ -575,7 +575,7 @@
    "season_status": "FINISHED",
    "last_notified_season": 1,
    "last_notified_episode": null,
-   "last_check": "2026-10-02T07:08:07.066Z",
+   "last_check": "2026-10-02T13:58:38.250Z",
    "ntfy_topic": null
   }
  },
@@ -815,7 +815,7 @@
    "season_status": "RELEASING",
    "last_notified_season": 1,
    "last_notified_episode": null,
-   "last_check": "2026-10-02T07:08:07.232Z",
+   "last_check": "2026-10-02T13:58:38.460Z",
    "ntfy_topic": null
   }
  },
@@ -3189,7 +3189,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 5,
-   "derniere_verification": "2026-10-02T07:08:05.137Z",
+   "derniere_verification": "2026-10-02T13:58:36.544Z",
    "ntfy_topic": null,
    "source_used": "mangadex_en",
    "mangadex_id": "b5ceba59-69c4-4cd7-b866-e26c6f6c512a",
@@ -6572,7 +6572,7 @@
    "season_status": "FINISHED",
    "last_notified_season": 1,
    "last_notified_episode": null,
-   "last_check": "2026-10-02T07:08:07.306Z",
+   "last_check": "2026-10-02T13:58:38.596Z",
    "ntfy_topic": null
   }
  },
@@ -6901,7 +6901,7 @@
    "season_status": "FINISHED",
    "last_notified_season": 1,
    "last_notified_episode": null,
-   "last_check": "2026-10-02T07:08:07.379Z",
+   "last_check": "2026-10-02T13:58:38.719Z",
    "ntfy_topic": null
   }
  },
@@ -6948,7 +6948,7 @@
    "season_status": "FINISHED",
    "last_notified_season": 1,
    "last_notified_episode": 9,
-   "last_check": "2026-10-02T07:08:07.447Z",
+   "last_check": "2026-10-02T13:58:38.853Z",
    "ntfy_topic": null
   }
  },
@@ -7122,7 +7122,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 43,
-   "derniere_verification": "2026-10-02T07:08:06.302Z",
+   "derniere_verification": "2026-10-02T13:58:37.609Z",
    "ntfy_topic": null,
    "source_used": "mangadex_en",
    "last_notified_chapter": 43,
@@ -7173,7 +7173,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 87,
-   "derniere_verification": "2026-10-02T07:08:06.660Z",
+   "derniere_verification": "2026-10-02T13:58:37.901Z",
    "ntfy_topic": null,
    "source_used": "mangadex_fr",
    "last_notified_chapter": 87,
