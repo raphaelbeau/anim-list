@@ -1020,14 +1020,14 @@
   "lang": "vf",
   "fmt": "serie",
   "anime_url": "https://v5.voiranime.com/anime/alya-sometimes-hides-her-feelings-in-russian-vf/",
-  "scan_url": "",
+  "scan_url": "https://anime-sama.to/catalogue/roshidere/scan/vf/",
   "anime_status": "att_suite",
-  "manga_status": null,
+  "manga_status": "en_cours",
   "anime_seasons": [
    {
     "label": "Anime",
     "note": 8,
-    "comment": "tres bon debut, marrant efficace. La saison deux a beaucoup de potentiel (suite 2026)"
+    "comment": "tres bon debut, marrant efficace. La saison deux a beaucoup de potentiel"
    }
   ],
   "manga": {
@@ -1035,7 +1035,7 @@
    "comment": ""
   },
   "sequel_date": "suite 2027",
-  "progress_chapter": "",
+  "progress_chapter": "23",
   "progress_episode": "S2",
   "anime_overall_note": null,
   "suivi": {
