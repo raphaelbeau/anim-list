@@ -122,7 +122,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 239,
-   "derniere_verification": "2026-10-04T18:17:13.492Z",
+   "derniere_verification": "2026-10-04T08:37:00.044Z",
    "ntfy_topic": null,
    "source_used": "mangadex_fr",
    "mangadex_id": "87ffa375-bd2c-49ba-ba0c-6d78ea07c342",
@@ -173,7 +173,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 199,
-   "derniere_verification": "2026-10-04T18:17:14.176Z",
+   "derniere_verification": "2026-10-04T08:37:00.555Z",
    "ntfy_topic": null,
    "source_used": "mangadex_en",
    "last_notified_chapter": 199,
@@ -270,7 +270,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 1194,
-   "derniere_verification": "2026-10-04T18:17:14.498Z",
+   "derniere_verification": "2026-10-04T08:37:00.886Z",
    "ntfy_topic": null,
    "source_used": "mangadex_fr",
    "last_notified_chapter": 1194,
@@ -575,7 +575,7 @@
    "season_status": "FINISHED",
    "last_notified_season": 1,
    "last_notified_episode": null,
-   "last_check": "2026-10-04T18:17:17.761Z",
+   "last_check": "2026-10-04T08:37:04.341Z",
    "ntfy_topic": null
   }
  },
@@ -780,8 +780,8 @@
   "lang": "vo",
   "fmt": "serie",
   "anime_url": "https://anime-sama.to/catalogue/seihantai-na-kimi-to-boku/saison1/vostfr/",
-  "scan_url": "",
-  "anime_status": "fini",
+  "scan_url": "https://comix.to/title/jd6wv-you-and-i-are-polar-opposites/5616323-chapter-1",
+  "anime_status": "a_voir",
   "manga_status": null,
   "anime_seasons": [
    {
@@ -792,14 +792,14 @@
    {
     "label": "S2",
     "note": 9,
-    "comment": "Toujours aussi drole et agreable.\nOn gagne en profondeur sur les couples. Ca avance tres bien. En deux saison on a tout le manga. (Bon y'a des elipses). J'aurai prefere que le dernier side couple se concretise mais j'ai pas l'impression que ca arrivera un jour... dommage"
+    "comment": "Bonne approfondissement. Toujours aussi bien, marrant.\nPas mal de side couple donc j'aime beaucoup."
    }
   ],
   "manga": {
    "note": null,
    "comment": ""
   },
-  "sequel_date": "att fin",
+  "sequel_date": "",
   "progress_chapter": "",
   "progress_episode": "",
   "anime_overall_note": null,
@@ -820,7 +820,7 @@
    "season_status": "FINISHED",
    "last_notified_season": 3,
    "last_notified_episode": null,
-   "last_check": "2026-10-04T18:17:17.935Z",
+   "last_check": "2026-10-04T08:37:04.487Z",
    "ntfy_topic": null
   }
  },
@@ -3194,7 +3194,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 5,
-   "derniere_verification": "2026-10-04T18:17:15.831Z",
+   "derniere_verification": "2026-10-04T08:37:02.384Z",
    "ntfy_topic": null,
    "source_used": "mangadex_en",
    "mangadex_id": "b5ceba59-69c4-4cd7-b866-e26c6f6c512a",
@@ -6577,7 +6577,7 @@
    "season_status": "FINISHED",
    "last_notified_season": 1,
    "last_notified_episode": null,
-   "last_check": "2026-10-04T18:17:18.013Z",
+   "last_check": "2026-10-04T08:37:04.555Z",
    "ntfy_topic": null
   }
  },
@@ -6906,7 +6906,7 @@
    "season_status": "FINISHED",
    "last_notified_season": 1,
    "last_notified_episode": null,
-   "last_check": "2026-10-04T18:17:18.100Z",
+   "last_check": "2026-10-04T08:37:04.633Z",
    "ntfy_topic": null
   }
  },
@@ -6953,7 +6953,7 @@
    "season_status": "FINISHED",
    "last_notified_season": 1,
    "last_notified_episode": 9,
-   "last_check": "2026-10-04T18:17:18.187Z",
+   "last_check": "2026-10-04T08:37:04.711Z",
    "ntfy_topic": null
   }
  },
@@ -7127,7 +7127,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 43,
-   "derniere_verification": "2026-10-04T18:17:16.988Z",
+   "derniere_verification": "2026-10-04T08:37:03.572Z",
    "ntfy_topic": null,
    "source_used": "mangadex_en",
    "last_notified_chapter": 43,
@@ -7178,7 +7178,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 87,
-   "derniere_verification": "2026-10-04T18:17:17.336Z",
+   "derniere_verification": "2026-10-04T08:37:03.925Z",
    "ntfy_topic": null,
    "source_used": "mangadex_fr",
    "last_notified_chapter": 87,
