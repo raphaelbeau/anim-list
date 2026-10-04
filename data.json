@@ -781,13 +781,18 @@
   "fmt": "serie",
   "anime_url": "https://anime-sama.to/catalogue/seihantai-na-kimi-to-boku/saison1/vostfr/",
   "scan_url": "",
-  "anime_status": "a_voir",
+  "anime_status": "fini",
   "manga_status": null,
   "anime_seasons": [
    {
     "label": "Anime",
     "note": 8,
     "comment": "trop bien, bon rythme, marrant de fou avance bien. manque de profondeur surtout sur la fin c dommage. saison suivante va être au panthéon"
+   },
+   {
+    "label": "S2",
+    "note": 9,
+    "comment": "Toujours aussi drole et agreable.\nOn gagne en profondeur sur les couples. Ca avance tres bien. En deux saison on a tout le manga. (Bon y'a des elipses). J'aurai prefere que le dernier side couple se concretise mais j'ai pas l'impression que ca arrivera un jour... dommage"
    }
   ],
   "manga": {
