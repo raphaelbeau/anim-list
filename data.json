@@ -7672,5 +7672,32 @@
    "last_check": null,
    "ntfy_topic": null
   }
+ },
+ {
+  "id": "e-mv2x39lmfabdu",
+  "title": "toriko",
+  "nickname": "",
+  "genre": "autre",
+  "anime_status": null,
+  "manga_status": "a_lire",
+  "lang": null,
+  "fmt": null,
+  "anime_url": "",
+  "scan_url": "https://sushiscan.net/catalogue/toriko/",
+  "progress_episode": "",
+  "progress_chapter": "",
+  "sequel_date": "",
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "anime_overall_note": null,
+  "manga": {
+   "note": null,
+   "comment": ""
+  }
  }
 ]
