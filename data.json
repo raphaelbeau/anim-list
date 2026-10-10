@@ -7490,8 +7490,8 @@
   "title": "solo leveling",
   "nickname": "",
   "genre": "autre",
-  "anime_status": "a_voir",
-  "manga_status": null,
+  "anime_status": "att_suite",
+  "manga_status": "a_lire",
   "lang": "vf",
   "fmt": "serie",
   "anime_url": "https://anime-sama.to/catalogue/solo-leveling/",
@@ -7502,8 +7502,8 @@
   "anime_seasons": [
    {
     "label": "Anime",
-    "note": null,
-    "comment": ""
+    "note": 8,
+    "comment": "très cool, super style, ca donne envi de lire"
    }
   ],
   "anime_overall_note": null,
