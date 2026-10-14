@@ -7719,5 +7719,32 @@
    "last_check": null,
    "ntfy_topic": null
   }
+ },
+ {
+  "id": "e-mv8nzf05a03lz",
+  "title": "Vinland saga",
+  "nickname": "",
+  "genre": "autre",
+  "anime_status": "a_voir",
+  "manga_status": null,
+  "lang": null,
+  "fmt": null,
+  "anime_url": "",
+  "scan_url": "",
+  "progress_episode": "",
+  "progress_chapter": "",
+  "sequel_date": "",
+  "anime_seasons": [
+   {
+    "label": "Anime",
+    "note": null,
+    "comment": ""
+   }
+  ],
+  "anime_overall_note": null,
+  "manga": {
+   "note": null,
+   "comment": ""
+  }
  }
 ]
