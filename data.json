@@ -121,13 +121,13 @@
   "anime_overall_note": null,
   "suivi": {
    "suivi_actif": true,
-   "dernier_chapitre_paru": 241,
-   "derniere_verification": "2026-10-21T19:26:52.652Z",
+   "dernier_chapitre_paru": 242,
+   "derniere_verification": "2026-10-21T22:33:29.569Z",
    "ntfy_topic": null,
    "source_used": "mangadex_fr",
    "mangadex_id": "87ffa375-bd2c-49ba-ba0c-6d78ea07c342",
-   "last_notified_chapter": 241,
-   "dernier_chapitre_notifie": 241
+   "last_notified_chapter": 242,
+   "dernier_chapitre_notifie": 242
   },
   "suivi_anime": {
    "notification_mode": "disabled",
@@ -173,7 +173,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 199,
-   "derniere_verification": "2026-10-21T19:26:53.593Z",
+   "derniere_verification": "2026-10-21T22:33:30.218Z",
    "ntfy_topic": null,
    "source_used": "mangadex_en",
    "last_notified_chapter": 199,
@@ -270,7 +270,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 1196,
-   "derniere_verification": "2026-10-21T19:26:53.913Z",
+   "derniere_verification": "2026-10-21T22:33:30.465Z",
    "ntfy_topic": null,
    "source_used": "mangadex_en",
    "last_notified_chapter": 1196,
@@ -3194,7 +3194,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 5,
-   "derniere_verification": "2026-10-21T19:26:54.984Z",
+   "derniere_verification": "2026-10-21T22:33:31.820Z",
    "ntfy_topic": null,
    "source_used": "mangadex_en",
    "mangadex_id": "b5ceba59-69c4-4cd7-b866-e26c6f6c512a",
@@ -7127,7 +7127,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 44,
-   "derniere_verification": "2026-10-21T19:26:56.293Z",
+   "derniere_verification": "2026-10-21T22:33:32.686Z",
    "ntfy_topic": null,
    "source_used": "mangadex_en",
    "last_notified_chapter": 44,
@@ -7178,7 +7178,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 87,
-   "derniere_verification": "2026-10-21T19:26:56.702Z",
+   "derniere_verification": "2026-10-21T22:33:32.953Z",
    "ntfy_topic": null,
    "source_used": "mangadex_fr",
    "last_notified_chapter": 87,
