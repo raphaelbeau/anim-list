@@ -122,7 +122,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 242,
-   "derniere_verification": "2026-10-21T22:33:29.569Z",
+   "derniere_verification": "2026-10-22T01:03:37.367Z",
    "ntfy_topic": null,
    "source_used": "mangadex_fr",
    "mangadex_id": "87ffa375-bd2c-49ba-ba0c-6d78ea07c342",
@@ -173,7 +173,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 199,
-   "derniere_verification": "2026-10-21T22:33:30.218Z",
+   "derniere_verification": "2026-10-22T01:03:37.976Z",
    "ntfy_topic": null,
    "source_used": "mangadex_en",
    "last_notified_chapter": 199,
@@ -270,7 +270,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 1196,
-   "derniere_verification": "2026-10-21T22:33:30.465Z",
+   "derniere_verification": "2026-10-22T01:03:38.311Z",
    "ntfy_topic": null,
    "source_used": "mangadex_en",
    "last_notified_chapter": 1196,
@@ -3194,7 +3194,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 5,
-   "derniere_verification": "2026-10-21T22:33:31.820Z",
+   "derniere_verification": "2026-10-22T01:03:39.718Z",
    "ntfy_topic": null,
    "source_used": "mangadex_en",
    "mangadex_id": "b5ceba59-69c4-4cd7-b866-e26c6f6c512a",
@@ -7126,12 +7126,12 @@
   },
   "suivi": {
    "suivi_actif": true,
-   "dernier_chapitre_paru": 44,
-   "derniere_verification": "2026-10-21T22:33:32.686Z",
+   "dernier_chapitre_paru": 45,
+   "derniere_verification": "2026-10-22T01:03:41.289Z",
    "ntfy_topic": null,
    "source_used": "mangadex_en",
-   "last_notified_chapter": 44,
-   "dernier_chapitre_notifie": 44,
+   "last_notified_chapter": 45,
+   "dernier_chapitre_notifie": 45,
    "mangadex_id": "c4ca02fb-8378-433b-8049-fbbea5d25cba"
   },
   "suivi_anime": {
@@ -7178,7 +7178,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": 87,
-   "derniere_verification": "2026-10-21T22:33:32.953Z",
+   "derniere_verification": "2026-10-22T01:03:41.648Z",
    "ntfy_topic": null,
    "source_used": "mangadex_fr",
    "last_notified_chapter": 87,
