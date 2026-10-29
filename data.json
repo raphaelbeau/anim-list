@@ -79,7 +79,7 @@
    "ntfy_topic": null
   },
   "suivi_anime": {
-   "notification_mode": "season_complete",
+   "notification_mode": "disabled",
    "anilist_id": 189123,
    "current_season": 3,
    "episodes_released": 4,
