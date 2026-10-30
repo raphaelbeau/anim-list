@@ -192,6 +192,7 @@ a{color:var(--neon-cyan);}
 }
 .sync-dot.ok{background:var(--good);box-shadow:0 0 6px var(--good);}
 .sync-dot.error{background:var(--danger);box-shadow:0 0 6px var(--danger);}
+.sync-dot.pending{background:var(--neon-amber);box-shadow:0 0 6px var(--neon-amber);}
 .sync-dot.syncing{background:var(--neon-cyan);box-shadow:0 0 6px var(--neon-cyan);animation:pulse-dot 1s infinite;}
 @keyframes pulse-dot{0%,100%{opacity:1;}50%{opacity:.3;}}
 
@@ -1007,6 +1008,7 @@ main{padding:24px 40px 60px;}
           <div class="gear-menu-title">OPTIONS</div>
           <button class="ghost-btn sync-btn" id="btnSync">🔗 SYNCHRO GITHUB</button>
           <div id="syncStatus" class="sync-status"></div>
+          <button class="ghost-btn sync-btn" id="btnPushNow">⬆ ENVOYER MAINTENANT</button>
           <button class="ghost-btn notif-btn" id="btnNotif">🔔 PARUTIONS</button>
         </div>
       </div>
@@ -1267,29 +1269,131 @@ async function pullFromGitHub(silent) {
   return true;
 }
 
-let pushDebounceTimer = null;
+/* ---------------- envoi différé vers GitHub ----------------
+   Chaque modification est enregistrée tout de suite en local (localStorage) et marque
+   les données comme "en attente d'envoi" (DIRTY_KEY, persistant : survit à la fermeture
+   de l'onglet / de l'appli). Un compteur (10 min par défaut, réglable) repart à zéro à
+   chaque nouvelle modification ; quand il arrive à 0, UN SEUL envoi regroupe tout.
+   Garde-fou : même si tu modifies sans arrêt, envoi forcé au bout de MAX_WAIT_MS.
+   Envoi immédiat possible via le bouton "ENVOYER MAINTENANT" (roue crantée). */
+const DIRTY_KEY = 'anime-db-sync-dirty';
+const DEFAULT_PUSH_DELAY_MIN = 10;
+const MAX_WAIT_MS = 30 * 60 * 1000;
+const RETRY_AFTER_ERROR_MS = 2 * 60 * 1000;
+
+function getDirty() {
+  try { const r = window.localStorage.getItem(DIRTY_KEY); return r ? JSON.parse(r) : null; } catch (e) { return null; }
+}
+function setDirty(v) {
+  try {
+    if (v) window.localStorage.setItem(DIRTY_KEY, JSON.stringify(v));
+    else window.localStorage.removeItem(DIRTY_KEY);
+  } catch (e) {}
+}
+function getPushDelayMs() {
+  const c = getSyncConfig();
+  const m = c && c.delay_min !== undefined && c.delay_min !== '' ? parseFloat(c.delay_min) : DEFAULT_PUSH_DELAY_MIN;
+  return Math.max(3000, (isNaN(m) ? DEFAULT_PUSH_DELAY_MIN : m) * 60000);
+}
+
+let pushTimer = null;
+let pushDueAt = null;
+
 function schedulePushToGitHub() {
   if (!isSyncConfigured()) return;
-  clearTimeout(pushDebounceTimer);
-  pushDebounceTimer = setTimeout(() => pushToGitHub(), 1500);
+  const now = Date.now();
+  const d = getDirty() || { since: now };
+  d.last = now;
+  setDirty(d);
+  const wait = Math.min(getPushDelayMs(), Math.max(1000, d.since + MAX_WAIT_MS - now));
+  clearTimeout(pushTimer);
+  pushDueAt = now + wait;
+  pushTimer = setTimeout(() => flushPush(), wait);
+  renderSyncStatus();
+}
+
+async function flushPush(manual) {
+  clearTimeout(pushTimer);
+  pushTimer = null;
+  pushDueAt = null;
+  if (!isSyncConfigured()) return false;
+  if (syncState.syncing) { // un envoi est déjà en cours : on repasse juste après
+    pushTimer = setTimeout(() => flushPush(manual), 3000);
+    return false;
+  }
+  const ok = await pushToGitHub(manual);
+  if (!ok && !pushTimer) { // échec : les données restent "en attente", nouvel essai automatique
+    pushDueAt = Date.now() + RETRY_AFTER_ERROR_MS;
+    pushTimer = setTimeout(() => flushPush(), RETRY_AFTER_ERROR_MS);
+    renderSyncStatus();
+  }
+  return ok;
+}
+
+/* Si l'Action GitHub (vérification des parutions) a mis à jour data.json pendant qu'on
+   attendait, on récupère ses champs de détection avant d'écraser le fichier, sinon on
+   les perdrait. Le reste (tes modifs) reste celui de l'appareil. */
+const MANGA_DETECTED_FIELDS = ['dernier_chapitre_paru', 'derniere_verification'];
+const ANIME_DETECTED_FIELDS = [
+  'anilist_id', 'current_season', 'episodes_released', 'episodes_total', 'next_episode_number',
+  'next_episode_date', 'season_status', 'last_notified_season', 'last_notified_episode', 'last_check',
+];
+function mergeRemoteDetections(local, remote) {
+  const byId = new Map(remote.map(r => [r.id, r]));
+  let changed = false;
+  local.forEach(e => {
+    const r = byId.get(e.id);
+    if (!r) return;
+    const take = (src, dst, fields) => {
+      fields.forEach(k => {
+        if (src[k] !== undefined && src[k] !== null && src[k] !== dst[k]) { dst[k] = src[k]; changed = true; }
+      });
+    };
+    if (r.suivi) { if (!e.suivi) e.suivi = {}; take(r.suivi, e.suivi, MANGA_DETECTED_FIELDS); }
+    if (r.suivi_anime) { if (!e.suivi_anime) e.suivi_anime = defaultSuiviAnime(); take(r.suivi_anime, e.suivi_anime, ANIME_DETECTED_FIELDS); }
+  });
+  return changed;
 }
 
 async function pushToGitHub(manual) {
   const cfg = getSyncConfig();
   if (!cfg) return false;
   syncState.syncing = true;
-  if (manual) renderSyncStatus();
-  const result = await githubPutFile(cfg, DATA, syncState.sha);
-  syncState.syncing = false;
-  if (result.error) {
-    syncState.lastError = result.error;
-    toast('⚠️ Sync GitHub : ' + result.error);
+  renderSyncStatus();
+  const startedAt = Date.now();
+  const fail = (msg) => {
+    syncState.syncing = false;
+    syncState.lastError = msg;
+    toast('⚠️ Sync GitHub : ' + msg + (getDirty() ? ' — tes modifs restent en attente' : ''));
     renderSyncStatus();
     return false;
+  };
+
+  // 1) état distant : on récupère le sha à jour (évite les conflits) et d'éventuelles maj de l'Action
+  const remote = await githubGetFile(cfg);
+  if (remote.error) return fail(remote.error);
+  let sha = null;
+  let mergedFromRemote = false;
+  if (!remote.notFound) {
+    sha = remote.sha;
+    if (sha !== syncState.sha && Array.isArray(remote.data)) {
+      mergedFromRemote = mergeRemoteDetections(DATA, remote.data);
+      if (mergedFromRemote) await storageSet(STORAGE_KEY, DATA);
+    }
   }
+
+  // 2) envoi
+  const result = await githubPutFile(cfg, DATA, sha);
+  syncState.syncing = false;
+  if (result.error) return fail(result.error);
+
   syncState.sha = result.sha;
   syncState.lastSync = Date.now();
   syncState.lastError = null;
+  // on ne vide le "en attente" que si rien n'a été modifié pendant l'envoi
+  const d = getDirty();
+  if (!d || d.last <= startedAt) setDirty(null);
+  if (mergedFromRemote) { renderNav(); render(); }
   renderSyncStatus();
   if (manual) toast('Synchronisé avec GitHub ✓');
   return true;
@@ -1430,7 +1534,14 @@ async function init() {
   if (!storageOk) showStorageWarning();
 
   let pulledFromGitHub = false;
-  if (isSyncConfigured()) {
+  // modifs locales pas encore envoyées (onglet fermé avant la fin du compteur) : on NE tire PAS
+  // la version GitHub, elle écraserait ces modifs. On les envoie d'abord.
+  let pendingLocal = isSyncConfigured() && !!getDirty();
+  if (pendingLocal) {
+    const probe = await storageGet(STORAGE_KEY, null);
+    if (!Array.isArray(probe)) { pendingLocal = false; setDirty(null); } // stockage local vide : rien à envoyer
+  }
+  if (isSyncConfigured() && !pendingLocal) {
     pulledFromGitHub = await pullFromGitHub(true);
   }
 
@@ -1453,6 +1564,8 @@ async function init() {
   renderNav();
   renderSyncStatus();
   render();
+  setInterval(renderSyncStatus, 20000); // met à jour le compte à rebours
+  if (pendingLocal) flushPush();
 }
 
 async function persist(skipSync) {
@@ -1579,25 +1692,31 @@ function renderSyncStatus() {
   const el = document.getElementById('syncStatus');
   const dot = document.getElementById('gearDot'); // pastille sur la roue crantée
   const setDot = (cls) => { if (dot) dot.className = 'sync-dot' + (cls !== null ? ' show ' + cls : ''); };
+  const html = (cls, txt) => { if (el) el.innerHTML = `<span class="sync-dot ${cls}"></span> ${txt}`; };
   if (!isSyncConfigured()) {
     if (el) el.innerHTML = '';
     setDot(null);
     return;
   }
+  const pending = !!getDirty();
+  const minsLeft = pushDueAt ? Math.max(1, Math.ceil((pushDueAt - Date.now()) / 60000)) : null;
   if (syncState.syncing) {
-    if (el) el.innerHTML = `<span class="sync-dot syncing"></span> Synchro en cours...`;
+    html('syncing', 'Synchro en cours...');
     setDot('syncing');
   } else if (syncState.lastError) {
-    if (el) el.innerHTML = `<span class="sync-dot error"></span> Erreur de sync`;
+    html('error', 'Erreur de sync' + (pending && minsLeft ? ` · nouvel essai ~${minsLeft} min` : ''));
     setDot('error');
+  } else if (pending) {
+    html('pending', 'Modifs en attente' + (minsLeft ? ` · envoi dans ~${minsLeft} min` : ''));
+    setDot('pending');
   } else if (syncState.lastSync) {
     const t = new Date(syncState.lastSync);
     const hh = String(t.getHours()).padStart(2, '0');
     const mm = String(t.getMinutes()).padStart(2, '0');
-    if (el) el.innerHTML = `<span class="sync-dot ok"></span> Sync ${hh}:${mm}`;
+    html('ok', `Sync ${hh}:${mm}`);
     setDot('ok');
   } else {
-    if (el) el.innerHTML = `<span class="sync-dot"></span> GitHub configuré`;
+    html('', 'GitHub configuré');
     setDot('');
   }
 }
@@ -2882,6 +3001,11 @@ function openSyncModal() {
           <input type="text" id="syncBranch" value="${escapeHtml(cfg.branch || 'main')}" placeholder="main">
         </div>
       </div>
+      <div class="field" style="max-width:260px;">
+        <label>Délai avant envoi (minutes)</label>
+        <input type="number" id="syncDelay" min="0" step="1" value="${cfg.delay_min !== undefined && cfg.delay_min !== '' ? escapeHtml(String(cfg.delay_min)) : DEFAULT_PUSH_DELAY_MIN}">
+        <p class="field-hint">Après ta dernière modification, l'envoi vers GitHub part au bout de ce délai (tout est regroupé en un seul envoi).</p>
+      </div>
       <div class="field">
         <label>Personal Access Token</label>
         <input type="password" id="syncToken" value="${escapeHtml(cfg.token)}" placeholder="">
@@ -2917,6 +3041,7 @@ function openSyncModal() {
       path: document.getElementById('syncPath').value.trim() || 'data.json',
       branch: document.getElementById('syncBranch').value.trim() || 'main',
       token: document.getElementById('syncToken').value.trim(),
+      delay_min: (() => { const v = parseFloat(document.getElementById('syncDelay').value); return isNaN(v) ? DEFAULT_PUSH_DELAY_MIN : Math.max(0, v); })(),
     };
   }
 
@@ -2954,13 +3079,15 @@ function openSyncModal() {
     setSyncConfig(newCfg);
     const resultEl = document.getElementById('syncTestResult');
     resultEl.textContent = 'Synchronisation en cours...';
-    const pulled = await pullFromGitHub();
+    syncState.lastError = null;
+    // modifs locales en attente : on les ENVOIE (pas de pull, il les écraserait)
+    const pulled = getDirty() ? false : await pullFromGitHub();
     if (pulled) {
       renderNav();
       render();
       resultEl.textContent = '✅ Données récupérées depuis GitHub.';
     } else if (!syncState.lastError) {
-      const pushed = await pushToGitHub(true);
+      const pushed = await flushPush(true);
       resultEl.textContent = pushed ? '✅ Données envoyées vers GitHub (fichier créé).' : '❌ ' + (syncState.lastError || 'Échec de la synchro.');
     } else {
       resultEl.textContent = '❌ ' + syncState.lastError;
@@ -2971,6 +3098,7 @@ function openSyncModal() {
   document.getElementById('syncClear').onclick = () => {
     if (!confirm("Déconnecter la synchro GitHub ? Le token sera supprimé de cet appareil. Tes données restent en local.")) return;
     clearSyncConfig();
+    clearTimeout(pushTimer); pushTimer = null; pushDueAt = null; setDirty(null);
     syncState = { syncing: false, lastSync: null, lastError: null, sha: null };
     toast('Synchro GitHub désactivée sur cet appareil');
     renderSyncStatus();
@@ -3172,6 +3300,17 @@ document.addEventListener('keydown', (ev) => {
   if (ev.key === 'Escape') setGearMenu(false);
 });
 document.getElementById('btnSync').onclick = openSyncModal;
+document.getElementById('btnPushNow').onclick = () => {
+  if (!isSyncConfigured()) { toast("Configure d'abord la synchro GitHub"); return; }
+  flushPush(true);
+};
+/* filets de sécurité : on tente un envoi quand on quitte la page (et, sur téléphone, quand l'appli
+   passe en arrière-plan). Si ça échoue, les modifs restent en attente et partent à la prochaine ouverture. */
+window.addEventListener('pagehide', () => { if (getDirty() && isSyncConfigured()) flushPush(); });
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden' && window.matchMedia('(pointer:coarse)').matches
+      && getDirty() && isSyncConfigured()) flushPush();
+});
 document.getElementById('btnNotif').onclick = openNotifModal;
 document.getElementById('btnExport').onclick = exportJSON;
 document.getElementById('btnImport').onclick = () => document.getElementById('fileImport').click();

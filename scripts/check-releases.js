@@ -14,12 +14,24 @@ const MANGADEX_API_URL = 'https://api.mangadex.org';
    ============================================================ */
 
 function parseChapterNumber(text) {
-  if (!text) return null;
-  const match = text.match(/(?:chapitre|chapter|scan|ch|c)[^\d]*(\d+(?:\.\d+)?)/i) 
-             || text.match(/(\d+(?:\.\d+)?)/);
+  if (text === null || text === undefined || text === '') return null;
+  const value = String(text).trim();
+  const match = value.match(/(?:chapitre|chapter|scan|ch\.?|c)\s*[-:#]?\s*(\d+(?:\.\d+)?)/i)
+             || value.match(/^\s*(\d+(?:\.\d+)?)(?:\s|$)/);
   if (!match) return null;
   const num = parseFloat(match[1]);
   return isNaN(num) ? null : num;
+}
+
+function compareChapters(current, previous) {
+  const currentNumber = parseChapterNumber(current);
+  const previousNumber = parseChapterNumber(previous);
+  if (currentNumber !== null && previousNumber !== null) {
+    return currentNumber - previousNumber;
+  }
+  if (currentNumber !== null) return 1;
+  if (previousNumber !== null) return -1;
+  return String(current).localeCompare(String(previous), undefined, { numeric: true });
 }
 
 function cleanTitle(title) {
@@ -118,32 +130,46 @@ async function searchMangaDexIdByTitle(title) {
  */
 async function fetchMangaDexFeedForLang(mangadexId, lang) {
   try {
-    const url = `${MANGADEX_API_URL}/manga/${mangadexId}/feed?limit=500&order[chapter]=desc&translatedLanguage[]=${lang}&includeFuturePublishAt=0`;
+    const params = new URLSearchParams({
+      limit: '500',
+      'order[chapter]': 'desc',
+      'translatedLanguage[]': lang,
+      includeFuturePublishAt: '0',
+    });
+    const url = `${MANGADEX_API_URL}/manga/${encodeURIComponent(mangadexId)}/feed?${params}`;
     const res = await fetch(url, { headers: { 'User-Agent': 'AnimeDB-Checker/2.0' } });
     if (!res.ok) return null;
 
     const json = await res.json();
     if (!json.data || !Array.isArray(json.data) || json.data.length === 0) return null;
 
-    let maxChapter = -1;
-    let latestChapterObj = null;
+    let bestNumberedChapter = null;
+    let firstChapter = null;
 
     for (const item of json.data) {
       const chAttr = item.attributes;
-      if (!chAttr || !chAttr.chapter) continue;
+      if (!chAttr || typeof item.id !== 'string') continue;
+      const chapterNumber = String(chAttr.chapter ?? '').trim();
+      const chapter = {
+        chapter: chapterNumber || 'Oneshot',
+        url: `https://mangadex.org/chapter/${item.id}`,
+        source: `mangadex_${lang}`,
+      };
+      if (!firstChapter) firstChapter = chapter;
 
-      const chNum = parseFloat(chAttr.chapter);
-      if (!isNaN(chNum) && chNum > maxChapter) {
-        maxChapter = chNum;
-        latestChapterObj = {
-          chapter: chNum,
-          url: `https://mangadex.org/chapter/${item.id}`,
-          source: `mangadex_${lang}`
-        };
+      const numericChapter = parseChapterNumber(chapterNumber);
+      if (numericChapter !== null && (
+        !bestNumberedChapter || numericChapter > bestNumberedChapter.numericChapter
+      )) {
+        bestNumberedChapter = { ...chapter, numericChapter };
       }
     }
 
-    return latestChapterObj;
+    if (bestNumberedChapter) {
+      const { numericChapter, ...chapter } = bestNumberedChapter;
+      return chapter;
+    }
+    return firstChapter;
   } catch (e) {
     return null;
   }
@@ -170,7 +196,10 @@ async function fetchMangaDexLatestChapter(mangadexIdOrTitle, preferredLang = 'fr
     // 1. Tente MangaDex si un ID est présent : FR et EN en parallèle
     if (mangadexId) {
       const langsToCheck = new Set(['fr', 'en']);
-      if (preferredLang) langsToCheck.add(preferredLang.toLowerCase());
+      if (preferredLang && /^[a-z]{2}(?:-[a-z]{2})?$/i.test(preferredLang)) {
+        const normalizedLang = preferredLang.toLowerCase();
+        if (!['vo', 'vf'].includes(normalizedLang)) langsToCheck.add(normalizedLang);
+      }
 
       const feedResults = await Promise.all(
         [...langsToCheck].map(lang => fetchMangaDexFeedForLang(mangadexId, lang))
@@ -178,7 +207,7 @@ async function fetchMangaDexLatestChapter(mangadexIdOrTitle, preferredLang = 'fr
 
       let best = null;
       for (const res of feedResults) {
-        if (res && (!best || res.chapter > best.chapter)) {
+        if (res && (!best || compareChapters(res.chapter, best.chapter) > 0)) {
           best = res;
         }
       }
@@ -201,9 +230,135 @@ async function fetchMangaDexLatestChapter(mangadexIdOrTitle, preferredLang = 'fr
     return null;
   }
 }
+
 /* ============================================================
-   3. SCRAPING DES SITES SCAN_URL
+   3. RÉCUPÉRATION COMIX ET SCRAPING DES SITES SCAN_URL
    ============================================================ */
+
+function getScanProvider(scanUrl) {
+  if (!scanUrl) return null;
+  if (scanUrl.toLowerCase() === 'mangadex') return 'mangadex';
+
+  try {
+    const url = new URL(scanUrl);
+    const hostname = url.hostname.toLowerCase();
+    if (hostname === 'comix.to' || hostname.endsWith('.comix.to')) return 'comix';
+    if (hostname === 'mangadex.org' || hostname.endsWith('.mangadex.org')) return 'mangadex';
+  } catch (e) {
+    return null;
+  }
+  return null;
+}
+
+function extractMangaDexId(scanUrl) {
+  if (!scanUrl || scanUrl.toLowerCase() === 'mangadex') return null;
+  try {
+    const url = new URL(scanUrl);
+    if (getScanProvider(scanUrl) !== 'mangadex') return null;
+    return url.pathname.match(
+      /^\/title\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})(?:\/|$)/i
+    )?.[1] || null;
+  } catch (e) {
+    return null;
+  }
+}
+
+function extractComixSlug(scanUrl) {
+  let url;
+  try {
+    url = new URL(scanUrl);
+  } catch (e) {
+    throw new Error('URL Comix invalide.');
+  }
+
+  const hostname = url.hostname.toLowerCase();
+  if (hostname !== 'comix.to' && !hostname.endsWith('.comix.to')) {
+    throw new Error('L’URL fournie ne pointe pas vers Comix.');
+  }
+  const match = url.pathname.match(/^\/title\/([^/]+)/i);
+  if (!match) throw new Error('URL Comix invalide : identifiant du manga introuvable.');
+  return decodeURIComponent(match[1]);
+}
+
+function isCloudflareChallenge(html) {
+  return /challenge-platform|cf-chl-|\/cdn-cgi\/challenge|checking your browser|verify you are human|just a moment\.\.\./i.test(html)
+    || /(?:attention required|error 1020|error 1015).{0,100}cloudflare|cloudflare.{0,100}(?:attention required|error 1020|error 1015)/i.test(html);
+}
+
+async function fetchLatestComixChapter(scanUrl) {
+  const slug = extractComixSlug(scanUrl);
+  const pageUrl = `https://comix.to/title/${encodeURIComponent(slug)}`;
+  const response = await fetch(pageUrl, {
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      'Accept': 'text/html,application/xhtml+xml',
+      'Accept-Language': 'fr-FR,fr;q=0.9,en;q=0.8',
+    },
+    signal: AbortSignal.timeout(15000),
+  });
+  const html = await response.text();
+
+  if (isCloudflareChallenge(html)) {
+    throw new Error('Comix est bloqué par un challenge Cloudflare; aucun contournement n’est tenté.');
+  }
+  if (!response.ok) throw new Error(`Comix a répondu HTTP ${response.status}.`);
+
+  const $ = cheerio.load(html);
+  const initialData = $('#initial-data').first().text().trim();
+  if (!initialData) throw new Error('Les données manga intégrées à la page Comix sont introuvables.');
+
+  let payload;
+  try {
+    payload = JSON.parse(initialData);
+  } catch (e) {
+    throw new Error('Comix a retourné des données manga intégrées invalides.');
+  }
+  if (!payload || typeof payload !== 'object' || !payload.queries || typeof payload.queries !== 'object') {
+    throw new Error('Comix a retourné une structure de données manga invalide.');
+  }
+
+  const detail = Object.entries(payload.queries).find(([key, value]) => {
+    if (!value || typeof value !== 'object') return false;
+    const detailUrl = typeof value.url === 'string' ? value.url : '';
+    const detailSlug = detailUrl.match(/^\/title\/([^/?#]+)/i)?.[1];
+    let queryKeyMatches = false;
+    try {
+      const queryKey = JSON.parse(key);
+      queryKeyMatches = Array.isArray(queryKey) && queryKey.includes(slug);
+    } catch (e) {
+      queryKeyMatches = false;
+    }
+
+    return detailSlug === slug ||
+      detailSlug?.startsWith(`${slug}-`) ||
+      (typeof value.hid === 'string' && slug.startsWith(`${value.hid}-`)) ||
+      String(value.id ?? '') === slug ||
+      queryKeyMatches;
+  })?.[1];
+
+  if (!detail || typeof detail !== 'object') {
+    throw new Error(`Aucune fiche manga Comix ne correspond à « ${slug} ».`);
+  }
+
+  const chapterNumber = parseChapterNumber(detail.latestChapter);
+  const chapterPath = typeof detail.latestChapterUrl === 'string'
+    ? detail.latestChapterUrl.trim()
+    : '';
+  if (chapterNumber === null || !chapterPath) {
+    throw new Error(`Le dernier chapitre est absent des données Comix pour « ${slug} ».`);
+  }
+
+  const chapterUrl = new URL(chapterPath, 'https://comix.to');
+  if (chapterUrl.origin !== 'https://comix.to') {
+    throw new Error('Comix a retourné une URL de chapitre externe.');
+  }
+
+  return {
+    chapter: chapterNumber,
+    url: chapterUrl.toString(),
+    source: 'comix',
+  };
+}
 
 function resolveUrl(href, baseUrl) {
   try {
@@ -352,7 +507,7 @@ function evaluateMangaNotification(entry, latestChapter, latestUrl) {
     };
   }
 
-  if (latestChapter <= lastNotified) return null;
+  if (compareChapters(latestChapter, lastNotified) <= 0) return null;
 
   return {
     type: 'new_chapter',
@@ -375,14 +530,35 @@ async function checkMangaReleases(entries, ntfyConfig = null) {
     const suivi = entry.suivi || {};
     const checkedAt = new Date().toISOString();
     
-    const mangadexTarget = suivi.mangadex_id || entry.mangadex_id || entry.title || null;
-    const preferredLang = entry.lang || suivi.language || 'fr';
     const scanUrl = entry.scan_url || suivi.scan_url || null;
+    const scanProvider = getScanProvider(scanUrl);
+    const mangadexTarget =
+      extractMangaDexId(scanUrl) ||
+      suivi.mangadex_id ||
+      entry.mangadex_id ||
+      entry.title ||
+      null;
+    const preferredLang = entry.lang || suivi.language || 'fr';
+    let sourceError = null;
 
-    const [mangadexRes, scanUrlRes] = await Promise.all([
-      mangadexTarget ? fetchMangaDexLatestChapter(mangadexTarget, preferredLang) : null,
-      scanUrl ? scrapeScanUrl(scanUrl) : null
-    ]);
+    let mangadexRes = null;
+    let scanUrlRes = null;
+    try {
+      if (scanProvider === 'comix') {
+        scanUrlRes = await fetchLatestComixChapter(scanUrl);
+      } else if (scanProvider === 'mangadex') {
+        mangadexRes = mangadexTarget
+          ? await fetchMangaDexLatestChapter(mangadexTarget, preferredLang)
+          : null;
+      } else {
+        [mangadexRes, scanUrlRes] = await Promise.all([
+          mangadexTarget ? fetchMangaDexLatestChapter(mangadexTarget, preferredLang) : null,
+          scanUrl ? scrapeScanUrl(scanUrl) : null,
+        ]);
+      }
+    } catch (error) {
+      sourceError = error instanceof Error ? error.message : String(error);
+    }
 
     let releaseInfo = null;
     if (mangadexRes && scanUrlRes) {
@@ -394,7 +570,7 @@ async function checkMangaReleases(entries, ntfyConfig = null) {
     if (!releaseInfo) {
       results.push({
         id: entry.id, title: entry.title, nickname: entry.nickname || '',
-        found: false, checkedAt
+        found: false, checkedAt, ...(sourceError ? { error: sourceError } : {})
       });
       continue;
     }
@@ -482,7 +658,15 @@ async function notifyMangaAlerts(newChapterAlerts, ntfyConfig) {
 }
 
 module.exports = {
-  checkMangaReleases, fetchMangaDexLatestChapter, scrapeScanUrl, evaluateMangaNotification, notifyMangaAlerts
+  checkMangaReleases,
+  fetchMangaDexLatestChapter,
+  fetchLatestComixChapter,
+  getScanProvider,
+  extractMangaDexId,
+  scrapeScanUrl,
+  evaluateMangaNotification,
+  notifyMangaAlerts,
+  compareChapters,
 };
 
 if (require.main === module) {

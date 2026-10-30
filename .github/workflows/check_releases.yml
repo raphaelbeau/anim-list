@@ -28,6 +28,9 @@ jobs:
       - name: Installer les dépendances (Cheerio, etc.)
         run: npm install
 
+      - name: Tester la détection des parutions manga
+        run: node --test scripts/check-releases.test.js
+
       - name: Vérifier les parutions manga/webtoon et notifier
         run: node scripts/check-releases.js data.json notif-config.json --write
 

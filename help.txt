@@ -1,0 +1,364 @@
+///module de récupération --mangadexet comix
+
+import * as cheerio from "cheerio";
+
+export interface LatestChapter {
+  provider: string;
+  mangaId: string;
+  chapterNumber: string;
+  chapterTitle?: string;
+  releaseDate?: string;
+  url: string;
+}
+
+export class LatestChapterNotFoundError extends Error {
+  constructor(provider: string, mangaId: string) {
+    super(`No chapters found for ${provider} manga ${mangaId}`);
+    this.name = "LatestChapterNotFoundError";
+  }
+}
+
+const COMIX_BASE = "https://comix.to";
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null;
+}
+
+function optionalString(value: unknown): string | undefined {
+  return typeof value === "string" ? value : undefined;
+}
+
+async function getLatestComixChapter(mangaId: string): Promise<LatestChapter> {
+  const response = await fetch(`${COMIX_BASE}/title/${encodeURIComponent(mangaId)}`, {
+    headers: { Accept: "text/html" },
+    signal: AbortSignal.timeout(15_000),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Comix returned HTTP ${response.status}`);
+  }
+
+  const html = await response.text();
+  const $ = cheerio.load(html);
+  const initialData = $("#initial-data").first().text();
+
+  if (!initialData) {
+    if (/cloudflare|challenge-platform|cf-chl-/i.test(html)) {
+      throw new Error("Comix returned an anti-bot challenge; no bypass was attempted");
+    }
+    throw new Error("Comix page did not contain its manga data");
+  }
+
+  let payload: unknown;
+  try {
+    payload = JSON.parse(initialData);
+  } catch {
+    throw new Error("Comix returned invalid embedded manga data");
+  }
+
+  if (!isRecord(payload) || !isRecord(payload.queries)) {
+    throw new Error("Comix returned an invalid manga page");
+  }
+
+  const detail = Object.entries(payload.queries).find(([key, value]) => {
+    if (!isRecord(value)) return false;
+
+    const url = optionalString(value.url);
+    const slug = url?.match(/^\/title\/([^/?]+)/)?.[1];
+    let queryKeyMatches = false;
+    try {
+      const queryKey: unknown = JSON.parse(key);
+      queryKeyMatches = Array.isArray(queryKey) && queryKey.includes(mangaId);
+    } catch {
+      queryKeyMatches = false;
+    }
+
+    return (
+      optionalString(value.hid) === mangaId ||
+      String(value.id ?? "") === mangaId ||
+      slug === mangaId ||
+      slug?.startsWith(`${mangaId}-`) === true ||
+      queryKeyMatches
+    );
+  })?.[1];
+
+  if (!isRecord(detail)) {
+    throw new LatestChapterNotFoundError("Comix", mangaId);
+  }
+
+  const chapterNumber =
+    typeof detail.latestChapter === "number" || typeof detail.latestChapter === "string"
+      ? String(detail.latestChapter).trim()
+      : "";
+  const chapterPath = optionalString(detail.latestChapterUrl);
+
+  if (!chapterNumber || !chapterPath) {
+    throw new LatestChapterNotFoundError("Comix", mangaId);
+  }
+
+  const chapterUrl = new URL(chapterPath, COMIX_BASE);
+  if (chapterUrl.origin !== COMIX_BASE) {
+    throw new Error("Comix returned a chapter URL outside its own site");
+  }
+
+  const releaseDate = optionalString(detail.chapterUpdatedAtFormatted);
+
+  return {
+    provider: "comix",
+    mangaId,
+    chapterNumber,
+    ...(releaseDate ? { releaseDate } : {}),
+    url: chapterUrl.toString(),
+  };
+}
+
+export async function getLatestChapter(
+  mangaId: string,
+  provider: string,
+  language = "fr"
+): Promise<LatestChapter> {
+  if (!mangaId.trim()) {
+    throw new RangeError("mangaId must not be empty");
+  }
+
+  const providerId = provider.toLowerCase();
+  if (providerId === "comix") {
+    return getLatestComixChapter(mangaId);
+  }
+
+  if (providerId !== "mangadex") {
+    throw new RangeError(`Unsupported chapter provider: ${provider}`);
+  }
+
+  if (!/^[a-z]{2}(?:-[a-z]{2})?$/i.test(language)) {
+    throw new RangeError(`Invalid MangaDex language: ${language}`);
+  }
+
+  const params = new URLSearchParams({
+    limit: "1",
+    "order[readableAt]": "desc",
+    "translatedLanguage[]": language.toLowerCase(),
+  });
+  const response = await fetch(
+    `https://api.mangadex.org/manga/${encodeURIComponent(mangaId)}/feed?${params}`,
+    {
+      headers: { Accept: "application/json" },
+      signal: AbortSignal.timeout(15_000),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(`MangaDex API returned HTTP ${response.status}`);
+  }
+
+  const payload: unknown = await response.json();
+  if (!isRecord(payload) || !Array.isArray(payload.data)) {
+    throw new Error("MangaDex returned an invalid chapter feed");
+  }
+
+  const chapter = payload.data[0];
+  if (chapter === undefined) {
+    throw new LatestChapterNotFoundError("MangaDex", mangaId);
+  }
+
+  if (
+    !isRecord(chapter) ||
+    typeof chapter.id !== "string" ||
+    !isRecord(chapter.attributes)
+  ) {
+    throw new Error("MangaDex returned an invalid chapter entry");
+  }
+
+  const attributes = chapter.attributes;
+  const chapterNumber = optionalString(attributes.chapter)?.trim() || "Oneshot";
+  const chapterTitle = optionalString(attributes.title)?.trim() || undefined;
+  const releaseDate =
+    optionalString(attributes.readableAt) ||
+    optionalString(attributes.publishAt) ||
+    optionalString(attributes.createdAt);
+  const externalUrl = optionalString(attributes.externalUrl);
+  const url = externalUrl || `https://mangadex.org/chapter/${chapter.id}`;
+
+  return {
+    provider: "mangadex",
+    mangaId,
+    chapterNumber,
+    ...(chapterTitle ? { chapterTitle } : {}),
+    ...(releaseDate ? { releaseDate } : {}),
+    url,
+  };
+}
+
+
+////route api
+
+import { NextRequest, NextResponse } from "next/server";
+import {
+  getLatestChapter,
+  LatestChapterNotFoundError,
+} from "@/lib/chapter-updates";
+
+export async function GET(request: NextRequest) {
+  const { searchParams } = request.nextUrl;
+  const mangaId = searchParams.get("id");
+  const provider = searchParams.get("provider");
+  const language = searchParams.get("language") ?? "fr";
+
+  if (!mangaId) {
+    return NextResponse.json({ error: "Missing 'id' parameter" }, { status: 400 });
+  }
+
+  if (!provider) {
+    return NextResponse.json(
+      { error: "Missing 'provider' parameter" },
+      { status: 400 }
+    );
+  }
+
+  try {
+    const chapter = await getLatestChapter(mangaId, provider, language);
+    return NextResponse.json(chapter);
+  } catch (error) {
+    if (error instanceof RangeError) {
+      return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+    if (error instanceof LatestChapterNotFoundError) {
+      return NextResponse.json({ error: error.message }, { status: 404 });
+    }
+
+    console.error("Failed to retrieve latest manga chapter", error);
+    const message = error instanceof Error ? error.message : "Unknown upstream error";
+    return NextResponse.json({ error: message }, { status: 502 });
+  }
+}
+
+
+////exemple de vérification périodique
+
+import { readFile, writeFile } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
+
+const apiBaseUrl = process.env.MANGA_API_URL ?? "http://localhost:3000";
+const checkIntervalMs = 30 * 60 * 1000;
+const stateFile = fileURLToPath(new URL("./chapter-state.json", import.meta.url));
+
+const mangas = [
+  { id: "REPLACE_WITH_COMIX_ID", title: "My manga", provider: "comix" },
+];
+
+async function loadState() {
+  try {
+    const contents = await readFile(stateFile, "utf8");
+    const state = JSON.parse(contents);
+    if (typeof state !== "object" || state === null || Array.isArray(state)) {
+      throw new Error("chapter-state.json must contain a JSON object");
+    }
+    return state;
+  } catch (error) {
+    if (error?.code === "ENOENT") return {};
+    throw error;
+  }
+}
+
+const state = await loadState();
+
+async function checkManga(manga) {
+  const url = new URL("/api/scrape/latest-chapter", apiBaseUrl);
+  url.searchParams.set("id", manga.id);
+  url.searchParams.set("provider", manga.provider);
+  if (manga.language) {
+    url.searchParams.set("language", manga.language);
+  }
+
+  const response = await fetch(url);
+  const result = await response.json();
+  if (!response.ok) {
+    throw new Error(result.error ?? `API returned HTTP ${response.status}`);
+  }
+  if (typeof result?.chapterNumber !== "string" || typeof result?.url !== "string") {
+    throw new Error("API returned an invalid latest-chapter response");
+  }
+
+  const stateKey = `${manga.provider}:${manga.id}`;
+  const previousNumber = state[stateKey];
+  if (previousNumber === undefined) {
+    console.log(`Baseline saved: ${manga.title} is at chapter ${result.chapterNumber}.`);
+  } else if (isNewerChapter(result.chapterNumber, previousNumber)) {
+    console.log(
+      `New chapter for ${manga.title}: ${result.chapterNumber}` +
+        (result.releaseDate ? ` (${result.releaseDate})` : "") +
+        ` - ${result.url}`
+    );
+  }
+
+  if (previousNumber === undefined || isNewerChapter(result.chapterNumber, previousNumber)) {
+    state[stateKey] = result.chapterNumber;
+    await writeFile(stateFile, `${JSON.stringify(state, null, 2)}\n`, "utf8");
+  }
+}
+
+function isNewerChapter(current, previous) {
+  const currentNumber = Number(current);
+  const previousNumber = Number(previous);
+  if (Number.isFinite(currentNumber) && Number.isFinite(previousNumber)) {
+    return currentNumber > previousNumber;
+  }
+  return current !== previous;
+}
+
+while (true) {
+  for (const manga of mangas) {
+    try {
+      await checkManga(manga);
+    } catch (error) {
+      console.error(`Could not check ${manga.title}:`, error);
+    }
+  }
+
+  await new Promise((resolve) => setTimeout(resolve, checkIntervalMs));
+}
+/////guide d'utilisation
+# Suivi des parutions de chapitres
+
+Cette extraction récupère le dernier chapitre de MangaDex ou de Comix. Pour
+Comix, elle lit les données de parution intégrées à la page publique du manga ;
+elle n'utilise pas de contournement Cloudflare et ne récupère pas les images.
+
+## Fichiers utiles pour cette fonctionnalité
+
+- `src/lib/chapter-updates.ts` : récupération du dernier chapitre MangaDex,
+  trié par date de lecture, ou lecture de la dernière parution intégrée à la page
+  publique Comix.
+- `src/app/api/scrape/latest-chapter/route.ts` : endpoint HTTP utilisé par
+  l'application et l'exemple ci-dessous.
+- `examples/check_updates.mjs` : vérification périodique avec mémorisation du
+  dernier numéro observé dans `examples/chapter-state.json`.
+
+Le reste du dépôt contient d'autres providers, des outils de test et des
+fonctionnalités d'anime, de proxy ou de lecture. Ils ne sont pas nécessaires à
+cette extraction ; ils restent dans le dépôt d'origine afin de ne pas supprimer
+de fichiers sans sauvegarde.
+
+## Utilisation
+
+1. Démarrer l'application avec `npm run dev`.
+2. Remplacer l'identifiant d'exemple dans `examples/check_updates.mjs`. Pour
+   Comix, utilise l'identifiant court présent dans l'URL du manga ; pour
+   MangaDex, utilise son UUID et ajoute `language: "fr"` à l'entrée.
+3. Lancer `node examples/check_updates.mjs`. Le premier passage enregistre le
+   numéro courant ; les passages suivants signalent les changements.
+
+Exemples d'endpoint :
+
+- `GET /api/scrape/latest-chapter?id=<UUID>&provider=mangadex`
+- `GET /api/scrape/latest-chapter?id=<comixId>&provider=comix`
+
+Le paramètre `language` est facultatif et vaut `fr` pour MangaDex ; il est ignoré
+par Comix. La valeur de date fournie par Comix est l'indication relative du site
+(par exemple « 3d ago »), pas un horodatage précis.
+
+Les autres providers ne sont pas encore pris en charge par cette extraction.
+Certains scrapers existants dépendent de mécanismes de contournement anti-bot ;
+ils ne sont pas utilisés ici.
+
+

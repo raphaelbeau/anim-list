@@ -1,4 +1,5 @@
 {
+  "_comment": "Ce fichier définit comment l'application ANIME//DB se comporte une fois installée (PWA).",
   "name": "ANIME//DB",
   "short_name": "AnimeDB",
   "start_url": "./",
