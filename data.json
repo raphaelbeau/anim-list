@@ -116,7 +116,7 @@
    "comment": ""
   },
   "sequel_date": "",
-  "progress_chapter": "242",
+  "progress_chapter": "243",
   "progress_episode": "",
   "anime_overall_note": null,
   "suivi": {
@@ -142,7 +142,8 @@
    "last_notified_episode": null,
    "last_check": null,
    "ntfy_topic": null
-  }
+  },
+  "image_url": ""
  },
  {
   "id": "imp-3-kaoru-hana-wa-rin-to-saku",
