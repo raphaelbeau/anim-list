@@ -566,7 +566,7 @@
    "dernier_chapitre_notifie": 63
   },
   "suivi_anime": {
-   "notification_mode": "season_complete",
+   "notification_mode": "disabled",
    "anilist_id": 196187,
    "current_season": 1,
    "episodes_released": 12,
@@ -6899,7 +6899,7 @@
    "ntfy_topic": null
   },
   "suivi_anime": {
-   "notification_mode": "season_complete",
+   "notification_mode": "disabled",
    "anilist_id": 199066,
    "current_season": 1,
    "episodes_released": 12,
