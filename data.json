@@ -6965,20 +6965,20 @@
   "title": "vinland saga",
   "nickname": "",
   "genre": "autre",
-  "anime_status": "a_voir",
-  "manga_status": null,
+  "anime_status": "fini",
+  "manga_status": "a_lire",
   "lang": null,
   "fmt": null,
   "anime_url": "https://anime-sama.to/catalogue/vinland-saga/",
-  "scan_url": "",
+  "scan_url": "https://comix.to/title/1v1n-vinland-saga/4013963-chapter-101",
   "progress_episode": "",
   "progress_chapter": "",
   "sequel_date": "",
   "anime_seasons": [
    {
     "label": "Anime",
-    "note": null,
-    "comment": ""
+    "note": 8,
+    "comment": "Bien, mais ca traine un peu trop en longueur. Les points clés ne m'ont pas tant touché.\nAu final, je crois que j'ai prefere la saison 1"
    }
   ],
   "anime_overall_note": null,
@@ -7005,7 +7005,8 @@
    "last_notified_episode": null,
    "last_check": null,
    "ntfy_topic": null
-  }
+  },
+  "image_url": ""
  },
  {
   "id": "e-mrpgr4z7fhoue",
@@ -7400,7 +7401,7 @@
   "title": "nichijou",
   "nickname": "",
   "genre": "autre",
-  "anime_status": "en_cours",
+  "anime_status": "a_voir",
   "manga_status": null,
   "lang": "vo",
   "fmt": "serie",
@@ -7440,7 +7441,8 @@
    "last_notified_episode": null,
    "last_check": null,
    "ntfy_topic": null
-  }
+  },
+  "image_url": ""
  },
  {
   "id": "e-mtrct7nvg6a25",
