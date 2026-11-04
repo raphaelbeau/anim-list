@@ -265,7 +265,7 @@
    "comment": ""
   },
   "sequel_date": "",
-  "progress_chapter": "1194",
+  "progress_chapter": "1197",
   "progress_episode": "",
   "anime_overall_note": null,
   "suivi": {
@@ -291,7 +291,8 @@
    "last_notified_episode": null,
    "last_check": null,
    "ntfy_topic": null
-  }
+  },
+  "image_url": ""
  },
  {
   "id": "imp-6-one-punch-man",
@@ -6972,7 +6973,7 @@
   "anime_url": "https://anime-sama.to/catalogue/vinland-saga/",
   "scan_url": "https://comix.to/title/1v1n-vinland-saga/4013963-chapter-101",
   "progress_episode": "",
-  "progress_chapter": "",
+  "progress_chapter": "100",
   "sequel_date": "",
   "anime_seasons": [
    {
