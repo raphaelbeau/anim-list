@@ -116,7 +116,7 @@
    "comment": ""
   },
   "sequel_date": "",
-  "progress_chapter": "244",
+  "progress_chapter": "243",
   "progress_episode": "",
   "anime_overall_note": null,
   "suivi": {
@@ -168,7 +168,7 @@
    "comment": ""
   },
   "sequel_date": "",
-  "progress_chapter": "205",
+  "progress_chapter": "206",
   "progress_episode": "",
   "anime_overall_note": null,
   "suivi": {
@@ -194,7 +194,8 @@
    "last_notified_episode": null,
    "last_check": null,
    "ntfy_topic": null
-  }
+  },
+  "image_url": ""
  },
  {
   "id": "imp-4-hajimete-no-gal",
@@ -274,8 +275,8 @@
    "derniere_verification": "2026-11-08T15:25:22.803Z",
    "ntfy_topic": null,
    "source_used": "mangadex_fr",
-   "last_notified_chapter": "1198",
-   "dernier_chapitre_notifie": "1198",
+   "last_notified_chapter": "1197",
+   "dernier_chapitre_notifie": "1197",
    "mangadex_id": "a1c7c817-4e59-43b7-9365-09675a149a6f"
   },
   "suivi_anime": {
