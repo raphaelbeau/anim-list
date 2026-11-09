@@ -7403,7 +7403,7 @@
   "title": "nichijou",
   "nickname": "",
   "genre": "autre",
-  "anime_status": "a_voir",
+  "anime_status": "fini",
   "manga_status": null,
   "lang": "vo",
   "fmt": "serie",
@@ -7415,8 +7415,8 @@
   "anime_seasons": [
    {
     "label": "Anime",
-    "note": null,
-    "comment": ""
+    "note": 8,
+    "comment": "On se tape des barres. Attention un peu long parfois. Rythme irrégulier.\nPar contre excellente morale"
    }
   ],
   "anime_overall_note": null,
