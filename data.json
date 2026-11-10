@@ -6873,20 +6873,20 @@
   "title": "Hanaori-san wa Tensei Shite mo Kenka ga Shitai",
   "nickname": "hanaori wants to fight",
   "genre": "shojo",
-  "anime_status": "en_cours",
+  "anime_status": "fini",
   "manga_status": null,
   "lang": null,
   "fmt": null,
   "anime_url": "https://anime-sama.to/catalogue/hanaori-san-still-wants-to-fight-in-the-next-life/",
   "scan_url": "",
-  "progress_episode": "4",
+  "progress_episode": "",
   "progress_chapter": "",
   "sequel_date": "",
   "anime_seasons": [
    {
     "label": "Anime",
-    "note": null,
-    "comment": ""
+    "note": 6.5,
+    "comment": "Sympa. Manque de concrétisation meme si on la devine. Marrant et tout de meme original pour moi"
    }
   ],
   "anime_overall_note": null,
@@ -6913,7 +6913,8 @@
    "last_notified_episode": null,
    "last_check": "2026-11-01T09:29:25.627Z",
    "ntfy_topic": null
-  }
+  },
+  "image_url": ""
  },
  {
   "id": "e-mrp9p2a90ddt0",
