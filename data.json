@@ -3041,7 +3041,7 @@
   "fmt": "serie",
   "anime_url": "https://anime-sama.tv/catalogue/the-shiunji-family-children/saison1/vostfr/",
   "scan_url": "",
-  "anime_status": "a_voir",
+  "anime_status": "en_cours",
   "manga_status": null,
   "anime_seasons": [
    {
@@ -3076,7 +3076,9 @@
    "last_notified_episode": null,
    "last_check": null,
    "ntfy_topic": null
-  }
+  },
+  "image_url": "",
+  "anime_overall_note": null
  },
  {
   "id": "imp-66-mayonaka-heart-tune",
@@ -7729,34 +7731,6 @@
    "last_notified_episode": null,
    "last_check": null,
    "ntfy_topic": null
-  }
- },
- {
-  "id": "e-mwe9qk36uffkg",
-  "title": "Childhood friend complex",
-  "nickname": "",
-  "genre": "shojo",
-  "anime_status": null,
-  "manga_status": null,
-  "lang": null,
-  "fmt": null,
-  "anime_url": "",
-  "scan_url": "",
-  "image_url": "",
-  "progress_episode": "",
-  "progress_chapter": "",
-  "sequel_date": "",
-  "anime_seasons": [
-   {
-    "label": "Anime",
-    "note": null,
-    "comment": ""
-   }
-  ],
-  "anime_overall_note": null,
-  "manga": {
-   "note": null,
-   "comment": ""
   }
  }
 ]
