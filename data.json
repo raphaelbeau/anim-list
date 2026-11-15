@@ -1156,7 +1156,8 @@
    "last_notified_episode": null,
    "last_check": null,
    "ntfy_topic": null
-  }
+  },
+  "image_url": ""
  },
  {
   "id": "imp-24-dr-stone",
@@ -3041,7 +3042,7 @@
   "fmt": "serie",
   "anime_url": "https://anime-sama.tv/catalogue/the-shiunji-family-children/saison1/vostfr/",
   "scan_url": "",
-  "anime_status": "en_cours",
+  "anime_status": "fini",
   "manga_status": null,
   "anime_seasons": [
    {
@@ -7192,8 +7193,8 @@
    "derniere_verification": "2026-11-15T21:23:49.759Z",
    "ntfy_topic": null,
    "source_used": "mangadex_fr",
-   "last_notified_chapter": "91",
-   "dernier_chapitre_notifie": "91",
+   "last_notified_chapter": 87,
+   "dernier_chapitre_notifie": 87,
    "mangadex_id": "984df7d5-ae4c-43c6-aa65-737b9f37e5ef"
   },
   "suivi_anime": {
@@ -7256,7 +7257,8 @@
    "last_notified_episode": null,
    "last_check": null,
    "ntfy_topic": null
-  }
+  },
+  "image_url": ""
  },
  {
   "id": "e-mt5ym624ifm9d",
