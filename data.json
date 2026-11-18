@@ -122,7 +122,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": "244",
-   "derniere_verification": "2026-11-17T19:27:54.407Z",
+   "derniere_verification": "2026-11-18T01:45:27.100Z",
    "ntfy_topic": null,
    "source_used": "mangadex_fr",
    "mangadex_id": "87ffa375-bd2c-49ba-ba0c-6d78ea07c342",
@@ -174,7 +174,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": "199",
-   "derniere_verification": "2026-11-17T19:27:55.119Z",
+   "derniere_verification": "2026-11-18T01:45:27.719Z",
    "ntfy_topic": null,
    "source_used": "mangadex_en",
    "last_notified_chapter": 199,
@@ -272,7 +272,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": "1198",
-   "derniere_verification": "2026-11-17T19:27:55.406Z",
+   "derniere_verification": "2026-11-18T01:45:28.060Z",
    "ntfy_topic": null,
    "source_used": "mangadex_fr",
    "last_notified_chapter": "1198",
@@ -1012,7 +1012,7 @@
    "season_status": "RELEASING",
    "last_notified_season": 2,
    "last_notified_episode": null,
-   "last_check": "2026-11-17T19:27:58.072Z",
+   "last_check": "2026-11-18T01:45:29.812Z",
    "ntfy_topic": null
   }
  },
@@ -3202,7 +3202,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": "5",
-   "derniere_verification": "2026-11-17T19:27:56.385Z",
+   "derniere_verification": "2026-11-18T01:45:28.612Z",
    "ntfy_topic": null,
    "source_used": "mangadex_en",
    "mangadex_id": "b5ceba59-69c4-4cd7-b866-e26c6f6c512a",
@@ -6680,7 +6680,7 @@
    "season_status": "RELEASING",
    "last_notified_season": null,
    "last_notified_episode": null,
-   "last_check": "2026-11-17T19:27:58.389Z",
+   "last_check": "2026-11-18T01:45:30.072Z",
    "ntfy_topic": null
   }
  },
@@ -7138,7 +7138,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": "48",
-   "derniere_verification": "2026-11-17T19:27:57.328Z",
+   "derniere_verification": "2026-11-18T01:45:29.036Z",
    "ntfy_topic": null,
    "source_used": "mangadex_en",
    "last_notified_chapter": "48",
@@ -7190,7 +7190,7 @@
   "suivi": {
    "suivi_actif": true,
    "dernier_chapitre_paru": "91",
-   "derniere_verification": "2026-11-17T19:27:57.710Z",
+   "derniere_verification": "2026-11-18T01:45:29.410Z",
    "ntfy_topic": null,
    "source_used": "mangadex_fr",
    "last_notified_chapter": "91",
