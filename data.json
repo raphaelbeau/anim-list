@@ -7460,7 +7460,7 @@
   "nickname": "",
   "genre": "shojo",
   "anime_status": null,
-  "manga_status": null,
+  "manga_status": "att_suite",
   "lang": null,
   "fmt": null,
   "anime_url": "",
@@ -7477,8 +7477,8 @@
   ],
   "anime_overall_note": null,
   "manga": {
-   "note": null,
-   "comment": ""
+   "note": 8,
+   "comment": "Partie 2 terminée (hiatus), très bon webtoon. Hyper intéressant avec les chien j'aime beaucoup. Mais ca passe un peu trop au second plan attention. Sinon principe original, ca avance très bien"
   },
   "suivi": {
    "suivi_actif": false,
