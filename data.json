@@ -7168,13 +7168,13 @@
   "nickname": "",
   "genre": "shojo",
   "anime_status": null,
-  "manga_status": "en_cours",
+  "manga_status": "att_suite",
   "lang": null,
   "fmt": null,
   "anime_url": "",
   "scan_url": "https://www.scan-manga.com/15048-79874/My-Bias-Gets-on-the-Last-Train.html",
   "progress_episode": "",
-  "progress_chapter": "87",
+  "progress_chapter": "91",
   "sequel_date": "",
   "anime_seasons": [
    {
@@ -7185,8 +7185,8 @@
   ],
   "anime_overall_note": null,
   "manga": {
-   "note": null,
-   "comment": ""
+   "note": 7,
+   "comment": "Partie 1 très bien, c style la meuf et cool\nCa avance tout de meme bien. La partie va je pense très bien commencer"
   },
   "suivi": {
    "suivi_actif": true,
@@ -7211,7 +7211,8 @@
    "last_notified_episode": null,
    "last_check": null,
    "ntfy_topic": null
-  }
+  },
+  "image_url": ""
  },
  {
   "id": "e-mt5o7izdsl6ta",
