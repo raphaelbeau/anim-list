@@ -126,8 +126,8 @@
    "ntfy_topic": null,
    "source_used": "mangadex_fr",
    "mangadex_id": "87ffa375-bd2c-49ba-ba0c-6d78ea07c342",
-   "last_notified_chapter": "246",
-   "dernier_chapitre_notifie": "246"
+   "last_notified_chapter": "245",
+   "dernier_chapitre_notifie": "245"
   },
   "suivi_anime": {
    "notification_mode": "disabled",
@@ -266,7 +266,7 @@
    "comment": ""
   },
   "sequel_date": "",
-  "progress_chapter": "1199",
+  "progress_chapter": "1198",
   "progress_episode": "",
   "anime_overall_note": null,
   "suivi": {
@@ -7460,7 +7460,7 @@
   "nickname": "",
   "genre": "shojo",
   "anime_status": null,
-  "manga_status": null,
+  "manga_status": "att_suite",
   "lang": null,
   "fmt": null,
   "anime_url": "",
@@ -7477,8 +7477,8 @@
   ],
   "anime_overall_note": null,
   "manga": {
-   "note": null,
-   "comment": ""
+   "note": 8,
+   "comment": "Partie 2 terminée (hiatus), très bon webtoon. Hyper intéressant avec les chien j'aime beaucoup. Mais ca passe un peu trop au second plan attention. Sinon principe original, ca avance très bien"
   },
   "suivi": {
    "suivi_actif": false,
@@ -7508,7 +7508,7 @@
   "nickname": "",
   "genre": "autre",
   "anime_status": "att_suite",
-  "manga_status": "a_lire",
+  "manga_status": "fini",
   "lang": "vf",
   "fmt": "serie",
   "anime_url": "https://anime-sama.to/catalogue/solo-leveling/",
@@ -7525,8 +7525,8 @@
   ],
   "anime_overall_note": null,
   "manga": {
-   "note": null,
-   "comment": ""
+   "note": 7,
+   "comment": "Sympa. J'ai du mal a suivre souvent, c longuait, on perd le file. Sur les side story ca part dans tous les sens, dommage"
   },
   "suivi": {
    "suivi_actif": false,
@@ -7547,7 +7547,8 @@
    "last_notified_episode": null,
    "last_check": null,
    "ntfy_topic": null
-  }
+  },
+  "image_url": ""
  },
  {
   "id": "e-mtw5hmp2u26d9",
